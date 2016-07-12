@@ -84,7 +84,8 @@ function M.on_input(self, action_id, action)
 			c.potential_double_tap = false
 			c.gestures.swipe = {
 				from = vmath.vector3(c.pressed_action.x, c.pressed_action.y, 0),
-				to = vmath.vector3(action.x, action.y, 0)
+				to = vmath.vector3(action.x, action.y, 0),
+				time = time,
 			}
 		end
 		c.released_time = socket.gettime()
