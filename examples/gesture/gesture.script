@@ -1,0 +1,16 @@
+local gesture = require "ludobits.m.gesture"
+
+function init(self)
+	msg.post(".", "acquire_input_focus")
+end
+
+function final(self)
+	msg.post(".", "release_input_focus")
+end
+
+function on_input(self, action_id, action)
+	local g = gesture.on_input(self, action_id, action)
+	if g then
+		pprint(g)
+	end
+end
