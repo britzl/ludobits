@@ -4,6 +4,7 @@ version = 0.1
 
 [bootstrap]
 main_collection = /examples/gesture/gesture.collectionc
+render = /ludobits/r/fixed_aspect_ratio.renderc
 
 [input]
 game_binding = /input/game.input_bindingc

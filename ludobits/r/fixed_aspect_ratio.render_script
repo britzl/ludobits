@@ -16,16 +16,11 @@ end
 local render_helper = require("ludobits.r.render_helper")
 
 function update(self)
+	-- clear color 
 	render.set_depth_mask(true)
 	render.clear({[render.BUFFER_COLOR_BIT] = self.clear_color, [render.BUFFER_DEPTH_BIT] = 1, [render.BUFFER_STENCIL_BIT] = 0})
 
-	local original_width = render.get_width()
-	local original_height = render.get_height()
-	local current_width = render.get_window_width()
-	local current_height = render.get_window_height()
-	render.set_viewport(0, 0, current_width, current_height)
-	render.set_view(self.view)
-	
+	-- set render state
 	render.set_depth_mask(false)
 	render.disable_state(render.STATE_DEPTH_TEST)
 	render.disable_state(render.STATE_STENCIL_TEST)
@@ -33,25 +28,14 @@ function update(self)
 	render.set_blend_func(render.BLEND_SRC_ALPHA, render.BLEND_ONE_MINUS_SRC_ALPHA)
 	render.disable_state(render.STATE_CULL_FACE)
 
-	-- center (and zoom out if needed)
-	local zoom_factor = math.min(math.min(current_width / original_width, current_height / original_height), 1)
-	local projected_width = current_width / zoom_factor
-	local projected_height = current_height / zoom_factor
-	local xoffset = -(projected_width - original_width) / 2
-	local yoffset = -(projected_height - original_height) / 2
-	render.set_projection(vmath.matrix4_orthographic(xoffset, xoffset + projected_width, yoffset, yoffset + projected_height, -1, 1))
-
-	-- store zoom and offset for use when translating touch events to positions
-	render_helper.zoom_factor = zoom_factor
-	render_helper.xoffset = xoffset
-	render_helper.yoffset = yoffset
+	render_helper.render_fixed_aspect_ratio(self.view)
 
 	render.draw(self.tile_pred)
 	render.draw(self.particle_pred)
 	render.draw_debug3d()
 	
 	render.set_view(vmath.matrix4())
-	render.set_projection(vmath.matrix4_orthographic(0, current_width, 0, current_height, -1, 1))
+	render.set_projection(vmath.matrix4_orthographic(0, render.get_window_width(), 0, render.get_window_height(), -1, 1))
 	
 	render.enable_state(render.STATE_STENCIL_TEST)
 	render.draw(self.gui_pred)
