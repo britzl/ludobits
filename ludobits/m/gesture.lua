@@ -32,6 +32,7 @@ function M.on_input(self, action_id, action)
 				swipe_right = false,
 				swipe_up = false,
 				swipe_down = false,
+				swipe = nil,
 			}
 		}
 	end
@@ -43,6 +44,7 @@ function M.on_input(self, action_id, action)
 	c.gestures.swipe_right = false
 	c.gestures.swipe_up = false
 	c.gestures.swipe_down = false
+	c.gestures.swipe = nil
 
 	if action.pressed then
 		c.pressed = true
@@ -80,6 +82,10 @@ function M.on_input(self, action_id, action)
 				c.gestures.swipe_left = true
 			end
 			c.potential_double_tap = false
+			c.gestures.swipe = {
+				from = vmath.vector3(c.pressed_action.x, c.pressed_action.y, 0),
+				to = vmath.vector3(action.x, action.y, 0)
+			}
 		end
 		c.released_time = socket.gettime()
 		c.pressed = false
