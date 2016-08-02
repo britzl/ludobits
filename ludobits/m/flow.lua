@@ -13,6 +13,7 @@ local function create_or_get(co)
 	assert(co, "You must provide a coroutine")
 	if not instances[co] then
 		instances[co] = {
+			id = socket.gettime(),
 			url = msg.url(),
 			state = READY,
 			co = co,
@@ -113,7 +114,7 @@ function M.update()
 			
 			if instance.state == READY then
 				instance.state = RESUMING
-				msg.post(instance.url, MSG_RESUME, { url = instance.url })
+				msg.post(instance.url, MSG_RESUME, { url = instance.url, id = instance.id })
 			end
 		end
 	end
@@ -122,7 +123,7 @@ end
 function M.on_message(message_id, message, sender)
 	if message_id == MSG_RESUME then
 		for co,instance in pairs(instances) do
-			if instance.url == message.url then
+			if instance.id == message.id then
 				instance.state = RUNNING
 				local result = instance.result or {}
 				instance.result = nil
