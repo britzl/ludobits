@@ -5,8 +5,6 @@ local M = {}
 
 local action_map = {}
 
-local ACTION_ID_UNNAMED = hash("unnamed")
-
 --- Acquire input focus for the current script
 function M.acquire()
 	msg.post(".", "acquire_input_focus")
@@ -30,9 +28,8 @@ end
 
 --- Forward any calls to on_input from scripts using this module
 function M.update(action_id, action)
-	assert(action_id, "You must provide an action_id")
 	assert(action, "You must provide an action")
-	if action_id ~= ACTION_ID_UNNAMED then
+	if action_id then
 		action_id = type(action_id) == "string" and hash(action_id) or action_id
 		if action.pressed then
 			action_map[hash_to_hex(action_id)] = true
