@@ -6,14 +6,16 @@ local M = {}
 local action_map = {}
 
 --- Acquire input focus for the current script
-function M.acquire()
-	msg.post(".", "acquire_input_focus")
+-- @param url
+function M.acquire(url)
+	msg.post(url or ".", "acquire_input_focus")
 	action_map = {}
 end
 
 --- Release input focus for the current script
-function M.release()
-	msg.post(".", "release_input_focus")
+-- @param url
+function M.release(url)
+	msg.post(url or ".", "release_input_focus")
 	action_map = {}
 end
 
