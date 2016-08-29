@@ -27,6 +27,11 @@ function M.start(fn)
 	return create_or_get(coroutine.create(fn))
 end
 
+function M.stop(instance)
+	assert(instance, "You must provide a flow instance")
+	instances[instance.co] = nil
+end
+
 
 function M.delay(seconds)
 	assert(seconds, "You must provide a delay")
@@ -51,6 +56,7 @@ function M.until_any_message()
 	instance.state = WAITING
 	instance.on_message = function(message_id, message, sender)
 		instance.result = { message_id = message_id, message = message }
+		instance.on_message = nil
 		instance.state = READY
 	end
 	return coroutine.yield()
@@ -64,6 +70,7 @@ function M.until_message(...)
 		for _, message_id_to_wait_for in pairs(message_ids_to_wait_for) do
 			if message_id == message_id_to_wait_for then
 				instance.result = { message_id = message_id, message = message }
+				instance.on_message = nil
 				instance.state = READY
 				break
 			end
@@ -100,7 +107,6 @@ end
 function M.update()
 	for co,instance in pairs(instances) do
 		local status = coroutine.status(co)
-		--print(status, instance.state)
 		if status == "dead" then
 			instances[co] = nil
 		else
