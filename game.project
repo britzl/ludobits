@@ -3,7 +3,7 @@ title = Ludobits
 version = 0.1
 
 [bootstrap]
-main_collection = /examples/split_screen/split_screen.collectionc
+main_collection = /examples/collection/collection.collectionc
 render = /ludobits/r/split_screen.renderc
 
 [input]
