@@ -40,5 +40,9 @@ function M.update(action_id, action)
 		end
 	end
 end
+function M.on_input(action_id, action)
+	-- I can't decide on which I like best, on_input() or update()
+	return M.update(action_id, action)
+end
 
 return M

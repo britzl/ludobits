@@ -1,6 +1,12 @@
 images {
   image: "/examples/assets/images/set1_tiles.png"
 }
+images {
+  image: "/examples/assets/images/blue_circle.png"
+}
+images {
+  image: "/examples/assets/images/green_circle.png"
+}
 animations {
   id: "blue_player"
   images {
@@ -46,5 +52,5 @@ animations {
   flip_vertical: 0
 }
 margin: 0
-extrude_borders: 1
+extrude_borders: 2
 inner_padding: 0
