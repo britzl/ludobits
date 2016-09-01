@@ -31,6 +31,10 @@ function M.create(collision_hashes)
 		instance.velocity.x = velocity
 	end
 	
+	function instance.move(velocity)
+		instance.velocity = velocity
+	end
+	
 	function instance.stop()
 		instance.velocity.x = 0
 	end
