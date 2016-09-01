@@ -1,0 +1,50 @@
+local platformer = require "ludobits.m.platformer"
+local input = require "ludobits.m.input"
+
+local LEFT = hash("left")
+local RIGHT = hash("right")
+local JUMP = hash("jump")
+
+function init(self)
+	input.acquire()
+	self.physics = platformer.create({ hash("ground") })
+	self.physics.gravity = -800
+end
+
+function final(self)
+	input.release()
+end
+
+function update(self, dt)
+	if input.is_pressed(LEFT) then
+		self.physics.left(140)
+	elseif input.is_pressed(RIGHT) then
+		self.physics.right(140)
+	else
+		self.physics.stop()
+	end
+
+	self.physics.update(dt)
+end
+
+function on_message(self, message_id, message, sender)
+	self.physics.on_message(message_id, message, sender)
+end
+
+function on_input(self, action_id, action)
+	input.on_input(action_id, action)
+	if action_id == JUMP then
+		if action.pressed then
+			print("jmp")
+			self.physics.jump(800)
+		elseif action.released then
+			self.physics.abort_jump()
+		end
+
+	end
+end
+
+function on_reload(self)
+    -- Add reload-handling code here
+    -- Remove this function if not needed
+end

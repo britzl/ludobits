@@ -3,7 +3,7 @@ title = Ludobits
 version = 0.1
 
 [bootstrap]
-main_collection = /examples/flow/flow.collectionc
+main_collection = /examples/platformer/platformer.collectionc
 render = /ludobits/r/split_screen.renderc
 
 [input]
@@ -15,10 +15,14 @@ height = 720
 
 [physics]
 scale = 0.02
+debug = 0
 
 [script]
 shared_state = 1
 
 [library]
 include_dirs = ludobits
+
+[graphics]
+max_debug_vertices = 50000
 

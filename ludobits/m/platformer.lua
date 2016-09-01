@@ -4,6 +4,7 @@ local CONTACT_POINT_RESPONSE = hash("contact_point_response")
 
 
 function M.create(collision_hashes)
+	collision_hashes = collision_hashes or {}
 	for _,h in ipairs(collision_hashes) do
 		collision_hashes[h] = true
 	end
@@ -12,6 +13,7 @@ function M.create(collision_hashes)
 		velocity = vmath.vector3(),
 		gravity = -100,
 		ground_contact = false,
+		jumping = false,
 	}
 
 	local correction = vmath.vector3()
@@ -36,6 +38,7 @@ function M.create(collision_hashes)
 	function instance.jump(power, allow_double_jump)
 		if instance.ground_contact then
 			instance.velocity.y = instance.velocity.y + power
+			instance.jumping = true
 		elseif allow_double_jump and jumping_up() and not double_jumping then
 			instance.velocity.y = instance.velocity.y + power
 			double_jumping = true
@@ -46,6 +49,14 @@ function M.create(collision_hashes)
 		if jumping_up() then
 			instance.velocity.y = instance.velocity.y * 0.5
 		end
+	end
+	
+	function instance.is_jumping()
+		return instance.jumping
+	end
+	
+	function instance.is_falling()
+		return not instance.ground_contact and not jumping_up()
 	end
 
 	function instance.on_message(message_id, message)
@@ -60,6 +71,7 @@ function M.create(collision_hashes)
 					instance.velocity = instance.velocity - proj * message.normal
 				end
 				instance.ground_contact = true
+				instance.jumping = false
 				double_jumping = false
 			end
 		end
