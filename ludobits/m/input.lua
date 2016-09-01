@@ -25,7 +25,7 @@ end
 function M.is_pressed(action_id)
 	assert(action_id, "You must provide an action_id")
 	action_id = type(action_id) == "string" and hash(action_id) or action_id
-	return action_map[hash_to_hex(action_id)]
+	return action_map[action_id]
 end
 
 --- Forward any calls to on_input from scripts using this module
@@ -34,9 +34,9 @@ function M.update(action_id, action)
 	if action_id then
 		action_id = type(action_id) == "string" and hash(action_id) or action_id
 		if action.pressed then
-			action_map[hash_to_hex(action_id)] = true
+			action_map[action_id] = true
 		elseif action.released then
-			action_map[hash_to_hex(action_id)] = false
+			action_map[action_id] = false
 		end
 	end
 end
