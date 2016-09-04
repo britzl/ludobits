@@ -49,10 +49,24 @@ end
 
 
 --- Stop a created flow before it has completed
--- @param instance As returned from a call to @{start}
+-- @param instance This can be either the returned value from
+-- a call to @{start}, a coroutine or URL
 function M.stop(instance)
 	assert(instance, "You must provide a flow instance")
-	instances[instance.co] = nil
+	if type(instance) == "table" then
+		assert(instance.co, "The provided instance doesn't contain a coroutine")
+		instances[instance.co] = nil
+	elseif type(instance) == "thread" then
+		instances[instance] = nil
+	else
+		for k,v in pairs(instances) do
+			if v.url == instance then
+				instances[k] = nil
+				return
+			end
+			print("Warning: Unable to find a flow instance to remove for", instance)
+		end
+	end
 end
 
 
