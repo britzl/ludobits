@@ -1,0 +1,30 @@
+local flow = require "ludobits.m.flow"
+
+function init(self)
+	flow.start(function()
+		local box = gui.get_node("box")
+		while true do
+			flow.gui_animate(box, gui.PROP_POSITION, gui.PLAYBACK_ONCE_FORWARD, vmath.vector3(100, 500, 0), gui.EASING_INOUTCUBIC, 1, 0.2)
+			flow.gui_animate(box, gui.PROP_COLOR, gui.PLAYBACK_ONCE_FORWARD, vmath.vector4(1, 1, 1, 0), gui.EASING_INOUTCUBIC, 1, 0)
+			flow.gui_animate(box, gui.PROP_COLOR, gui.PLAYBACK_ONCE_FORWARD, vmath.vector4(1, 1, 1, 1), gui.EASING_INOUTCUBIC, 1, 0)
+			flow.gui_animate(box, gui.PROP_POSITION, gui.PLAYBACK_ONCE_FORWARD, vmath.vector3(500, 500, 0), gui.EASING_INOUTCUBIC, 1, 0.2)
+		end
+	end)
+end
+
+function final(self)
+	flow.stop()
+end
+
+function update(self, dt)
+	flow.update()
+end
+
+function on_message(self, message_id, message, sender)
+	flow.on_message(message_id, message, sender)
+end
+
+function on_reload(self)
+    -- Add input-handling code here
+    -- Remove this function if not needed
+end

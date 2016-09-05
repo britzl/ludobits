@@ -257,6 +257,7 @@ end
 -- @param duration
 -- @param delay
 function M.gui_animate(node, property, playback, to, easing, duration, delay)
+	delay = delay or 0
 	M.until_callback(function(cb)
 		gui.cancel_animation(node, property)
 		gui.animate(node, property, to, easing, duration, delay, cb, playback)
@@ -266,22 +267,25 @@ end
 
 --- Call this as often as needed (every frame)
 function M.update()
+	local url = msg.url()
 	for co,instance in pairs(instances) do
-		local status = coroutine.status(co)
-		if status == "dead" then
-			instances[co] = nil
-		else
-			if instance.state == WAITING and instance.condition then
-				if instance.condition() then
-					instance.condition = nil
-					instance.on_message = nil
-					instance.state = READY
+		if instance.url == url then
+			local status = coroutine.status(co)
+			if status == "dead" then
+				instances[co] = nil
+			else
+				if instance.state == WAITING and instance.condition then
+					if instance.condition() then
+						instance.condition = nil
+						instance.on_message = nil
+						instance.state = READY
+					end
 				end
-			end
-			
-			if instance.state == READY then
-				instance.state = RESUMING
-				msg.post(instance.url, MSG_RESUME, { url = instance.url, id = instance.id })
+				
+				if instance.state == READY then
+					instance.state = RESUMING
+					msg.post(instance.url, MSG_RESUME, { url = instance.url, id = instance.id })
+				end
 			end
 		end
 	end
