@@ -7,6 +7,12 @@ images {
 images {
   image: "/examples/assets/images/green_circle.png"
 }
+images {
+  image: "/examples/assets/images/green_button07.png"
+}
+images {
+  image: "/examples/assets/images/blue_button07.png"
+}
 animations {
   id: "blue_player"
   images {
