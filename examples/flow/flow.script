@@ -15,6 +15,9 @@ function init(self)
 			return go.get_position().x == 300
 		end)
 		print("flow.until_true() go.animate() done")
+
+		flow.go_animate(".", "position.y", go.PLAYBACK_ONCE_PINGPONG, 400, go.EASING_INOUTCUBIC, 1, 0)
+		print("flow.go_animate() done")
 		
 		msg.post("#", "fooo")
 		local message_id, message, sender = flow.until_any_message()
@@ -24,10 +27,11 @@ function init(self)
 		local message_id, message, sender = flow.until_message(hash("booo"))
 		print("flow.until_message()", message_id, message, sender)
 		
-		flow.until_callback(function(callback)
-			go.animate(".", "position.x", go.PLAYBACK_ONCE_FORWARD, 600, go.EASING_INOUTCUBIC, 1, 0, callback)
+		local self, id, response = flow.until_callback(function(callback)
+			http.request("http://www.google.com", "GET", callback)
 		end)
-		print("flow.until_callback() go.animate() with callback done")
+		print("flow.until_callback() http.request() with callback done")
+		pprint(response)
 		
 		local foo, bar = flow.until_callback(function(callback)
 			callback("foo", "bar")

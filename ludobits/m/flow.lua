@@ -1,3 +1,36 @@
+--- The flow module simplifies asynchronous flows of execution where your
+-- code needs to wait for one asynchronous operation to finish before
+-- starting with the next one.
+-- @usage
+--
+-- 	local flow = require "ludobits.m.flow"
+-- 
+-- 	function init(self)
+-- 		flow.start(function()
+-- 			-- animate a gameobject and wait for animation to complete
+-- 			flow.go_animate(".", "position.y", go.PLAYBACK_ONCE_FORWARD, 0, go.EASING_INCUBIC, 2)
+-- 			-- wait for one and a half seconds
+-- 			flow.delay(1.5)
+-- 			-- wait until a function returns true
+-- 			flow.until_true(is_game_over)
+-- 			-- animate go again
+-- 			flow.go_animate(".", "position.y", go.PLAYBACK_ONCE_FORWARD, 400, go.EASING_INCUBIC, 2)
+-- 		end)
+-- 	end
+-- 	
+-- 	function final(self)
+-- 		flow.stop()
+-- 	end
+-- 	
+-- 	function update(self, dt)
+-- 		flow.update()
+-- 	end
+-- 	
+-- 	function on_message(self, message_id, message, sender)
+-- 		flow.on_message(message_id, message, sender)
+-- 	end
+-- 	
+
 local M = {}
 
 local instances = {}
@@ -39,7 +72,7 @@ end
 
 --- Start a new flow. This will either create a new
 -- coroutine or create one if this function isn't called
--- from witin a coroutine
+-- from within a coroutine
 -- @param fn The function to run within the flow
 -- @return The created flow instance
 function M.start(fn)
@@ -50,9 +83,10 @@ end
 
 --- Stop a created flow before it has completed
 -- @param instance This can be either the returned value from
--- a call to @{start}, a coroutine or URL
+-- a call to @{start}, a coroutine or URL. Defaults to the URL of the
+-- running script
 function M.stop(instance)
-	assert(instance, "You must provide a flow instance")
+	instance = instance or msg.url()
 	if type(instance) == "table" then
 		assert(instance.co, "The provided instance doesn't contain a coroutine")
 		instances[instance.co] = nil
@@ -62,9 +96,8 @@ function M.stop(instance)
 		for k,v in pairs(instances) do
 			if v.url == instance then
 				instances[k] = nil
-				return
+				break
 			end
-			print("Warning: Unable to find a flow instance to remove for", instance)
 		end
 	end
 end
@@ -197,6 +230,41 @@ function M.unload(collection_url)
 end
 
 
+--- Call go.animate and wait until it has finished
+-- @param url
+-- @param property
+-- @param playback
+-- @param to
+-- @param easing
+-- @param duration
+-- @param delay
+function M.go_animate(url, property, playback, to, easing, duration, delay)
+	M.until_callback(function(cb)
+		go.cancel_animations(url, property)
+		go.animate(url, property, playback, to, easing, duration, delay, cb)
+	end)
+end
+
+
+--- Call gui.animate and wait until it has finished
+-- NOTE: The argument order differs from gui.animate() (playback is shifted
+-- to the same position as for go.animate)
+-- @param url
+-- @param property
+-- @param playback
+-- @param to
+-- @param easing
+-- @param duration
+-- @param delay
+function M.gui_animate(node, property, playback, to, easing, duration, delay)
+	M.until_callback(function(cb)
+		gui.cancel_animation(node, property)
+		gui.animate(node, property, to, easing, duration, delay, cb, playback)
+	end)
+end
+
+
+--- Call this as often as needed (every frame)
 function M.update()
 	for co,instance in pairs(instances) do
 		local status = coroutine.status(co)
@@ -220,6 +288,7 @@ function M.update()
 end
 
 
+--- Forward any received messages in your scripts to this function
 function M.on_message(message_id, message, sender)
 	if message_id == MSG_RESUME then
 		for co,instance in pairs(instances) do
