@@ -1,6 +1,6 @@
 [project]
 title = Ludobits
-version = 0.7.2
+version = 0.7.3
 
 [bootstrap]
 main_collection = /examples/flow/flow.collectionc
