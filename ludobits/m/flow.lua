@@ -134,6 +134,7 @@ end
 --- Wait until a function returns true
 -- @param fn
 function M.until_true(fn)
+	assert(fn, "You must provide a function")
 	local instance = create_or_get(coroutine.running())
 	instance.state = WAITING
 	instance.condition = fn
@@ -189,6 +190,7 @@ end
 -- @param argn Additional argument to pass to fn
 -- @return Any values passed to the callback function
 function M.until_callback(fn, ...)
+	assert(fn, "You must provide a function")
 	local instance = create_or_get(coroutine.running())
 	instance.state = WAITING
 	fn(function(...)
@@ -202,6 +204,7 @@ end
 --- Load a collection and wait until it is loaded and enabled
 -- @param collection_url
 function M.load(collection_url)
+	assert(collection_url, "You must provide a URL to a collection proxy")
 	local instance = create_or_get(coroutine.running())
 	instance.state = WAITING
 	instance.on_message = function(message_id, message, sender)
@@ -218,6 +221,7 @@ end
 --- Unload a collection and wait until it is unloaded
 -- @param collection_url The collection to unload
 function M.unload(collection_url)
+	assert(collection_url, "You must provide a URL to a collection proxy")
 	local instance = create_or_get(coroutine.running())
 	instance.state = WAITING
 	instance.on_message = function(message_id, message, sender)
@@ -239,6 +243,9 @@ end
 -- @param duration
 -- @param delay
 function M.go_animate(url, property, playback, to, easing, duration, delay)
+	assert(url, "You must provide a URL")
+	assert(property, "You must provide a property to animate")
+	assert(to, "You must provide a value to animate to")
 	M.until_callback(function(cb)
 		go.cancel_animations(url, property)
 		go.animate(url, property, playback, to, easing, duration, delay, cb)
@@ -257,11 +264,35 @@ end
 -- @param duration
 -- @param delay
 function M.gui_animate(node, property, playback, to, easing, duration, delay)
+	assert(node, "You must provide a node")
+	assert(property, "You must provide a property to animate")
+	assert(to, "You must provide a value to animate to")
 	delay = delay or 0
 	M.until_callback(function(cb)
 		gui.cancel_animation(node, property)
 		gui.animate(node, property, to, easing, duration, delay, cb, playback)
 	end)
+end
+
+
+--- Play a sprite animation and wait until it has finished
+-- @param sprite_url
+-- @param id
+function M.play_animation(sprite_url, id)
+	assert(sprite_url, "You must provide a sprite url")
+	assert(id, "You must provide an animation id")
+	print("play_animation", sprite_url, id)
+	sprite_url = (type(sprite_url) == "string") and msg.url(sprite_url) or sprite_url
+	id = (type(id) == "string") and hash(id) or id
+	local instance = create_or_get(coroutine.running())
+	instance.state = WAITING
+	instance.on_message = function(message_id, message, sender)
+		if message_id == hash("animation_done") and sender == sprite_url then
+			instance.state = READY
+		end
+	end
+	msg.post(sprite_url, "play_animation", { id = id })
+	return coroutine.yield()
 end
 
 

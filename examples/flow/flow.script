@@ -10,13 +10,13 @@ function init(self)
 		flow.frames(10)
 		print("flow.frames() 10 frames have elapsed")
 
-		go.animate(".", "position.x", go.PLAYBACK_ONCE_FORWARD, 300, go.EASING_INOUTCUBIC, 1, 0)
+		go.animate(".", "position.x", go.PLAYBACK_ONCE_FORWARD, 500, go.EASING_INOUTCUBIC, 1, 0)
 		flow.until_true(function()
-			return go.get_position().x == 300
+			return go.get_position().x == 500
 		end)
 		print("flow.until_true() go.animate() done")
 
-		flow.go_animate(".", "position.y", go.PLAYBACK_ONCE_PINGPONG, 400, go.EASING_INOUTCUBIC, 1, 0)
+		flow.go_animate(".", "position.y", go.PLAYBACK_ONCE_PINGPONG, 500, go.EASING_INOUTCUBIC, 1, 0)
 		print("flow.go_animate() done")
 		
 		msg.post("#", "fooo")
@@ -38,6 +38,7 @@ function init(self)
 		end)
 		print("flow.until_callback() immediate callback", foo, bar)
 		
+		flow.play_animation("#sprite", "green_walk_once")
 		print("DONE")
 	end)
 end
