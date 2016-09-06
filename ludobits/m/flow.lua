@@ -82,16 +82,22 @@ end
 -- within an existing flow the existing flow can either
 -- wait for the new flow to finish or run in parallel
 -- @param fn The function to run within the flow
--- @param parallel
+-- @param options Key value pairs. Allowed keys:
+--		parallel = true if running flow shouldn't wait for this flow
+-- @param on_error Function to call if something goes wrong while
+-- running the flow
 -- @return The created flow instance
-function M.start(fn, parallel)
+function M.start(fn, options, on_error)
 	assert(fn, "You must provide a function")
 	local co = coroutine.running()
-	if not co or not instances[co] or parallel then
-		return create_or_get(coroutine.create(fn))
+	if not co or not instances[co] or (options and options.parallel) then
+		local created_instance = create_or_get(coroutine.create(fn))
+		created_instance.on_error = on_error
+		return created_instance
 	else
 		local running_instance = instances[co]
 		local created_instance = create_or_get(coroutine.create(fn))
+		created_instance.on_error = on_error
 		M.until_true(function()
 			return instances[created_instance.co] == nil
 		end)
@@ -115,7 +121,6 @@ function M.stop(instance)
 		for k,v in pairs(instances) do
 			if v.url == instance then
 				instances[k] = nil
-				break
 			end
 		end
 	end
@@ -351,7 +356,14 @@ function M.on_message(message_id, message, sender)
 				instance.state = RUNNING
 				local result = instance.result or {}
 				instance.result = nil
-				coroutine.resume(co, table_unpack(result))
+				local ok, error = coroutine.resume(co, table_unpack(result))
+				if not ok then
+					if instance.on_error then
+						instance.on_error(error)
+					else
+						print("Warning: Flow resulted in error", error)
+					end
+				end
 				return
 			end
 		end

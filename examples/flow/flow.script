@@ -53,7 +53,7 @@ function init(self)
 			msg.post("#", "abc")
 			flow.delay(0.2)
 			msg.post("#", "booo")
-		end, true)
+		end, { parallel = true })
 		
 		print("9 This flow will continue to run without waiting for the parallel flow to finish")
 		
@@ -85,6 +85,15 @@ function init(self)
 		-- play a sprite animation and wait until it is done
 		flow.play_animation("#sprite", "green_walk_once")
 		print("17 DONE")
+	end)
+	
+	flow(function()
+		print("In another flow")
+		flow.delay(1)
+		error("Crashing the flow")
+		print("This will not print")
+	end, nil, function(error)
+		print("Something went wrong in my flow!", error)
 	end)
 end
 
