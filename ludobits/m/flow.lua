@@ -43,6 +43,14 @@ local RESUMING = "RESUMING"
 local WAITING = "WAITING"
 
 
+local function ensure_url(url)
+	return (type(url) == "string") and msg.url(url) or url
+end
+
+local function ensure_hash(s)
+	return (type(s) == "string") and hash(s) or s
+end
+
 local function table_pack(...)
 	return { n = select("#", ...), ... }
 end
@@ -204,10 +212,13 @@ end
 --- Load a collection and wait until it is loaded and enabled
 -- @param collection_url
 function M.load(collection_url)
+	print("load", collection_url)
 	assert(collection_url, "You must provide a URL to a collection proxy")
+	collection_url = ensure_url(collection_url)
 	local instance = create_or_get(coroutine.running())
 	instance.state = WAITING
 	instance.on_message = function(message_id, message, sender)
+		print("load", message_id)
 		if message_id == hash("proxy_loaded") and sender == collection_url then
 			msg.post(sender, "enable")
 			instance.state = READY
@@ -222,6 +233,7 @@ end
 -- @param collection_url The collection to unload
 function M.unload(collection_url)
 	assert(collection_url, "You must provide a URL to a collection proxy")
+	collection_url = ensure_url(collection_url)
 	local instance = create_or_get(coroutine.running())
 	instance.state = WAITING
 	instance.on_message = function(message_id, message, sender)
@@ -282,8 +294,8 @@ function M.play_animation(sprite_url, id)
 	assert(sprite_url, "You must provide a sprite url")
 	assert(id, "You must provide an animation id")
 	print("play_animation", sprite_url, id)
-	sprite_url = (type(sprite_url) == "string") and msg.url(sprite_url) or sprite_url
-	id = (type(id) == "string") and hash(id) or id
+	sprite_url = ensure_url(sprite_url)
+	id = ensure_hash(id)
 	local instance = create_or_get(coroutine.running())
 	instance.state = WAITING
 	instance.on_message = function(message_id, message, sender)

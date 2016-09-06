@@ -9,6 +9,9 @@ function init(self)
 		
 		flow.frames(10)
 		print("flow.frames() 10 frames have elapsed")
+		
+		flow.load("#a_proxy")
+		print("flow.load() a_proxy loaded")
 
 		go.animate(".", "position.x", go.PLAYBACK_ONCE_FORWARD, 500, go.EASING_INOUTCUBIC, 1, 0)
 		flow.until_true(function()
@@ -16,6 +19,12 @@ function init(self)
 		end)
 		print("flow.until_true() go.animate() done")
 
+		flow.unload("#a_proxy")
+		print("flow.unload() a_proxy unloaded")
+
+		flow.load("#b_proxy")
+		print("flow.load() b_proxy loaded")
+		
 		flow.go_animate(".", "position.y", go.PLAYBACK_ONCE_PINGPONG, 500, go.EASING_INOUTCUBIC, 1, 0)
 		print("flow.go_animate() done")
 		
@@ -33,6 +42,10 @@ function init(self)
 		print("flow.until_callback() http.request() with callback done")
 		pprint(response)
 		
+		
+		flow.load("#a_proxy")
+		print("flow.load() a_proxy loaded")
+
 		local foo, bar = flow.until_callback(function(callback)
 			callback("foo", "bar")
 		end)
