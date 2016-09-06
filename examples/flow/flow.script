@@ -2,57 +2,89 @@ local flow = require "ludobits.m.flow"
 
 function init(self)
 	msg.post(".", "acquire_input_focus")
-	flow.start(function()
-		print("Flow has started")
+	flow(function()
+		print("1 Flow has started")
+		
+		-- wait until 0.5 seconds have elapsed
 		flow.delay(0.5)
-		print("flow.delay() half a second has elapsed")
+		print("2 flow.delay() half a second has elapsed")
 		
+		-- wait until 10 updates/frames have been registered for this flow
 		flow.frames(10)
-		print("flow.frames() 10 frames have elapsed")
+		print("3 flow.frames() 10 frames have elapsed")
 		
+		-- load a collection proxy and wait for it to become loaded
 		flow.load("#a_proxy")
-		print("flow.load() a_proxy loaded")
+		print("4 flow.load() a_proxy loaded")
 
-		go.animate(".", "position.x", go.PLAYBACK_ONCE_FORWARD, 500, go.EASING_INOUTCUBIC, 1, 0)
-		flow.until_true(function()
-			return go.get_position().x == 500
+		-- the running flow will wait for this flow to finish
+		flow(function()
+		
+			-- animate a game object and wait until it's position is a specific value
+			go.animate(".", "position.x", go.PLAYBACK_ONCE_FORWARD, 500, go.EASING_INOUTCUBIC, 1, 0)
+			flow.until_true(function()
+				return go.get_position().x == 500
+			end)
+			print("5 flow.until_true() go.animate() done")
+	
+			-- flows can be nested to any depth
+			flow(function()
+				flow.delay(1)
+		
+				flow.load("#b_proxy")
+				print("6 flow.load() b_proxy loaded")
+			end)
+			
+			flow.go_animate(".", "position.y", go.PLAYBACK_ONCE_PINGPONG, 500, go.EASING_INOUTCUBIC, 1, 0)
+			print("7 flow.go_animate() done")
 		end)
-		print("flow.until_true() go.animate() done")
 
+		-- unload a collection proxy and wait until it is unloaded
 		flow.unload("#a_proxy")
-		print("flow.unload() a_proxy unloaded")
-
-		flow.load("#b_proxy")
-		print("flow.load() b_proxy loaded")
+		print("8 flow.unload() a_proxy unloaded")
 		
-		flow.go_animate(".", "position.y", go.PLAYBACK_ONCE_PINGPONG, 500, go.EASING_INOUTCUBIC, 1, 0)
-		print("flow.go_animate() done")
+		-- the running flow will not wait for this flow to finish
+		flow(function()
+			print("10 Parallel flow starting")
+			flow.delay(2)
+			print("11 The outer flow did not wait for me")
+			msg.post("#", "fooo")
+			flow.delay(0.2)
+			msg.post("#", "abc")
+			flow.delay(0.2)
+			msg.post("#", "booo")
+		end, true)
 		
-		msg.post("#", "fooo")
+		print("9 This flow will continue to run without waiting for the parallel flow to finish")
+		
+		-- wait for any message (the message will be posted by the parallel flow created above)
 		local message_id, message, sender = flow.until_any_message()
-		print("flow.until_any_message()", message_id, message, sender)
+		print("12 flow.until_any_message()", message_id, message, sender)
 		
-		msg.post("#", "booo")
+		-- wait for a specific message (the message will be posted by the parallel flow created above)
 		local message_id, message, sender = flow.until_message(hash("booo"))
-		print("flow.until_message()", message_id, message, sender)
+		print("13 flow.until_message()", message_id, message, sender)
 		
+		-- wait until a callback is invoked
+		-- in this case we make a http.request call and wait for the callback
 		local self, id, response = flow.until_callback(function(callback)
 			http.request("http://www.google.com", "GET", callback)
 		end)
-		print("flow.until_callback() http.request() with callback done")
-		pprint(response)
+		print("14 flow.until_callback() http.request() with callback done", response.status)
 		
-		
-		flow.load("#a_proxy")
-		print("flow.load() a_proxy loaded")
-
+		-- waiting for a callback must also work when the callback is
+		-- invoked immediately (as opposed to the result of some async operation)
 		local foo, bar = flow.until_callback(function(callback)
 			callback("foo", "bar")
 		end)
-		print("flow.until_callback() immediate callback", foo, bar)
-		
+		print("15 flow.until_callback() immediate callback", foo, bar)
+
+		flow.load("#a_proxy")
+		print("16 flow.load() a_proxy loaded")
+
+		-- play a sprite animation and wait until it is done
 		flow.play_animation("#sprite", "green_walk_once")
-		print("DONE")
+		print("17 DONE")
 	end)
 end
 

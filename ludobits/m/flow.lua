@@ -78,14 +78,25 @@ local function create_or_get(co)
 end 
 
 
---- Start a new flow. This will either create a new
--- coroutine or create one if this function isn't called
--- from within a coroutine
+--- Start a new flow. If this function is called from
+-- within an existing flow the existing flow can either
+-- wait for the new flow to finish or run in parallel
 -- @param fn The function to run within the flow
+-- @param parallel
 -- @return The created flow instance
-function M.start(fn)
+function M.start(fn, parallel)
 	assert(fn, "You must provide a function")
-	return create_or_get(coroutine.create(fn))
+	local co = coroutine.running()
+	if not co or not instances[co] or parallel then
+		return create_or_get(coroutine.create(fn))
+	else
+		local running_instance = instances[co]
+		local created_instance = create_or_get(coroutine.create(fn))
+		M.until_true(function()
+			return instances[created_instance.co] == nil
+		end)
+		return created_instance
+	end
 end
 
 
@@ -212,13 +223,11 @@ end
 --- Load a collection and wait until it is loaded and enabled
 -- @param collection_url
 function M.load(collection_url)
-	print("load", collection_url)
 	assert(collection_url, "You must provide a URL to a collection proxy")
 	collection_url = ensure_url(collection_url)
 	local instance = create_or_get(coroutine.running())
 	instance.state = WAITING
 	instance.on_message = function(message_id, message, sender)
-		print("load", message_id)
 		if message_id == hash("proxy_loaded") and sender == collection_url then
 			msg.post(sender, "enable")
 			instance.state = READY
@@ -293,7 +302,6 @@ end
 function M.play_animation(sprite_url, id)
 	assert(sprite_url, "You must provide a sprite url")
 	assert(id, "You must provide an animation id")
-	print("play_animation", sprite_url, id)
 	sprite_url = ensure_url(sprite_url)
 	id = ensure_hash(id)
 	local instance = create_or_get(coroutine.running())
@@ -356,4 +364,8 @@ function M.on_message(message_id, message, sender)
 	end
 end
 
-return M
+return setmetatable(M, {
+	__call = function(self, ...)
+		return M.start(...)
+	end
+})
