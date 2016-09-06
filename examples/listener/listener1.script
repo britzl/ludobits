@@ -1,0 +1,15 @@
+local some_data = require "examples.listener.some_data"
+
+function init(self)
+	-- this will use the default behavior of registering
+	-- with the script url (equivalent to some_data.listeners.add(msg.url()))
+	some_data.listeners.add()
+end
+
+function final(self)
+	some_data.listeners.remove()
+end
+
+function on_message(self, message_id, message, sender)
+	print("listener1 on_message() received", message_id)
+end

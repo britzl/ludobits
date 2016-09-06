@@ -1,9 +1,9 @@
 [project]
 title = Ludobits
-version = 0.7
+version = 0.7.1
 
 [bootstrap]
-main_collection = /examples/flow/flow.collectionc
+main_collection = /examples/listener/listener.collectionc
 render = /ludobits/r/split_screen.renderc
 
 [input]

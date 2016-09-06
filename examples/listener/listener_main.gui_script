@@ -1,0 +1,26 @@
+local simple_input = require "ludobits.m.simple_input"
+local some_data = require "examples.listener.some_data"
+
+
+function init(self)
+	simple_input.acquire()
+	simple_input.register("foo/button", function()
+		some_data.trigger_foo()
+	end)
+	simple_input.register("bar/button", function()
+		some_data.trigger_bar()
+	end)
+end
+
+function final(self)
+	simple_input.release()
+end
+
+function on_input(self, action_id, action)
+	simple_input.on_input(action_id, action)
+end
+
+function on_reload(self)
+    -- Add input-handling code here
+    -- Remove this function if not needed
+end

@@ -1,0 +1,22 @@
+local some_data = require "examples.listener.some_data"
+
+local function foo(message_id, message)
+	print("listener3 foo() received", message_id)
+end
+
+function init(self)
+	some_data.listeners.add({
+		[some_data.FOO] = foo,
+		[some_data.BAR] = msg.url(),
+	})
+end
+
+function final(self)
+	some_data.listeners.remove(foo)
+	some_data.listeners.remove(msg.url())
+end
+
+function on_message(self, message_id, message, sender)
+	assert(message_id == some_data.BAR, "Expected only messages of type BAR to be received")
+	print("listener3 on_message() received", message_id)
+end

@@ -1,0 +1,18 @@
+local some_data = require "examples.listener.some_data"
+
+local function any(message_id, message)
+	print("listener2 any() received", message_id)
+end
+
+function init(self)
+	-- this adds a function as callback when the listener is invoked 
+	some_data.listeners.add(any)
+end
+
+function final(self)
+	some_data.listeners.remove(any)
+end
+
+function on_message(self, message_id, message, sender)
+	error("listener2 on_message() should not receive any messages " .. tostring(message_id))
+end
