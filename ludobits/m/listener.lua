@@ -62,11 +62,14 @@ function M.create()
 	--	2. URL
 	--  3. Table with mapping between specific message ids and functions or urls
 	function instance.add(url_fn_table)
+		-- no function, url or table defined
+		-- add current script url
 		if not url_fn_table then
 			listeners[msg.url()] = {
 				trigger = trigger_url
 			}
 		else
+			-- add a mapping of message hashes to functions/urls
 			if type(url_fn_table) == "table" then
 				for message_id, url_fn in pairs(url_fn_table) do
 					listeners[url_fn] = {
@@ -74,6 +77,7 @@ function M.create()
 						trigger = type(url_fn) == "function" and trigger_function or trigger_url
 					}
 				end
+			-- add a function or url
 			else
 				listeners[url_fn_table] = {
 					trigger = type(url_fn_table) == "function" and trigger_function or trigger_url
@@ -83,9 +87,24 @@ function M.create()
 	end
 
 	--- Remove a previously added callback function or url
-	-- @param url_fn
-	function instance.remove(url_fn)
-		listeners[url_fn or msg.url()] = nil
+	-- @param url_fn_to_remove
+	function instance.remove(url_fn_to_remove)
+		if type(url_fn_to_remove) == "function" then
+			listeners[url_fn_to_remove] = nil
+		else
+			-- urls can't be compared using the equality operator
+			-- msg.url() ~= msg.url()
+			-- compare on socket, path and fragment instead
+			local url_to_remove = url_fn_to_remove or msg.url()
+			for url_fn,_ in pairs(listeners) do
+				if type(url_fn) ~= "function"
+					and url_fn.socket == url_to_remove.socket
+					and url_fn.path == url_to_remove.path
+					and url_fn.fragment == url_to_remove.fragment then
+					listeners[url_fn] = nil
+				end
+			end
+		end
 	end
 	
 	--- Trigger this listener
