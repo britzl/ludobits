@@ -1,0 +1,43 @@
+local dynamic = require "ludobits.m.dynamic"
+local input = require "ludobits.m.input"
+
+
+function init(self)
+	input.acquire()
+end
+
+function final(self)
+	input.release()
+end
+
+function update(self, dt)
+	if input.is_pressed(hash("left")) then
+		dynamic.rotate("#collisionobject", vmath.vector3(0, -1000, 0) * dt)
+	elseif input.is_pressed(hash("right")) then
+		dynamic.rotate("#collisionobject", vmath.vector3(0, 1000, 0) * dt)
+	else
+		dynamic.stop_rotating("#collisionobject")
+	end
+	
+	if input.is_pressed(hash("up")) then
+		dynamic.forward("#collisionobject", vmath.vector3(0, 10000, 0) * dt)
+	elseif input.is_pressed(hash("down")) then
+		dynamic.backwards("#collisionobject", vmath.vector3(0, 10000, 0) * dt)
+	else
+		dynamic.stop_moving("#collisionobject")
+	end
+end
+
+function on_input(self, action_id, action)
+	input.on_input(action_id, action)
+	if action_id == hash("toggle_physics_debug") and action.released then
+		msg.post("@system:", "toggle_physics_debug")
+	elseif action_id == hash("toggle_profile") and action.released then
+		msg.post("@system:", "toggle_profile")
+	end
+end
+
+function on_reload(self)
+    -- Add reload-handling code here
+    -- Remove this function if not needed
+end

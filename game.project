@@ -3,7 +3,7 @@ title = Ludobits
 version = 0.7.3
 
 [bootstrap]
-main_collection = /examples/flow/flow.collectionc
+main_collection = /examples/dynamic/dynamic.collectionc
 render = /ludobits/r/split_screen.renderc
 
 [input]
@@ -16,6 +16,7 @@ height = 720
 [physics]
 scale = 0.02
 debug = 0
+gravity_y = 0
 
 [script]
 shared_state = 1

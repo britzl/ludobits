@@ -3,6 +3,9 @@ local M = {}
 local LINEAR_VELOCITY = hash("linear_velocity")
 local ANGULAR_VELOCITY = hash("angular_velocity")
 
+--- Rotate a collision object be applying opposing and offset forces
+-- @param collisionobject_url
+-- @param force In the format of vmath.vector3(0, force, 0)
 function M.rotate(collisionobject_url, force)
 	local rotation = go.get_rotation()
 	local world_position = go.get_world_position()
@@ -11,14 +14,16 @@ function M.rotate(collisionobject_url, force)
 end
 
 
----
+--- Move a dynamic collision object in its direction of rotation by
+-- applying a force 
 -- @param collisionobject_url
 -- @param force In the format of vmath.vector3(0, force, 0)
 function M.forward(collisionobject_url, force)
 	msg.post(collisionobject_url, "apply_force", { force = vmath.rotate(go.get_rotation(), force), position = go.get_world_position() })
 end
 
----
+--- Move a dynamic collision object in the opposite direction of
+-- its rotation by applying a force 
 -- @param collisionobject_url
 -- @param force In the format of vmath.vector3(0, force, 0)
 function M.backwards(collisionobject_url, force)

@@ -10,6 +10,22 @@ key_trigger {
   input: KEY_SPACE
   action: "jump"
 }
+key_trigger {
+  input: KEY_UP
+  action: "up"
+}
+key_trigger {
+  input: KEY_DOWN
+  action: "down"
+}
+key_trigger {
+  input: KEY_1
+  action: "toggle_profile"
+}
+key_trigger {
+  input: KEY_2
+  action: "toggle_physics_debug"
+}
 mouse_trigger {
   input: MOUSE_BUTTON_1
   action: "touch"

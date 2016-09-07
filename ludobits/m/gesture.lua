@@ -1,3 +1,30 @@
+--- Gesture detection module that can be used to detect gestures such as tap, double tap,
+-- long press and swipe
+-- @usage
+--
+--	local gesture = require "ludobits.m.gesture"
+--	
+--	function on_input(self, action_id, action)
+--		local g = gesture.on_input(self, action_id, action)
+--		if g.tap then
+--			print("Single tap detected")
+--		elseif g.double_tap then
+--			print("Double tap detected")
+--		elseif g.long_press then
+--			print("Long-press detected")
+--		elseif g.swipe_left then
+--			print("Swipe left detected")
+--		elseif g.swipe_right then
+--			print("Swipe right detected")
+--		elseif g.swipe_up then
+--			print("Swipe up detected")
+--		elseif g.swipe_down then
+--			print("Swipe down detected")
+--		end
+--	end
+--
+
+
 local M = {}
 
 M.HASH_TOUCH = hash("touch")

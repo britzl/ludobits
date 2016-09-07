@@ -1,6 +1,7 @@
 --- The flow module simplifies asynchronous flows of execution where your
 -- code needs to wait for one asynchronous operation to finish before
 -- starting with the next one.
+--
 -- @usage
 --
 -- 	local flow = require "ludobits.m.flow"
