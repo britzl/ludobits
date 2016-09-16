@@ -1,0 +1,21 @@
+local broadcast = require "ludobits.m.broadcast"
+
+local function receive_boo(message)
+	print("Received boo")
+	--pprint(message)
+end
+
+function init(self)
+	broadcast.register("foo")
+	broadcast.register("boo", receive_boo)
+end
+
+function final(self)
+	broadcast.unregister("foo")
+	broadcast.unregister("boo", receive_boo)
+end
+
+function on_message(self, message_id, message, sender)
+	print("Received", message_id)
+	--pprint(message)
+end
