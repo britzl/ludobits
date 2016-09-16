@@ -1,4 +1,5 @@
 --- Module to simplify sending a message to multiple receivers
+local listener = require "ludobits.m.listener"
 
 local M = {}
 
@@ -13,38 +14,35 @@ end
 -- @param message
 function M.send(message_id, message)
 	assert(message_id)
-	local key = hash_to_hex(ensure_hash(message_id))
+	local key = ensure_hash(message_id)
 	if receivers[key] then
 		message = message or {}
-		for _,receiver_url in pairs(receivers[key]) do
-			msg.post(receiver_url, message_id, message)
-		end
+		receivers[key].trigger(message_id, message)
 	end
 end
 
 --- Register the current script as a receiver for a specific message
 -- @param message_id
-function M.register(message_id)
+-- @param url_or_fn Optional URL or function to register. Defaults to the
+-- current script url
+function M.register(message_id, url_or_fn)
 	assert(message_id)
-	local key = hash_to_hex(ensure_hash(message_id))
-	receivers[key] = receivers[key] or {}
-	table.insert(receivers[key], msg.url())
+	url_or_fn = url_or_fn or msg.url()
+	local key = ensure_hash(message_id)
+	receivers[key] = receivers[key] or listener.create()
+	receivers[key].add(url_or_fn)
 end
 
 --- Unregister the current script from receiving a previously registered message
 -- @param message_id
-function M.unregister(message_id)
+-- @param url_or_fn Optional URL or function to unregister. Defaults to the current
+-- script url
+function M.unregister(message_id, url_or_fn)
 	assert(message_id)
-	local key = hash_to_hex(ensure_hash(message_id))
-	if not receivers[key] then
-		return
-	end
-	local my_url = msg.url()
-	for i,receiver_url in pairs(receivers[key]) do
-		if receiver_url == my_url then
-			table.remove(receivers[key], i)
-			return
-		end
+	url_or_fn = url_or_fn or msg.url()
+	local key = ensure_hash(message_id)
+	if receivers[key] then
+		receivers[key].remove(url_or_fn)
 	end
 end
 
