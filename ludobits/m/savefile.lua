@@ -13,11 +13,16 @@
 local M = {}
 
 
+local function get_path(filename)
+	local path = sys.get_save_file(sys.get_config("project.title"):gsub(" ", "_"), filename)
+	return path
+end
+
 --- Open a file
 -- @param filename
 -- @return file instance
 function M.open(filename)
-	local path = sys.get_save_file(sys.get_config("project.title"):gsub(" ", "_"), filename)
+	local path = get_path(filename)
 	local instance = {}
 	
 	--- Load the contents of the file
@@ -31,7 +36,13 @@ function M.open(filename)
 	-- @return success
 	function instance.save(t)
 		assert(t and type(t) == "table", "You must provide a table to save")
-		return sys.save(path, t)
+		local tmpfile = get_path("____tmp")
+		-- write to temp file first, then move it
+		return pcall(function()
+			sys.save(tmpfile, t)
+			os.remove(path)
+			os.rename(tmpfile, path)
+		end)
 	end
 	
 	return instance
