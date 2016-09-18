@@ -22,8 +22,7 @@ function M.register(node_or_string, callback)
 	assert(node_or_string, "You must provide a node")
 	assert(callback, "You must provide a callback")
 	local node = ensure_node(node_or_string)
-	local node_id = gui.get_id(node)
-	registered_nodes[hash_to_hex(node_id)] = { url = msg.url(), callback = callback, node_id = node_id }
+	registered_nodes[node] = { url = msg.url(), callback = callback, node = node }
 end
 
 --- Unregister a previously registered node or all nodes
@@ -39,8 +38,7 @@ function M.unregister(node_or_string)
 		end
 	else
 		local node = ensure_node(node_or_string)
-		local node_id = gui.get_id(node)
-		registered_node[hash_to_hex(node_id)] = nil
+		registered_node[node] = nil
 	end
 end
 
@@ -75,7 +73,7 @@ function M.on_input(action_id, action)
 		local url = msg.url()
 		for _,registered_node in pairs(registered_nodes) do
 			if registered_node.url == url then
-				local node = gui.get_node(registered_node.node_id)
+				local node = registered_node.node
 				if is_enabled(node) and gui.pick_node(node, action.x, action.y) then
 					shake(node)
 					registered_node.callback()
