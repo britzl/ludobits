@@ -3,21 +3,21 @@
 -- @usage
 --
 --	-- script_a.script
---	
+--
 --	local broadcast = require "ludobits.m.listener"
---	
+--
 --	function init(self)
 --		broadcast.register("foo")
 --		broadcast.register("bar", function(message, sender)
 --			-- handle message
 --		end)
 --	end
---	
+--
 --	function final(self)
 --		broadcast.unregister("foo")
 --		broadcast.unregister("bar")
 --	end
---	
+--
 --	function on_message(self, message_id, message, sender)
 --		if broadcast.on_message(message_id, message, sender) then
 --			-- message was handled
@@ -30,7 +30,7 @@
 --
 --
 --	-- script_b.script
---	
+--
 --	local broadcast = require "ludobits.m.listener"
 --
 --	function update(self, dt)
@@ -47,6 +47,10 @@ local function ensure_hash(string_or_hash)
 	return type(string_or_hash) == "string" and hash(string_or_hash) or string_or_hash
 end
 
+local function url_to_key(url)
+	return tostring(url.socket) .. hash_to_hex(url.path) .. hash_to_hex(url.fragment)
+end
+
 --- Send a message to all registered receivers
 -- @param message_id
 -- @param message
@@ -55,8 +59,8 @@ function M.send(message_id, message)
 	local key = ensure_hash(message_id)
 	if receivers[key] then
 		message = message or {}
-		for url,_ in pairs(receivers[key]) do
-			msg.post(url, message_id, message)
+		for _,receiver in pairs(receivers[key]) do
+			msg.post(receiver.url, message_id, message)
 		end
 	end
 end
@@ -69,9 +73,10 @@ end
 -- to work
 function M.register(message_id, on_message_handler)
 	assert(message_id)
+	local url = msg.url()
 	local key = ensure_hash(message_id)
 	receivers[key] = receivers[key] or {}
-	receivers[key][msg.url()] = on_message_handler or true
+	receivers[key][url_to_key(url)] = { url = url, handler = on_message_handler }
 end
 
 --- Unregister the current script from receiving a previously registered message
@@ -80,7 +85,7 @@ function M.unregister(message_id)
 	assert(message_id)
 	local key = ensure_hash(message_id)
 	if receivers[key] then
-		receivers[key][msg.url()] = nil
+		receivers[key][url_to_key(msg.url())] = nil
 	end
 end
 
@@ -95,15 +100,15 @@ function M.on_message(message_id, message, sender)
 	if not message_receivers then
 		return false
 	end
-	local message_receiver = message_receivers[msg.url()]
-	if not message_receiver then
-		return false
+	
+	local url = msg.url()
+	for _,message_receiver in pairs(receivers[message_id]) do
+		if message_receiver.url == url and message_receiver.handler then
+			message_receiver.handler(message, sender)
+			return true
+		end
 	end
-	if message_receiver == true then
-		return false
-	end
-	message_receiver(message, sender)
-	return true
+	return false
 end
 
 
