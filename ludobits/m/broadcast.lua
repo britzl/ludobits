@@ -100,7 +100,7 @@ function M.on_message(message_id, message, sender)
 	if not message_receivers then
 		return false
 	end
-	
+
 	local url = msg.url()
 	for _,message_receiver in pairs(receivers[message_id]) do
 		if message_receiver.url == url and message_receiver.handler then
@@ -112,4 +112,8 @@ function M.on_message(message_id, message, sender)
 end
 
 
-return M
+return setmetatable(M, {
+	__call = function(self, ...)
+		return M.send(...)
+	end
+})
