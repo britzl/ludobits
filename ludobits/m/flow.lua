@@ -133,10 +133,10 @@ end
 function M.delay(seconds)
 	assert(seconds, "You must provide a delay")
 	local instance = create_or_get(coroutine.running())
-	local now = socket.gettime()
 	instance.state = WAITING
-	instance.condition = function()
-		return socket.gettime() > (now + seconds) 
+	instance.condition = function(dt)
+		seconds = seconds - dt
+		return seconds <= 0
 	end
 	return coroutine.yield()
 end
@@ -323,7 +323,11 @@ end
 
 
 --- Call this as often as needed (every frame)
-function M.update()
+function M.update(dt)
+	if not dt then
+		print("WARN: flow.update() now requires dt. Assuming 0.0167 for now.")
+		dt = 0.0167
+	end
 	local url = msg.url()
 	for co,instance in pairs(instances) do
 		if instance.url == url then
@@ -332,7 +336,7 @@ function M.update()
 				instances[co] = nil
 			else
 				if instance.state == WAITING and instance.condition then
-					if instance.condition() then
+					if instance.condition(dt) then
 						instance.condition = nil
 						instance.on_message = nil
 						instance.state = READY

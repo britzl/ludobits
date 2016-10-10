@@ -17,7 +17,7 @@ function final(self)
 end
 
 function update(self, dt)
-	flow.update()
+	flow.update(dt)
 end
 
 function on_message(self, message_id, message, sender)
