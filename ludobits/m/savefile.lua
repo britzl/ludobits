@@ -36,13 +36,7 @@ function M.open(filename)
 	-- @return success
 	function instance.save(t)
 		assert(t and type(t) == "table", "You must provide a table to save")
-		local tmpfile = get_path("____tmp")
-		-- write to temp file first, then move it
-		return pcall(function()
-			sys.save(tmpfile, t)
-			os.remove(path)
-			os.rename(tmpfile, path)
-		end)
+		sys.save(tmpfile, t)
 	end
 	
 	return instance
