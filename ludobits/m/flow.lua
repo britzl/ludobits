@@ -64,12 +64,14 @@ local function table_unpack(args)
 	end
 end
 
+local id_counter = 0
 
 local function create_or_get(co)
 	assert(co, "You must provide a coroutine")
 	if not instances[co] then
+		id_counter = id_counter + 1
 		instances[co] = {
-			id = socket.gettime(),
+			id = id_counter,
 			url = msg.url(),
 			state = READY,
 			co = co,
