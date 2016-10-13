@@ -1,0 +1,12 @@
+local test_input = require "test.test_input"
+local test_broadcast = require "test.test_broadcast"
+local test_flow = require "test.test_flow"
+
+local deftest = require "deftest.deftest"
+
+function init(self)
+	deftest.add(test_input)
+	deftest.add(test_broadcast)
+	deftest.add(test_flow)
+	deftest.run()
+end

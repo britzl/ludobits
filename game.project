@@ -1,9 +1,10 @@
 [project]
 title = Ludobits
 version = 0.7.6
+dependencies = https://github.com/britzl/deftest/archive/master.zip
 
 [bootstrap]
-main_collection = /examples/broadcast/broadcast.collectionc
+main_collection = /test/test.collectionc
 render = /ludobits/r/split_screen.renderc
 
 [input]
