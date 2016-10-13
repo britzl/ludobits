@@ -23,7 +23,7 @@ echo "Downloading ${BOB_URL}"
 curl -o bob.jar ${BOB_URL}
 
 echo "Running bob.jar - resolving dependencies"
-java -jar bob.jar --auth ${DEFOLD_TOKEN} --email bjorn.ritzl@king.com resolve
+java -jar bob.jar --auth ${DEFOLD_AUTH} --email bjorn.ritzl@king.com resolve
 
 echo "Running bob.jar - building"
 java -jar bob.jar --debug build
