@@ -23,7 +23,7 @@ echo "Downloading ${BOB_URL}"
 curl -o bob.jar ${BOB_URL}
 
 echo "Running bob.jar"
-java -jar bob.jar --debug build
+java -jar bob.jar --debug --auth ${DEFOLD_TOKEN} --email bjorn.ritzl@king.com resolve build
 
 echo "Starting dmengine_headless"
 ./dmengine_headless

@@ -3,6 +3,9 @@ language: java
 jdk:
   - oraclejdk8
 
+#DEFOLD_AUTH=auth token
+secure: "xv5FUth6u7OqKWCtxaNpffDpwGhfNF4frgUXmRvao8hCzJyWwcOI9eMMes+CoKbqnJRbX0BssU0fbsQG8W32Ia+9+RJd0wkcKS1MydmUvzPhXuhDbkt+CWNgDjR+61w6hwdoRpJ98SGVTVxk8uXtGtAFkZaSwQTOEWxNzrMs1/D9mh56Xk0RQUNXnAU8VV8xMEnqk+DnDt124dZOe10qEZBcRGV8Jf4edpbJ1LrpVblFE6m+F6poWedirfGKcAUjxbCSombPqoPY1AwKrJzEZis3GZYVLO4vZ6Sxq1TqEToAg+50Qd0cw2EXVoP+Bw3yAH040ox+9RDW2+NYg2TODufrOCXcsq9Dbo7OmQXr3gkGFkUfi0lCYFv9MInflsGdeFjiSi0ubZulE3xaJ9ayc1dxVqpARhfkQJX6KVQTzGpmX1NigBqYcyA56l7amSErsen3Y+PxL/YJiDJRzI8GlxXu6Rap2x7ZOk9FANAM0Ev82lTcyCJdz4VA7Jy8qk1vBNdTNR8Zufp+8UOFOfuN0kbCrWZ4nkmYgnmIT2jKSGxNzhAj1sPBnrYLZlLXigPv7k9NYDZM2qcl039Dlzypn6wxMxwQwqKMDd9kshHx48vPD87xCZXu0P2NrRqvg0qT0scFmCRPD38RWvXGiCfVIteQLQkBlq3iWcl3JUWjVv8="
+
 before_script:
   - "export DISPLAY=:99.0"
   - "sh -e /etc/init.d/xvfb start"
