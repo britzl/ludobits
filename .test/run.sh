@@ -22,8 +22,10 @@ chmod +x dmengine_headless
 echo "Downloading ${BOB_URL}"
 curl -o bob.jar ${BOB_URL}
 
-echo "Running bob.jar - resolving dependencies"
-java -jar bob.jar --auth ${DEFOLD_AUTH} --email bjorn.ritzl@king.com resolve
+if [ -n "${DEFOLD_AUTH}" ] && [ -n "${DEFOLD_USER}" ]; then
+	echo "Running bob.jar - resolving dependencies"
+	java -jar bob.jar --auth "${DEFOLD_AUTH}" --email "${DEFOLD_USER}" resolve
+fi
 
 echo "Running bob.jar - building"
 java -jar bob.jar --debug build
