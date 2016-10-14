@@ -223,7 +223,7 @@ function M.until_callback(fn, ...)
 	fn(function(...)
 		instance.state = READY
 		instance.result = table_pack(...)
-	end)
+	end, ...)
 	return coroutine.yield()
 end
 

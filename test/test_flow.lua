@@ -4,6 +4,8 @@ return function()
 	local flow
 	
 	local MSG_RESUME = hash("FLOW_RESUME")
+	local broadcast1 = msg.url("broadcast1")
+	local broadcast2 = msg.url("broadcast2")
 	
 	describe("flow", function()
 		before(function()
@@ -31,7 +33,7 @@ return function()
 		end)
 
 		it("should run the flow after a call to update", function()
-			msg.url.replace(function() return msg.url.original("broadcast1") end)
+			msg.url.replace(function() return broadcast1 end)
 			msg.post.replace(function(url, message_id, message, sender)
 				flow.on_message(message_id, message, sender)
 			end)
@@ -47,7 +49,7 @@ return function()
 		end)
 		
 		it("should be able to pause for a specific number of seconds", function()
-			msg.url.replace(function() return msg.url.original("broadcast1") end)
+			msg.url.replace(function() return broadcast1 end)
 			msg.post.replace(function(url, message_id, message, sender)
 				flow.on_message(message_id, message, sender)
 			end)
@@ -67,7 +69,7 @@ return function()
 		end)
 		
 		it("should be able to pause for a specific number of frames", function()
-			msg.url.replace(function() return msg.url.original("broadcast1") end)
+			msg.url.replace(function() return broadcast1 end)
 			msg.post.replace(function(url, message_id, message, sender)
 				flow.on_message(message_id, message, sender)
 			end)
@@ -87,9 +89,8 @@ return function()
 			flow.update(1)
 			assert(flow_finished)
 		end)
-		
+
 		it("should be able to pause until a condition is true", function()
-			local broadcast1 = msg.url("broadcast1")
 			msg.url.replace(function() return broadcast1 end)
 			msg.post.replace(function(url, message_id, message, sender)
 				flow.on_message(message_id, message, sender)
@@ -99,7 +100,7 @@ return function()
 			local is_it_true_yet = false
 			local instance = flow.start(function()
 				flow.until_true(function()
-					return is_it_true_yet == true
+					return is_it_true_yet
 				end)
 				flow_finished = true
 			end)
@@ -111,6 +112,75 @@ return function()
 			is_it_true_yet = true
 			
 			flow.update(1)
+			assert(flow_finished)
+		end)
+
+		it("should be able to pause until a message is received", function()
+			msg.url.replace(function() return broadcast1 end)
+			msg.post.replace(function(url, message_id, message, sender)
+				flow.on_message(message_id, message, sender)
+			end)
+
+			local flow_finished = false
+			local instance = flow.start(function()
+				flow.until_any_message()
+				flow_finished = true
+			end)
+
+			flow.update(0)
+			assert(not flow_finished)
+
+			msg.post(broadcast1, "foobar", {})
+			flow.update(0)
+			assert(flow_finished)
+		end)
+
+		it("should be able to pause until a specific message is received", function()
+			msg.url.replace(function() return broadcast1 end)
+			msg.post.replace(function(url, message_id, message, sender)
+				flow.on_message(message_id, message, sender)
+			end)
+
+			local flow_finished = false
+			local instance = flow.start(function()
+				flow.until_message("foo", "bar")
+				flow.until_message("boo", "car")
+				flow_finished = true
+			end)
+
+			flow.update(0)
+			assert(not flow_finished)
+
+			msg.post(broadcast1, "bar", {})
+			flow.update(0)
+			assert(not flow_finished)
+			msg.post(broadcast1, "boo", {})
+			flow.update(0)
+			assert(flow_finished)
+		end)
+		
+		it("should be possible to pause until a callback is invoked", function()
+			msg.url.replace(function() return broadcast1 end)
+			msg.post.replace(function(url, message_id, message, sender)
+				flow.on_message(message_id, message, sender)
+			end)
+
+			local callback
+			local flow_finished = false
+			local instance = flow.start(function()
+				flow.until_callback(function(cb, foo, bar)
+					assert(foo == "foo")
+					assert(bar == "bar")
+					callback = cb
+				end, "foo", "bar")
+				flow_finished = true
+			end)
+
+			flow.update(0)
+			assert(not flow_finished)
+
+			callback()
+			flow.update(0)
 			assert(flow_finished)
 		end)
 	end)
