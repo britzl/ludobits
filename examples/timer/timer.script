@@ -1,0 +1,19 @@
+local timer = require "ludobits.m.timer"
+
+function init(self)
+	self.t1 = timer.once(3, function()
+		print("t1 has fired")
+	end)
+	self.t2 = timer.every(1, function()
+		print("t2 has fired")
+	end)
+	self.t3 = timer(5, function()
+		print("t3 has fired")
+	end)
+end
+
+function update(self, dt)
+	self.t1.update(dt)
+	self.t2.update(dt)
+	self.t3.update(dt)
+end
