@@ -13,6 +13,9 @@ images {
 images {
   image: "/examples/assets/images/blue_button07.png"
 }
+images {
+  image: "/examples/assets/images/hitman1_gun.png"
+}
 animations {
   id: "blue_player"
   images {
