@@ -15,15 +15,12 @@ function M.handle_geometry_contact(correction, normal, distance, id)
 	correction = correction + comp
 	-- apply the compensation to the player character
 	go.set_position(go.get_position(id) + comp, id)
---[[	-- project the velocity onto the normal
-	proj = vmath.dot(self.velocity, normal)
-	-- if the projection is negative, it means that some of the velocity points towards the contact point
-	if proj < 0 then
-		-- remove that component in that case
-		self.velocity = self.velocity - proj * normal
-	end--]]
 end
 
+--- Set rotation around z-axis in such a way that the game object is
+-- facing a specific position
+-- @param look_at_position The position to look at
+-- @param id Optional id of the game object to rotate
 function M.look_at(look_at_position, id)
 	local pos = go.get_world_position(id)
 	local target_angle = -math.atan2(look_at_position.x - pos.x, look_at_position.y - pos.y)
@@ -31,20 +28,32 @@ function M.look_at(look_at_position, id)
 	go.set_rotation(target_quat)
 end
 
+--- Rotate around the z-axis
+-- @param Amount to rotate in radians
+-- @param id Optional id of the game object to rotate
 function M.rotate(angle, id)
 	go.set_rotation(go.get_rotation(id) * vmath.quat_rotation_z(angle), id)
 end
 
+--- Set the absolute rotation around z-axis
+-- @param angle Angle in radians (use math.rad(deg) to convert from degrees to radians)
+-- @param id Optional id of the game object to rotate
 function M.set_rotation(angle, id)
 	go.set_rotation(vmath.quat_rotation_z(angle), id)
 end
 
+--- Move forward in the current direction of rotation around z-axis
+-- @param amount Distance to move
+-- @param id Optional id of the game object to move
 function M.forward(amount, id)
 	local rotation = go.get_rotation(id)
 	local direction = vmath.rotate(rotation, vmath.vector3(0, amount, 0))
 	go.set_position(go.get_position(id) + direction, id)
 end
 
+--- Move backwards in the current direction of rotation around z-axis
+-- @param amount Distance to move
+-- @param id Optional id of the game object to move
 function M.backwards(amount, id)
 	local rotation = go.get_rotation(id)
 	local direction = vmath.rotate(rotation, vmath.vector3(0, amount, 0))
