@@ -25,7 +25,7 @@ function M.look_at(look_at_position, id)
 	local pos = go.get_world_position(id)
 	local target_angle = -math.atan2(look_at_position.x - pos.x, look_at_position.y - pos.y)
 	local target_quat = vmath.quat_rotation_z(target_angle)
-	go.set_rotation(target_quat)
+	go.set_rotation(target_quat, id)
 end
 
 --- Rotate around the z-axis
