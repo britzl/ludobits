@@ -34,9 +34,16 @@ function M.open(filename)
 	--- Save table to the file
 	-- @param t The table to save
 	-- @return success
+	-- @return error_message
 	function instance.save(t)
 		assert(t and type(t) == "table", "You must provide a table to save")
-		sys.save(tmpfile, t)
+		local tmpname = os.tmpname()
+		local success = sys.save(tmpname, t)
+		if not success then
+			return false, "Unable to save file"
+		end
+		os.remove(path)
+		return os.rename(tmpname, path)
 	end
 	
 	return instance
