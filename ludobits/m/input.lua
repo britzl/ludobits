@@ -1,5 +1,31 @@
 --- Module to simplify input handling. The module will keep track of
 -- pressed and released states for all input that it receives.
+-- @usage
+--
+-- local input = require "ludobits.m.input"
+-- 
+-- function init(self)
+-- 	input.acquire()
+-- end
+-- 
+-- function final(self)
+-- 	input.release()
+-- end
+-- 
+-- function update(self, dt)
+-- 	if input.is_pressed(hash("left")) then
+-- 		go.get_position(go.set_position() - vmath.vector3(50, 0, 0) * dt)
+-- 	elseif input.is_pressed(hash("right")) then
+-- 		go.get_position(go.set_position() + vmath.vector3(50, 0, 0) * dt)
+-- 	end
+-- end
+-- 
+-- function on_input(self, action_id, action)
+-- 	input.on_input(action_id, action)
+-- end
+--
+
+
 
 local M = {}
 
@@ -42,7 +68,7 @@ function M.update(action_id, action)
 end
 function M.on_input(action_id, action)
 	-- I can't decide on which I like best, on_input() or update()
-	return M.update(action_id, action)
+	M.update(action_id, action)
 end
 
 return M
