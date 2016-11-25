@@ -22,7 +22,7 @@ function M.register(node_or_string, callback)
 	assert(node_or_string, "You must provide a node")
 	assert(callback, "You must provide a callback")
 	local node = ensure_node(node_or_string)
-	registered_nodes[node] = { url = msg.url(), callback = callback, node = node }
+	registered_nodes[node] = { url = msg.url(), callback = callback, node = node, scale = gui.get_scale(node) }
 end
 
 --- Unregister a previously registered node or all nodes
@@ -42,14 +42,15 @@ function M.unregister(node_or_string)
 	end
 end
 
-local function shake(node)
+local function shake(node, initial_scale)
 	gui.cancel_animation(node, "scale.x")
 	gui.cancel_animation(node, "scale.y")
+	gui.set_scale(node, initial_scale)
 	local scale = gui.get_scale(node)
 	gui.set_scale(node, scale * 1.2)
 	gui.animate(node, "scale.x", scale.x, gui.EASING_OUTELASTIC, 0.8)
 	gui.animate(node, "scale.y", scale.y, gui.EASING_OUTELASTIC, 0.8, 0.05, function()
-		gui.set_scale(node, scale)
+		gui.set_scale(node, initial_scale)
 	end)
 end
 
@@ -75,7 +76,7 @@ function M.on_input(action_id, action)
 			if registered_node.url == url then
 				local node = registered_node.node
 				if is_enabled(node) and gui.pick_node(node, action.x, action.y) then
-					shake(node)
+					shake(node, registered_node.scale)
 					registered_node.callback()
 					return true
 				end
