@@ -19,6 +19,7 @@ function init(self)
 			lorem[i1], lorem[i2] = lorem[i2], lorem[i1]
 		end
 		self.file.save(lorem)
+		gui.set_text(gui.get_node("text"), table.concat(lorem, " "))
 	end)
 end
 
