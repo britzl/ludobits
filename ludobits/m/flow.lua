@@ -238,12 +238,8 @@ function M.load(collection_url)
 	instance.on_message = function(message_id, message, sender)
 		if message_id == hash("proxy_loaded") and sender == collection_url then
 			msg.post(sender, "enable")
-			-- we should wait one frame to ensure that the loaded collection has
-			-- been enabled
 			instance.on_message = nil
-			instance.condition = function()
-				return true
-			end
+			instance.state = READY
 		end
 	end
 	msg.post(collection_url, "load")
