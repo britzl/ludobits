@@ -234,11 +234,16 @@ function M.load(collection_url)
 	assert(collection_url, "You must provide a URL to a collection proxy")
 	collection_url = ensure_url(collection_url)
 	local instance = create_or_get(coroutine.running())
-	instance.state = WAITING
+	instance.state = WAITING	
 	instance.on_message = function(message_id, message, sender)
 		if message_id == hash("proxy_loaded") and sender == collection_url then
 			msg.post(sender, "enable")
-			instance.state = READY
+			-- we should wait one frame to ensure that the loaded collection has
+			-- been enabled
+			instance.on_message = nil
+			instance.condition = function()
+				return true
+			end
 		end
 	end
 	msg.post(collection_url, "load")
