@@ -1,14 +1,13 @@
 local some_data = require "examples.listener.some_data"
 
 local function foo(message_id, message)
+	assert(message_id == some_data.FOO, "Expected only messages of type FOO to be received")
 	print("listener3 foo() received", message_id)
 end
 
 function init(self)
-	some_data.listeners.add({
-		[some_data.FOO] = foo,
-		[some_data.BAR] = msg.url(),
-	})
+	some_data.listeners.add(foo, some_data.FOO)
+	some_data.listeners.add(msg.url(), some_data.BAR)
 end
 
 function final(self)

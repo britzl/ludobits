@@ -8,28 +8,37 @@
 --	
 --	local l = listener.create()
 --
---	l.add(msg.url("#myscript"))
---	l.add(function(message_id, message)
---		-- handle message
---	end)
---	l.add({
---		[hash("mymessage")] = function(message_id, message)
---			-- handle "mymessage"
---		end,
---		[hash("foobar")] = msg.url("#myscript"),
---	})
+--	local function handler1(message_id, message)
+--		-- will get mymessage1, mymessage2, mymessage3 and foobar
+--	end
 --
---	l.trigger(hash("mymessage"), { text = "lorem ipsum" })
+--	local function handler2(message_id, message)
+--		-- will get mymessage1 and mymessage2
+--	end
+--
+--	l.add(handler1)
+--	l.add(handler2, "mymessage1")
+--	l.add(handler2, "mymessage2")
+--
+--	l.add(msg.url("#myscript1"))
+--	l.add(msg.url("#myscript2"), "mymessage1")
+--	l.add(msg.url("#myscript2"), "mymessage2")
+--
+--
+--	l.trigger(hash("mymessage1"), { text = "lorem ipsum" })
+--	l.trigger(hash("mymessage2"), { text = "lorem ipsum" })
+--	l.trigger(hash("mymessage3"), { text = "lorem ipsum" })
 --	l.trigger(hash("foobar"), { foo = "bar" })
 --
 --
---	-- myscript.script
+--	-- myscript1.script
 --	function on_message(self, mesage_id, message, sender)
---		if message_id == hash("mymessage") then
---			-- handle "mymessage"
---		elseif message_id == hahs("foobar") then
---			-- handle "foobar"
---		end
+--		-- will get mymessage1, mymessage2, mymessage3 and foobar
+--	end
+--
+--	-- myscript2.script
+--	function on_message(self, mesage_id, message, sender)
+--		-- will get mymessage1 and mymessage2
 --	end
 --
 
@@ -57,51 +66,45 @@ function M.create()
 	local instance = {}
 	
 	--- Add a function or url to invoke when the listener is triggered
-	-- @param url_fn_table This can be one of three things:
-	--	1. Function
-	--	2. URL
-	--  3. Table with mapping between specific message ids and functions or urls
-	function instance.add(url_fn_table)
-		-- no function, url or table defined
-		-- add current script url
-		if not url_fn_table then
-			listeners[msg.url()] = {
-				trigger = trigger_url
-			}
-		else
-			-- add a mapping of message hashes to functions/urls
-			if type(url_fn_table) == "table" then
-				for message_id, url_fn in pairs(url_fn_table) do
-					listeners[url_fn] = {
-						message_id = ensure_hash(message_id),
-						trigger = type(url_fn) == "function" and trigger_function or trigger_url
-					}
-				end
-			-- add a function or url
-			else
-				listeners[url_fn_table] = {
-					trigger = type(url_fn_table) == "function" and trigger_function or trigger_url
-				}
-			end
-		end
+	-- @param url_or_fn_to_add URL or function to call. Can be nil in which case the current URL is used.
+	-- @param message_id Optional message id to filter on 
+	function instance.add(url_or_fn_to_add, message_id)
+		url_or_fn_to_add = url_or_fn_to_add or msg.url()
+		message_id = message_id and ensure_hash(message_id) or nil
+		listeners[url_or_fn_to_add] = listeners[url_or_fn_to_add] or {}
+
+		instance.remove(url_or_fn_to_add, message_id)
+		table.insert(listeners[url_or_fn_to_add], {
+			message_id = message_id,
+			trigger = type(url_or_fn_to_add) == "userdata" and trigger_url or trigger_function
+		})
 	end
 
 	--- Remove a previously added callback function or url
-	-- @param url_fn_to_remove
-	function instance.remove(url_fn_to_remove)
-		if type(url_fn_to_remove) == "function" then
-			listeners[url_fn_to_remove] = nil
-		else
-			-- urls can't be compared using the equality operator
-			-- msg.url() ~= msg.url()
-			-- compare on socket, path and fragment instead
-			local url_to_remove = url_fn_to_remove or msg.url()
-			for url_fn,_ in pairs(listeners) do
-				if type(url_fn) ~= "function"
-					and url_fn.socket == url_to_remove.socket
-					and url_fn.path == url_to_remove.path
-					and url_fn.fragment == url_to_remove.fragment then
-					listeners[url_fn] = nil
+	-- @param url_or_fn_to_remove
+	-- @param message_id Optional message_id to limit removal to
+	function instance.remove(url_or_fn_to_remove, message_id)
+		url_or_fn_to_remove = url_or_fn_to_remove or msg.url()
+		message_id = message_id and ensure_hash(message_id) or nil
+
+		local is_url = type(url_or_fn_to_remove) == "userdata"
+		
+		for url_fn,url_fn_listeners in pairs(listeners) do
+			-- make sure to only check against urls if we are removing a url and vice versa
+			if (is_url and type(url_fn) == "userdata") or (not is_url and type(url_fn) ~= "userdata") then
+				for k,data in pairs(url_fn_listeners) do
+					if is_url then
+						if url_fn.socket == url_or_fn_to_remove.socket
+						and url_fn.path == url_or_fn_to_remove.path
+						and url_fn.fragment == url_or_fn_to_remove.fragment
+						and (not message_id or message_id == data.message_id) then
+							url_fn_listeners[k] = nil
+						end
+					else
+						if url_fn == url_or_fn_to_remove and (not message_id or message_id == data.message_id) then
+							url_fn_listeners[k] = nil
+						end
+					end
 				end
 			end
 		end
@@ -112,11 +115,13 @@ function M.create()
 	-- @param message The message itself (can be nil)
 	function instance.trigger(message_id, message)
 		assert(message_id, "You must provide a message_id")
+		assert(not message or type(message) == "table", "You must either provide no message or a message of type 'table'")
 		message_id = ensure_hash(message_id)
-		message = message or {}
-		for url_fn,listener in pairs(listeners) do
-			if not listener.message_id or listener.message_id == message_id then
-				listener.trigger(url_fn, message_id, message)
+		for url_fn,url_fn_listeners in pairs(listeners) do
+			for _,listener in pairs(url_fn_listeners) do
+				if not listener.message_id or listener.message_id == message_id then
+					listener.trigger(url_fn, message_id, message or {})
+				end
 			end
 		end
 	end
