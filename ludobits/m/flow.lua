@@ -280,7 +280,7 @@ function M.go_animate(url, property, playback, to, easing, duration, delay)
 	assert(duration, "You must provide a duration")
 	M.until_callback(function(cb)
 		go.cancel_animations(url, property)
-		go.animate(url, property, playback, to, easing, duration, delay, cb)
+		go.animate(url, property, playback, to, easing, duration, delay or 0, cb)
 	end)
 end
 
@@ -303,7 +303,7 @@ function M.gui_animate(node, property, playback, to, easing, duration, delay)
 	assert(duration, "You must provide a duration")
 	M.until_callback(function(cb)
 		gui.cancel_animation(node, property)
-		gui.animate(node, property, to, easing, duration, delay, cb, playback)
+		gui.animate(node, property, to, easing, duration, delay or 0, cb, playback)
 	end)
 end
 
