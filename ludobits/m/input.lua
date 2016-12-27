@@ -14,9 +14,9 @@
 -- 
 -- function update(self, dt)
 -- 	if input.is_pressed(hash("left")) then
--- 		go.get_position(go.set_position() - vmath.vector3(50, 0, 0) * dt)
+-- 		go.set_position(go.get_position() - vmath.vector3(50, 0, 0) * dt)
 -- 	elseif input.is_pressed(hash("right")) then
--- 		go.get_position(go.set_position() + vmath.vector3(50, 0, 0) * dt)
+-- 		go.set_position(go.get_position() + vmath.vector3(50, 0, 0) * dt)
 -- 	end
 -- end
 -- 
