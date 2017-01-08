@@ -44,6 +44,11 @@ local RESUMING = "RESUMING"
 local WAITING = "WAITING"
 
 
+local RAY_CAST_RESPONSE = hash("ray_cast_response")
+local PLAY_ANIMATION = hash("play_animation")
+local PROXY_LOADED = hash("proxy_loaded")
+local PROXY_UNLOADED = hash("proxy_unloaded")
+
 local function ensure_url(url)
 	return (type(url) == "string") and msg.url(url) or url
 end
@@ -106,6 +111,11 @@ function M.start(fn, options, on_error)
 		end)
 		return created_instance
 	end
+end
+
+
+function M.parallel(fn, on_error)
+	return M.start(fn, { parallel = true }, on_error)
 end
 
 
@@ -236,7 +246,7 @@ function M.load(collection_url)
 	local instance = create_or_get(coroutine.running())
 	instance.state = WAITING	
 	instance.on_message = function(message_id, message, sender)
-		if message_id == hash("proxy_loaded") and sender == collection_url then
+		if message_id == PROXY_LOADED and sender == collection_url then
 			msg.post(sender, "enable")
 			instance.on_message = nil
 			instance.state = READY
@@ -255,7 +265,7 @@ function M.unload(collection_url)
 	local instance = create_or_get(coroutine.running())
 	instance.state = WAITING
 	instance.on_message = function(message_id, message, sender)
-		if message_id == hash("proxy_unloaded") and sender == collection_url then
+		if message_id == PROXY_UNLOADED and sender == collection_url then
 			instance.state = READY
 		end
 	end
@@ -323,7 +333,40 @@ function M.play_animation(sprite_url, id)
 			instance.state = READY
 		end
 	end
-	msg.post(sprite_url, "play_animation", { id = id })
+	msg.post(sprite_url, PLAY_ANIMATION, { id = id })
+	return coroutine.yield()
+end
+
+
+local raycast_request_id_counter = 0
+
+
+--- Cast a physics ray and wait for a response for a maximum of one frame
+-- @param from
+-- @param to
+-- @param groups
+-- @return The ray cast response or nil if no hit
+function M.ray_cast(from, to, groups)
+	assert(from, "You must provide a position to cast ray from")
+	assert(to, "You must provide a position to cast ray to")
+	assert(groups, "You must provide a list of groups")
+	local request_id = raycast_request_id_counter
+	raycast_request_id_counter = raycast_request_id_counter + 1
+	local instance = create_or_get(coroutine.running())
+	instance.state = WAITING
+	instance.on_message = function(message_id, message, sender)
+		if message_id == RAY_CAST_RESPONSE and message.request_id == request_id then
+			instance.result = table_pack(message)
+			instance.condition = nil
+			instance.state = READY
+		end
+	end
+	local frames = 1
+	instance.condition = function()
+		frames = frames - 1
+		return frames == 0
+	end
+	physics.ray_cast(from, to, groups, request_id)
 	return coroutine.yield()
 end
 
