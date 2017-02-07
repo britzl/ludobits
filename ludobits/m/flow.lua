@@ -422,8 +422,9 @@ function M.on_message(message_id, message, sender)
 			end
 		end
 	else
+		local url = msg.url()
 		for _,instance in pairs(instances) do
-			if instance.on_message then
+			if instance.on_message and instance.url == url then
 				instance.on_message(message_id, message, sender)
 			end
 		end
