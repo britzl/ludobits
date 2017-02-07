@@ -13,6 +13,7 @@ function M.create(collision_hashes)
 		velocity = vmath.vector3(),
 		gravity = -100,
 		ground_contact = false,
+		wall_contact = false,
 		jumping = false,
 	}
 
@@ -39,9 +40,13 @@ function M.create(collision_hashes)
 		instance.velocity.x = 0
 	end
 	
-	function instance.jump(power, allow_double_jump)
+	function instance.jump(power, allow_double_jump, allow_wall_jump)
 		if instance.ground_contact then
-			instance.velocity.y = instance.velocity.y + power
+			instance.velocity.y = power
+			instance.jumping = true
+		elseif instance.wall_contact and allow_wall_jump then
+			instance.velocity.y = power * 0.75
+			instance.velocity.x = instance.wall_contact.x * power * 0.35
 			instance.jumping = true
 		elseif allow_double_jump and jumping_up() and not double_jumping then
 			instance.velocity.y = instance.velocity.y + power
@@ -74,9 +79,12 @@ function M.create(collision_hashes)
 				if proj < 0 then
 					instance.velocity = instance.velocity - proj * message.normal
 				end
-				instance.ground_contact = true
-				instance.jumping = false
-				double_jumping = false
+				instance.wall_contact = message.normal.x ~= 0 and message.normal or instance.wall_contact
+				instance.ground_contact = instance.ground_contact or message.normal.y ~= 0
+				if message.normal.y ~= 0 then
+					instance.jumping = false
+					double_jumping = false
+				end
 			end
 		end
 	end
@@ -88,6 +96,7 @@ function M.create(collision_hashes)
 	
 		correction = vmath.vector3()
 		instance.ground_contact = false
+		instance.wall_contact = false
 	end
 
 	return instance
