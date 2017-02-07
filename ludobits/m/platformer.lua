@@ -74,7 +74,7 @@ function M.create(collision_hashes)
 				local proj = vmath.dot(correction, message.normal)
 				local comp = (message.distance - proj) * message.normal
 				correction = correction + comp
-				go.set_position(go.get_position(id) + comp)
+				go.set_position(go.get_position() + comp)
 				proj = vmath.dot(instance.velocity, message.normal)
 				if proj < 0 then
 					instance.velocity = instance.velocity - proj * message.normal
