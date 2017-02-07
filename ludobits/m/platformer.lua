@@ -54,9 +54,9 @@ function M.create(collision_hashes)
 		end
 	end
 	
-	function instance.abort_jump()
+	function instance.abort_jump(reduction)
 		if jumping_up() then
-			instance.velocity.y = instance.velocity.y * 0.5
+			instance.velocity.y = instance.velocity.y * (reduction or 0.5)
 		end
 	end
 	
