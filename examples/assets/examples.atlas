@@ -39,7 +39,7 @@ animations {
   flip_vertical: 0
 }
 animations {
-  id: "green_player"
+  id: "green_player_walk"
   images {
     image: "/examples/assets/images/playerGreen_walk1.png"
   }
@@ -111,6 +111,16 @@ animations {
   }
   playback: PLAYBACK_ONCE_FORWARD
   fps: 30
+  flip_horizontal: 0
+  flip_vertical: 0
+}
+animations {
+  id: "green_player_idle"
+  images {
+    image: "/examples/assets/images/playerGreen_walk1.png"
+  }
+  playback: PLAYBACK_LOOP_FORWARD
+  fps: 60
   flip_horizontal: 0
   flip_vertical: 0
 }

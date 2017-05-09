@@ -89,7 +89,7 @@ embedded_instances {
   "  id: \"sprite\"\n"
   "  type: \"sprite\"\n"
   "  data: \"tile_set: \\\"/examples/assets/examples.atlas\\\"\\n"
-  "default_animation: \\\"green_player\\\"\\n"
+  "default_animation: \\\"green_player_idle\\\"\\n"
   "material: \\\"/builtins/materials/sprite.material\\\"\\n"
   "blend_mode: BLEND_MODE_ALPHA\\n"
   "\"\n"
