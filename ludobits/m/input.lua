@@ -55,6 +55,8 @@ function M.is_pressed(action_id)
 end
 
 --- Forward any calls to on_input from scripts using this module
+-- @param action_id
+-- @param action
 function M.update(action_id, action)
 	assert(action, "You must provide an action")
 	if action_id then
