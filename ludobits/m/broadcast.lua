@@ -48,7 +48,7 @@ local function ensure_hash(string_or_hash)
 end
 
 local function url_to_key(url)
-	return tostring(url.socket) .. hash_to_hex(url.path) .. hash_to_hex(url.fragment or hash(""))
+	return hash_to_hex(url.socket) .. hash_to_hex(url.path) .. hash_to_hex(url.fragment or hash(""))
 end
 
 --- Send a message to all registered receivers
