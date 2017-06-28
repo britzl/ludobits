@@ -1,4 +1,9 @@
---- Camera module to use in combination with the camera.script
+--- Camera module to use in combination with the camera.go
+--
+-- Usage:
+-- 1. Add the camera.go
+-- 2. Select the script component on the camera.go and modify properties to suit your needs
+-- 3. Optional: Use camera.screen_to_world(camera_id, x, y, z) to correctly convert screen to world coordinates for a camera
 
 local M = {}
 
@@ -33,10 +38,19 @@ orthographic_projectors[hash("FIXED")] = function(near_z, far_z)
 	return vmath.matrix4_orthographic(xoffset, xoffset + projected_width, yoffset, yoffset + projected_height, near_z, far_z)
 end
 
-function M.add_orthographic_projector(id, fn)
-	orthographic_projectors[id] = fn
+--- Add a custom orthographic projection matrix provider
+-- @param projector_id Unique id of the provider (hash)
+-- @param fn The function to call when the projection matrix needs to be calculated
+-- The function will receive near_z and far_z as arguments
+function M.add_orthographic_projector(projector_id, fn)
+	orthographic_projectors[projector_id] = fn
 end
 
+--- Get an orthographic projection matrix provider
+-- @param projector_id
+-- @param near_z
+-- @param far_z
+-- @return Projection matrix
 function M.get_orthographic_projection(projector_id, near_z, far_z)
 	local projector_fn = orthographic_projectors[projector_id] or orthographic_projectors[hash("DEFAULT")]
 	return projector_fn(near_z, far_z)
