@@ -1,0 +1,62 @@
+go.property("aspect_ratio", 1.0)
+go.property("fov", 0.785)			--	45 degrees (45 * PI / 180)
+go.property("auto_aspect_ratio", false)
+go.property("near_z", -1)
+go.property("far_z", 1)
+go.property("orthographic", true)
+go.property("orthographic_projector", hash("FIXED"))
+go.property("enabled", true)
+
+local camera = require "ludobits.camera.camera"
+local app = require "ludobits.m.app"
+
+local ENABLE = hash("enable")
+local DISABLE = hash("disable")
+local UPDATE_VIEW_PROJECTION = hash("update_view_projection")
+
+local DISPLAY_WIDTH = tonumber(sys.get_config("display.width"))
+local DISPLAY_HEIGHT = tonumber(sys.get_config("display.height"))
+local DISPLAY_ASPECT_RATIO = DISPLAY_WIDTH / DISPLAY_HEIGHT
+
+local window_width = DISPLAY_WIDTH
+local window_height = DISPLAY_HEIGHT
+local window_aspect_ratio = window_width / window_height
+
+function init(self)
+	app.window.add_listener(function(self, event, data)
+		if event == window.WINDOW_EVENT_RESIZED then
+			window_width = data.width
+			window_height = data.height
+			window_aspect_ratio = window_width / window_height
+		end
+	end)
+end
+
+function update(self, dt)
+	if self.enabled then
+		-- update view projection after all game objects have been updated
+		-- will jitter otherwise
+		msg.post("#", UPDATE_VIEW_PROJECTION)
+	end
+end
+
+function on_message(self, message_id, message, sender)
+	if message_id == UPDATE_VIEW_PROJECTION then
+		local projection = nil
+		if self.orthographic then
+			projection = camera.get_orthographic_projection(self.orthographic_projector, self.near_z, self.far_z)
+		else
+			local aspect_ratio = self.auto_aspect_ratio and window_aspect_ratio or self.aspect_ratio 
+			projection = vmath.matrix4_perspective(self.fov, aspect_ratio, self.near_z, self.far_z)
+		end
+		
+		local camera_id = go.get_id()
+		camera.set_projection_matrix(camera_id, projection)
+		camera.set_view_matrix(camera_id, camera.create_view_matrix(camera_id))
+		camera.send_view_projection(camera_id)
+	elseif message_id == ENABLE then
+		self.enabled = true
+	elseif message_id == DISABLE then
+		self.enabled = false
+	end
+end
