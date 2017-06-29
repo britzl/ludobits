@@ -16,9 +16,6 @@ images {
 images {
   image: "/examples/assets/images/hitman1_gun.png"
 }
-images {
-  image: "/examples/assets/images/crosshair_outline_large.png"
-}
 animations {
   id: "blue_player"
   images {

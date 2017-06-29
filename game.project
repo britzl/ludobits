@@ -4,8 +4,8 @@ version = 0.7.6
 dependencies = https://github.com/britzl/deftest/archive/master.zip
 
 [bootstrap]
-main_collection = /examples/top_down_camera/top_down_camera.collectionc
-render = /ludobits/r/improved.renderc
+main_collection = /test/test.collectionc
+render = /ludobits/r/split_screen.renderc
 
 [input]
 game_binding = /input/game.input_bindingc

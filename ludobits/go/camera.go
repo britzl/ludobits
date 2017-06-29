@@ -1,6 +1,6 @@
 components {
   id: "script"
-  component: "/ludobits/camera/camera.script"
+  component: "/ludobits/go/camera.script"
   position {
     x: 0.0
     y: 0.0
