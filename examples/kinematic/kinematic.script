@@ -30,7 +30,6 @@ function update(self, dt)
 	elseif input.is_pressed(RIGHT) then
 		self.k.rotate(math.rad(-150 * dt))
 	end
-	go.set_position(go.get_position() - vmath.vector3(WIDTH / 2, HEIGHT / 2, 0), "camera")
 end
 
 function on_message(self, message_id, message, sender)
@@ -41,8 +40,7 @@ function on_input(self, action_id, action)
 	input.on_input(action_id, action)
 	
 	if not action_id then
-		local camera = go.get_position("camera")
-		local mouse = vmath.vector3(camera.x + action.screen_x, camera.y + action.screen_y, 0)
+		local mouse = vmath.vector3(action.screen_x, action.screen_y, 0)
 		go.set_position(mouse, "mouse")
 		self.k.look_at(mouse)
 	end
