@@ -5,7 +5,7 @@ dependencies = https://github.com/britzl/deftest/archive/master.zip
 
 [bootstrap]
 main_collection = /test/test.collectionc
-render = /ludobits/r/split_screen.renderc
+render = /builtins/render/default.renderc
 
 [input]
 game_binding = /input/game.input_bindingc
