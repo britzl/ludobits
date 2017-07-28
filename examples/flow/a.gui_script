@@ -1,0 +1,12 @@
+local flow = require "ludobits.m.flow"
+
+function init(self)
+	for k,v in pairs(_G) do print(k,v) end
+	local box = gui.get_node("box")
+	flow(function()
+		print("flow a")
+		flow.delay(1)
+		print("a delay")
+		gui.set_position(box, vmath.vector3(200, 200, 0))
+	end)
+end
