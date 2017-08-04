@@ -1,4 +1,4 @@
---- Wrapper module for sys.load() and sys.save()
+--- Wrapper module for io.open and io.write
 -- Files will be saved in a path created from a call to sys.get_save_file() with
 -- application id equal to the game.project config project.title with spaces
 -- replaced with underscores.
@@ -7,7 +7,7 @@
 --
 -- local file = savefile.open("foobar")
 -- local data = file.load()
--- file.save({ foo = "bar" })
+-- file.save("something large to save")
 --
 
 local M = {}
@@ -17,29 +17,35 @@ function M.get_path(filename)
 	return path
 end
 
---- Open a file
+--- Open a file for reading and writing using the io.* functions
 -- @param filename
 -- @return file instance
 function M.open(filename)
 	local path = M.get_path(filename)
 	local instance = {}
 	
-	--- Load the contents of the file
-	-- @return File contents
+	--- Load the table stored in the file
+	-- @return contents File contents or nil if something went wrong
+	-- @return error_message Error message if something went wrong while reading
 	function instance.load()
-		return sys.load(path)
+		local f, err = io.open(path, "rb")
+		if err then
+			return nil, err
+		end
+		return f:read("*a")
 	end
 	
-	--- Save table to the file
-	-- @param t The table to save
+	--- Save string to the file
+	-- @param s The string to save
 	-- @return success
 	-- @return error_message
-	function instance.save(t)
-		assert(t and type(t) == "table", "You must provide a table to save")
-		local success = sys.save(path, t)
-		if not success then
-			return false, "Unable to save file"
+	function instance.save(s)
+		assert(s and type(s) == "string", "You must provide a string to save")
+		local f, err = io.open(path, "wb")
+		if err then
+			return nil, err
 		end
+		f:write(s)
 		return true
 	end
 	
