@@ -1,0 +1,47 @@
+local bezier = require "ludobits.m.bezier"
+
+
+local function animate(self)
+	local p = table.remove(self.points, 1)
+	if not p then
+		return
+	end
+	go.animate(".", "position", go.PLAYBACK_ONCE_FORWARD, p, go.EASING_LINEAR, 0.05, 0, animate)
+end
+
+function init(self)
+	local cps = {
+		go.get_position("cp1"),
+		go.get_position("cp2"),
+		go.get_position("cp3"),
+		go.get_position("cp4"),
+	}
+	self.points = bezier.create(cps, 20)
+	go.set_position(cps[1])
+	animate(self)
+end
+
+function final(self)
+	-- Add finalization code here
+	-- Remove this function if not needed
+end
+
+function update(self, dt)
+	-- Add update code here
+	-- Remove this function if not needed
+end
+
+function on_message(self, message_id, message, sender)
+	-- Add message-handling code here
+	-- Remove this function if not needed
+end
+
+function on_input(self, action_id, action)
+	-- Add input-handling code here
+	-- Remove this function if not needed
+end
+
+function on_reload(self)
+	-- Add reload-handling code here
+	-- Remove this function if not needed
+end
