@@ -4,7 +4,7 @@
 --
 --	-- script_a.script
 --
---	local broadcast = require "ludobits.m.listener"
+--	local broadcast = require "ludobits.m.broadcast"
 --
 --	function init(self)
 --		broadcast.register("foo")
@@ -31,7 +31,7 @@
 --
 --	-- script_b.script
 --
---	local broadcast = require "ludobits.m.listener"
+--	local broadcast = require "ludobits.m.broadcast"
 --
 --	function update(self, dt)
 --		if some condition then
