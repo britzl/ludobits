@@ -5,7 +5,7 @@
 -- @usage
 --
 -- 	local flow = require "ludobits.m.flow"
---
+-- 
 -- 	function init(self)
 -- 		flow.start(function()
 -- 			-- animate a gameobject and wait for animation to complete
@@ -18,19 +18,19 @@
 -- 			flow.go_animate(".", "position.y", go.PLAYBACK_ONCE_FORWARD, 400, go.EASING_INCUBIC, 2)
 -- 		end)
 -- 	end
---
+-- 	
 -- 	function final(self)
 -- 		flow.stop()
 -- 	end
---
+-- 	
 -- 	function update(self, dt)
 -- 		flow.update()
 -- 	end
---
+-- 	
 -- 	function on_message(self, message_id, message, sender)
 -- 		flow.on_message(message_id, message, sender)
 -- 	end
---
+-- 	
 
 local M = {}
 
@@ -80,11 +80,10 @@ local function create_or_get(co)
 			url = msg.url(),
 			state = READY,
 			co = co,
-			script_instance = _G.__dm_script_instance__,
 		}
 	end
 	return instances[co]
-end
+end 
 
 
 --- Start a new flow. If this function is called from
@@ -250,7 +249,7 @@ function M.load(collection_url)
 	assert(collection_url, "You must provide a URL to a collection proxy")
 	collection_url = ensure_url(collection_url)
 	local instance = create_or_get(coroutine.running())
-	instance.state = WAITING
+	instance.state = WAITING	
 	instance.on_message = function(message_id, message, sender)
 		if message_id == PROXY_LOADED and sender == collection_url then
 			msg.post(sender, "enable")
@@ -377,47 +376,32 @@ function M.ray_cast(from, to, groups)
 end
 
 
-local function resume(instance)
-	instance.state = RUNNING
-	local result = instance.result or {}
-	instance.result = nil
-	local ok, error = coroutine.resume(instance.co, table_unpack(result))
-	if not ok then
-		if instance.on_error then
-			instance.on_error(error)
-		else
-			print("Warning: Flow resulted in error", error)
-		end
-	end
-end
-
 --- Call this as often as needed (every frame)
 function M.update(dt)
 	if not dt then
 		print("WARN: flow.update() now requires dt. Assuming 0.0167 for now.")
 		dt = 0.0167
 	end
+	local url = msg.url()
 	for co,instance in pairs(instances) do
-		local status = coroutine.status(co)
-		if status == "dead" then
-			instances[co] = nil
-		else
-			local current_script_instance = _G.__dm_script_instance__
-			_G.__dm_script_instance__ = instance.script_instance
-			
-			if instance.state == WAITING and instance.condition then
-				if instance.condition(dt) then
-					instance.condition = nil
-					instance.on_message = nil
-					instance.state = READY
+		if instance.url == url then
+			local status = coroutine.status(co)
+			if status == "dead" then
+				instances[co] = nil
+			else
+				if instance.state == WAITING and instance.condition then
+					if instance.condition(dt) then
+						instance.condition = nil
+						instance.on_message = nil
+						instance.state = READY
+					end
+				end
+				
+				if instance.state == READY then
+					instance.state = RESUMING
+					msg.post(instance.url, MSG_RESUME, { url = instance.url, id = instance.id })
 				end
 			end
-			
-			if instance.state == READY then
-				resume(instance)
-			end
-
-			_G.__dm_script_instance__ = current_script_instance
 		end
 	end
 end
@@ -425,10 +409,29 @@ end
 
 --- Forward any received messages in your scripts to this function
 function M.on_message(message_id, message, sender)
-	local url = msg.url()
-	for _,instance in pairs(instances) do
-		if instance.on_message and instance.url == url then
-			instance.on_message(message_id, message, sender)
+	if message_id == MSG_RESUME then
+		for co,instance in pairs(instances) do
+			if instance.id == message.id then
+				instance.state = RUNNING
+				local result = instance.result or {}
+				instance.result = nil
+				local ok, error = coroutine.resume(co, table_unpack(result))
+				if not ok then
+					if instance.on_error then
+						instance.on_error(error)
+					else
+						print("Warning: Flow resulted in error", error)
+					end
+				end
+				return
+			end
+		end
+	else
+		local url = msg.url()
+		for _,instance in pairs(instances) do
+			if instance.on_message and instance.url == url then
+				instance.on_message(message_id, message, sender)
+			end
 		end
 	end
 end
