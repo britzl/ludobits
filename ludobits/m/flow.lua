@@ -226,6 +226,40 @@ function M.until_message(...)
 end
 
 
+--- Wait until input action with pressed state
+-- @param action_id Optional action to wait for (nil for any action)
+-- @return action_id
+-- @return action
+function M.until_input_pressed(action_id)
+	local instance = create_or_get(coroutine.running())
+	instance.state = WAITING
+	instance.on_input = function(action_id, action)
+		if (action_id and action_id == action_id) and action.pressed then
+			instance.result = table_pack(action_id, action)
+			instance.on_input = nil
+			instance.state = READY
+		end
+	end
+	return coroutine.yield()
+end
+
+--- Wait until input action with released state
+-- @param action_id Optional action to wait for (nil for any action)
+-- @return action_id
+-- @return action
+function M.until_input_released(action_id)
+	local instance = create_or_get(coroutine.running())
+	instance.state = WAITING
+	instance.on_input = function(action_id, action)
+		if (action_id and action_id == action_id) and action.released then
+			instance.result = table_pack(action_id, action)
+			instance.on_input = nil
+			instance.state = READY
+		end
+	end
+	return coroutine.yield()
+end
+
 --- Wait until a callback function is invoked
 -- @param fn The function to call. The function must take a callback function as its first argument
 -- @param arg1 Additional argument to pass to fn
@@ -429,6 +463,15 @@ function M.on_message(message_id, message, sender)
 	for _,instance in pairs(instances) do
 		if instance.on_message and instance.url == url then
 			instance.on_message(message_id, message, sender)
+		end
+	end
+end
+
+function M.on_input(action_id, action)
+	local url = msg.url()
+	for _,instance in pairs(instances) do
+		if instance.on_input and instance.url == url then
+			instance.on_input(action_id, action)
 		end
 	end
 end
