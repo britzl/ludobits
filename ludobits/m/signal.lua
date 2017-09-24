@@ -2,7 +2,9 @@ local M = {}
 
 function M.create(signal_id)
 	assert(signal_id, "You must provide a signal_id")
-	local signal = {}
+	local signal = {
+		id = signal_id
+	}
 
 	local listeners = {}
 
