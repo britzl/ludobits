@@ -9,7 +9,7 @@ function M.create(signal_id)
 	local listeners = {}
 
 	function signal.add(cb)
-		assert(cb, "You must provide a callback")
+		cb = cb or msg.url()
 		if type(cb) == "function" then
 			listeners[cb] = { fn = cb }
 		else
@@ -19,7 +19,7 @@ function M.create(signal_id)
 	end
 
 	function signal.remove(cb)
-		assert(cb, "You must provide a callback")
+		cb = cb or msg.url()
 		if type(cb) == "function" then
 			listeners[cb] = nil
 		else
