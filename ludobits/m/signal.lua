@@ -31,7 +31,7 @@ function M.create(signal_id)
 	function signal.trigger(message)
 		assert(message, "You must provide a message")
 		for k,v in pairs(listeners) do
-			v.fn(message)
+			v.fn(message or {})
 		end
 	end
 
