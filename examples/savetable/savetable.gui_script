@@ -1,15 +1,14 @@
-local savefile = require "ludobits.m.savefile"
+local savetable = require "ludobits.m.savetable"
 local simple_input = require "ludobits.m.simple_input"
 
 
 function init(self)
 	simple_input.acquire()
 	
-	self.file = savefile.open("savefile")
+	self.file = savetable.open("savetable")
 	simple_input.register("load/button", function()
 		local data = self.file.load()
-		data = data or "nil"
-		gui.set_text(gui.get_node("text"), data)
+		gui.set_text(gui.get_node("text"), table.concat(data, " "))
 	end)
 
 	simple_input.register("save/button", function()
@@ -19,9 +18,8 @@ function init(self)
 			local i2 = math.random(1, #lorem)
 			lorem[i1], lorem[i2] = lorem[i2], lorem[i1]
 		end
-		local file = table.concat(lorem, " ")
-		self.file.save(file)
-		gui.set_text(gui.get_node("text"), file)
+		self.file.save(lorem)
+		gui.set_text(gui.get_node("text"), table.concat(lorem, " "))
 	end)
 end
 

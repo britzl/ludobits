@@ -11,10 +11,12 @@
 -- file.save({ foo = "bar" })
 --
 
+local file = require "ludobits.m.file"
+
 local M = {}
 
 function M.get_path(filename)
-	local path = sys.get_save_file(sys.get_config("project.title"):gsub(" ", "_"), filename)
+	local path = sys.get_save_file(file.fix(sys.get_config("project.title"):gsub(" ", "_")), filename)
 	return path
 end
 

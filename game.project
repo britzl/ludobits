@@ -4,7 +4,7 @@ version = 0.7.6
 dependencies = https://github.com/britzl/deftest/archive/master.zip
 
 [bootstrap]
-main_collection = /test/test.collectionc
+main_collection = /examples/savefile/savefile.collectionc
 render = /builtins/render/default.renderc
 
 [input]
