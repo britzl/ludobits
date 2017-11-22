@@ -15,24 +15,19 @@ local file = require "ludobits.m.file"
 
 local M = {}
 
-function M.get_path(filename)
-	local path = sys.get_save_file(file.fix(sys.get_config("project.title"):gsub(" ", "_")), filename)
-	return path
-end
-
 --- Open a file for reading and writing using sys.save and sys.load
 -- @param filename
 -- @return file instance
 function M.open(filename)
-	local path = M.get_path(filename)
+	local path = file.get_save_file_path(filename)
 	local instance = {}
-	
+
 	--- Load the table stored in the file
 	-- @return File contents
 	function instance.load()
 		return sys.load(path)
 	end
-	
+
 	--- Save table to the file
 	-- @param t The table to save
 	-- @return success
@@ -45,7 +40,7 @@ function M.open(filename)
 		end
 		return true
 	end
-	
+
 	return instance
 end
 

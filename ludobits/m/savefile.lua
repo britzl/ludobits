@@ -14,18 +14,13 @@ local file = require "ludobits.m.file"
 
 local M = {}
 
-function M.get_path(filename)
-	local path = sys.get_save_file(file.fix(sys.get_config("project.title"):gsub(" ", "_")), filename)
-	return path
-end
-
 --- Open a file for reading and writing using the io.* functions
 -- @param filename
 -- @return file instance
 function M.open(filename)
-	local path = M.get_path(filename)
+	local path = file.get_save_file_path(filename)
 	local instance = {}
-	
+
 	--- Load the table stored in the file
 	-- @return contents File contents or nil if something went wrong
 	-- @return error_message Error message if something went wrong while reading
@@ -36,7 +31,7 @@ function M.open(filename)
 		end
 		return f:read("*a")
 	end
-	
+
 	--- Save string to the file
 	-- @param s The string to save
 	-- @return success
@@ -50,7 +45,7 @@ function M.open(filename)
 		f:write(s)
 		return true
 	end
-	
+
 	return instance
 end
 

@@ -1,4 +1,4 @@
---- Module to simplify sending a message to multiple receivers
+--- Module to simplify sending of a message to multiple receivers
 --
 -- @usage
 --
@@ -7,6 +7,7 @@
 --	local broadcast = require "ludobits.m.broadcast"
 --
 --	function init(self)
+--		-- this script should react to "foo" and "bar" messages
 --		broadcast.register("foo")
 --		broadcast.register("bar", function(message, sender)
 --			-- handle message
@@ -35,6 +36,7 @@
 --
 --	function update(self, dt)
 --		if some condition then
+--			-- broadcast a "foo" message to anyone listening
 --			broadcast.send("foo")
 --		end
 --	end

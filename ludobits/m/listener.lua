@@ -5,26 +5,31 @@
 --
 --	-- a.script
 --	local listener = require "ludobits.m.listener"
---	
+--
 --	local l = listener.create()
 --
 --	local function handler1(message_id, message)
---		-- will get mymessage1, mymessage2, mymessage3 and foobar
+--		print(message_id)
 --	end
 --
 --	local function handler2(message_id, message)
---		-- will get mymessage1 and mymessage2
+--		print(message_id)
 --	end
 --
+--	-- add listener function handler1 and listen to all messages
 --	l.add(handler1)
+--	-- add listener function handler2 and only listen to "mymessage1" and "mymessage2"
 --	l.add(handler2, "mymessage1")
 --	l.add(handler2, "mymessage2")
 --
+--	-- add listener url "#myscript1" and listen to all messages
 --	l.add(msg.url("#myscript1"))
+--	-- add listener url "#myscript2" and only listen to "mymessage1" and "mymessage2"
 --	l.add(msg.url("#myscript2"), "mymessage1")
 --	l.add(msg.url("#myscript2"), "mymessage2")
 --
 --
+--	-- trigger some messages
 --	l.trigger(hash("mymessage1"), { text = "lorem ipsum" })
 --	l.trigger(hash("mymessage2"), { text = "lorem ipsum" })
 --	l.trigger(hash("mymessage3"), { text = "lorem ipsum" })
@@ -33,12 +38,12 @@
 --
 --	-- myscript1.script
 --	function on_message(self, mesage_id, message, sender)
---		-- will get mymessage1, mymessage2, mymessage3 and foobar
+--		print(message_id)
 --	end
 --
 --	-- myscript2.script
 --	function on_message(self, mesage_id, message, sender)
---		-- will get mymessage1 and mymessage2
+--		print(message_id)
 --	end
 --
 
@@ -62,12 +67,12 @@ end
 function M.create()
 	local any_listeners_url = {}
 	local listeners = {}
-	
+
 	local instance = {}
-	
+
 	--- Add a function or url to invoke when the listener is triggered
 	-- @param url_or_fn_to_add URL or function to call. Can be nil in which case the current URL is used.
-	-- @param message_id Optional message id to filter on 
+	-- @param message_id Optional message id to filter on
 	function instance.add(url_or_fn_to_add, message_id)
 		url_or_fn_to_add = url_or_fn_to_add or msg.url()
 		message_id = message_id and ensure_hash(message_id) or nil
@@ -88,7 +93,7 @@ function M.create()
 		message_id = message_id and ensure_hash(message_id) or nil
 
 		local is_url = type(url_or_fn_to_remove) == "userdata"
-		
+
 		for url_fn,url_fn_listeners in pairs(listeners) do
 			-- make sure to only check against urls if we are removing a url and vice versa
 			if (is_url and type(url_fn) == "userdata") or (not is_url and type(url_fn) ~= "userdata") then
@@ -109,7 +114,7 @@ function M.create()
 			end
 		end
 	end
-	
+
 	--- Trigger this listener
 	-- @param message_id Id of message to trigger
 	-- @param message The message itself (can be nil)
@@ -125,7 +130,7 @@ function M.create()
 			end
 		end
 	end
-	
+
 	return instance
 end
 

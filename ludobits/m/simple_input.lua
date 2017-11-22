@@ -1,9 +1,38 @@
+-- Simple input handler for gui nodes. Register nodes and pass any call to
+-- on_input() to this module and it will automatically do picking and invoke
+-- a registered callback. Example:
+--
+-- local simple_input = require "ludobits.m.simple_input"
+--
+-- function init(self)
+-- 		simple_input.acquire()
+--
+-- 		simple_input.register(gui.get_node("blue"), function()
+-- 			print("blue")
+-- 		end)
+--
+-- 		simple_input.register("green", function()
+-- 			print("green")
+-- 			local scale = math.random(1, 5)
+-- 			gui.set_scale(gui.get_node("blue"), vmath.vector3(scale, scale, 1))
+-- 		end)
+-- end
+--
+-- function final(self)
+-- 		simple_input.release()
+-- end
+--
+-- function on_input(self, action_id, action)
+-- 		simple_input.on_input(action_id, action)
+-- end
+
+
 local M = {}
 
 local registered_nodes = {}
 
 local function ensure_node(node_or_node_id)
-	return type(node_or_node_id) == "string" and gui.get_node(node_or_node_id) or node_or_node_id 
+	return type(node_or_node_id) == "string" and gui.get_node(node_or_node_id) or node_or_node_id
 end
 
 --- Convenience function to acquire input focus

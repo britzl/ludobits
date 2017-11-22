@@ -1,6 +1,7 @@
 --- Module to simplify the use of several of the engine listeners.
 -- The module allows the user to define multiple listeners for the iac, iap,
 -- push and window listeners.
+--
 -- @usage
 -- local app = require "ludobits.app"
 --
