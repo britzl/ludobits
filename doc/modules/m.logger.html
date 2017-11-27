@@ -1,0 +1,386 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<head>
+    <title>Reference</title>
+    <link rel="stylesheet" href="../ldoc.css" type="text/css" />
+</head>
+<body>
+
+<div id="container">
+
+<div id="product">
+	<div id="product_logo"></div>
+	<div id="product_name"><big><b></b></big></div>
+	<div id="product_description"></div>
+</div> <!-- id="product" -->
+
+
+<div id="main">
+
+
+<!-- Menu -->
+
+<div id="navigation">
+<br/>
+<h1>ldoc</h1>
+
+<ul>
+  <li><a href="../index.html">Index</a></li>
+</ul>
+
+<h2>Contents</h2>
+<ul>
+<li><a href="#Functions">Functions</a></li>
+</ul>
+
+
+<h2>Modules</h2>
+<ul class="nowrap">
+  <li><a href="../modules/m.app.html">m.app</a></li>
+  <li><a href="../modules/m.bezier.html">m.bezier</a></li>
+  <li><a href="../modules/m.broadcast.html">m.broadcast</a></li>
+  <li><a href="../modules/m.dynamic.html">m.dynamic</a></li>
+  <li><a href="../modules/m.file.html">m.file</a></li>
+  <li><a href="../modules/m.flow.html">m.flow</a></li>
+  <li><a href="../modules/m.gesture.html">m.gesture</a></li>
+  <li><a href="../modules/m.input.html">m.input</a></li>
+  <li><a href="../modules/m.kinematic.html">m.kinematic</a></li>
+  <li><a href="../modules/m.listener.html">m.listener</a></li>
+  <li><strong>m.logger</strong></li>
+  <li><a href="../modules/m.platformer.html">m.platformer</a></li>
+  <li><a href="../modules/m.savefile.html">m.savefile</a></li>
+  <li><a href="../modules/m.savetable.html">m.savetable</a></li>
+  <li><a href="../modules/m.settings.html">m.settings</a></li>
+  <li><a href="../modules/m.signal.html">m.signal</a></li>
+  <li><a href="../modules/m.simple_input.html">m.simple_input</a></li>
+  <li><a href="../modules/m.util.html">m.util</a></li>
+</ul>
+
+</div>
+
+<div id="content">
+
+<h1>Module <code>m.logger</code></h1>
+<p>Simple Lua logger</p>
+<p></p>
+
+
+<h2><a href="#Functions">Functions</a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#level">level (level)</a></td>
+	<td class="summary">Set the current accepted log level.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#create">create (tag)</a></td>
+	<td class="summary">Create a logger instance</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#instance.debug">instance.debug (...)</a></td>
+	<td class="summary">Log with level set to DEBUG</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#instance.info">instance.info (...)</a></td>
+	<td class="summary">Log with level set to INFO</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#instance.warn">instance.warn (...)</a></td>
+	<td class="summary">Log with level set to WARN</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#instance.error">instance.error (...)</a></td>
+	<td class="summary">Log with level set to ERROR</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#instance.fatal">instance.fatal (...)</a></td>
+	<td class="summary">Log with level set to FATAL</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#instance.d">instance.d (...)</a></td>
+	<td class="summary">Log with level set to DEBUG</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#instance.i">instance.i (...)</a></td>
+	<td class="summary">Log with level set to INFO</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#instance.w">instance.w (...)</a></td>
+	<td class="summary">Log with level set to WARN</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#instance.e">instance.e (...)</a></td>
+	<td class="summary">Log with level set to ERROR</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#instance.f">instance.f (...)</a></td>
+	<td class="summary">Log with level set to FATAL</td>
+	</tr>
+</table>
+
+<br/>
+<br/>
+
+
+    <h2 class="section-header "><a name="Functions"></a>Functions</h2>
+
+    <dl class="function">
+    <dt>
+    <a name = "level"></a>
+    <strong>level (level)</strong>
+    </dt>
+    <dd>
+    Set the current accepted log level.  Any logger calls with a level less than
+ this will be silenced
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">level</span>
+         The minimum accepted level
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "create"></a>
+    <strong>create (tag)</strong>
+    </dt>
+    <dd>
+    Create a logger instance
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">tag</span>
+         Optional tag to preprend to all log output
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        Logger instance§
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "instance.debug"></a>
+    <strong>instance.debug (...)</strong>
+    </dt>
+    <dd>
+    Log with level set to DEBUG
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">...</span>
+
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "instance.info"></a>
+    <strong>instance.info (...)</strong>
+    </dt>
+    <dd>
+    Log with level set to INFO
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">...</span>
+
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "instance.warn"></a>
+    <strong>instance.warn (...)</strong>
+    </dt>
+    <dd>
+    Log with level set to WARN
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">...</span>
+
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "instance.error"></a>
+    <strong>instance.error (...)</strong>
+    </dt>
+    <dd>
+    Log with level set to ERROR
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">...</span>
+
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "instance.fatal"></a>
+    <strong>instance.fatal (...)</strong>
+    </dt>
+    <dd>
+    Log with level set to FATAL
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">...</span>
+
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "instance.d"></a>
+    <strong>instance.d (...)</strong>
+    </dt>
+    <dd>
+    Log with level set to DEBUG
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">...</span>
+
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "instance.i"></a>
+    <strong>instance.i (...)</strong>
+    </dt>
+    <dd>
+    Log with level set to INFO
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">...</span>
+
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "instance.w"></a>
+    <strong>instance.w (...)</strong>
+    </dt>
+    <dd>
+    Log with level set to WARN
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">...</span>
+
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "instance.e"></a>
+    <strong>instance.e (...)</strong>
+    </dt>
+    <dd>
+    Log with level set to ERROR
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">...</span>
+
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "instance.f"></a>
+    <strong>instance.f (...)</strong>
+    </dt>
+    <dd>
+    Log with level set to FATAL
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">...</span>
+
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+</dl>
+
+
+</div> <!-- id="content" -->
+</div> <!-- id="main" -->
+<div id="about">
+<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.4.6</a></i>
+<i style="float:right;">Last updated 2017-11-27 06:48:33 </i>
+</div> <!-- id="about" -->
+</div> <!-- id="container" -->
+</body>
+</html>

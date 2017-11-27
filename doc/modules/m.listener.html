@@ -1,0 +1,243 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<head>
+    <title>Reference</title>
+    <link rel="stylesheet" href="../ldoc.css" type="text/css" />
+</head>
+<body>
+
+<div id="container">
+
+<div id="product">
+	<div id="product_logo"></div>
+	<div id="product_name"><big><b></b></big></div>
+	<div id="product_description"></div>
+</div> <!-- id="product" -->
+
+
+<div id="main">
+
+
+<!-- Menu -->
+
+<div id="navigation">
+<br/>
+<h1>ldoc</h1>
+
+<ul>
+  <li><a href="../index.html">Index</a></li>
+</ul>
+
+<h2>Contents</h2>
+<ul>
+<li><a href="#Functions">Functions</a></li>
+</ul>
+
+
+<h2>Modules</h2>
+<ul class="nowrap">
+  <li><a href="../modules/m.app.html">m.app</a></li>
+  <li><a href="../modules/m.bezier.html">m.bezier</a></li>
+  <li><a href="../modules/m.broadcast.html">m.broadcast</a></li>
+  <li><a href="../modules/m.dynamic.html">m.dynamic</a></li>
+  <li><a href="../modules/m.file.html">m.file</a></li>
+  <li><a href="../modules/m.flow.html">m.flow</a></li>
+  <li><a href="../modules/m.gesture.html">m.gesture</a></li>
+  <li><a href="../modules/m.input.html">m.input</a></li>
+  <li><a href="../modules/m.kinematic.html">m.kinematic</a></li>
+  <li><strong>m.listener</strong></li>
+  <li><a href="../modules/m.logger.html">m.logger</a></li>
+  <li><a href="../modules/m.platformer.html">m.platformer</a></li>
+  <li><a href="../modules/m.savefile.html">m.savefile</a></li>
+  <li><a href="../modules/m.savetable.html">m.savetable</a></li>
+  <li><a href="../modules/m.settings.html">m.settings</a></li>
+  <li><a href="../modules/m.signal.html">m.signal</a></li>
+  <li><a href="../modules/m.simple_input.html">m.simple_input</a></li>
+  <li><a href="../modules/m.util.html">m.util</a></li>
+</ul>
+
+</div>
+
+<div id="content">
+
+<h1>Module <code>m.listener</code></h1>
+<p>Listener implementation where listeners are added as either urls or functions
+ and notified when any or specific messages are received</p>
+<p></p>
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">-- a.script
+local listener = require &quot;ludobits.m.listener&quot;
+
+local l = listener.create()
+
+local function handler1(message_id, message)
+	print(message_id)
+end
+
+local function handler2(message_id, message)
+	print(message_id)
+end
+
+-- add listener function handler1 and listen to all messages
+l.add(handler1)
+-- add listener function handler2 and only listen to &quot;mymessage1&quot; and &quot;mymessage2&quot;
+l.add(handler2, &quot;mymessage1&quot;)
+l.add(handler2, &quot;mymessage2&quot;)
+
+-- add listener url &quot;#myscript1&quot; and listen to all messages
+l.add(msg.url(&quot;#myscript1&quot;))
+-- add listener url &quot;#myscript2&quot; and only listen to &quot;mymessage1&quot; and &quot;mymessage2&quot;
+l.add(msg.url(&quot;#myscript2&quot;), &quot;mymessage1&quot;)
+l.add(msg.url(&quot;#myscript2&quot;), &quot;mymessage2&quot;)
+
+
+-- trigger some messages
+l.trigger(hash(&quot;mymessage1&quot;), { text = &quot;lorem ipsum&quot; })
+l.trigger(hash(&quot;mymessage2&quot;), { text = &quot;lorem ipsum&quot; })
+l.trigger(hash(&quot;mymessage3&quot;), { text = &quot;lorem ipsum&quot; })
+l.trigger(hash(&quot;foobar&quot;), { foo = &quot;bar&quot; })
+
+
+-- myscript1.script
+function on_message(self, mesage_id, message, sender)
+	print(message_id)
+end
+
+-- myscript2.script
+function on_message(self, mesage_id, message, sender)
+	print(message_id)
+end
+</pre>
+    </ul>
+
+
+<h2><a href="#Functions">Functions</a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#create">create ()</a></td>
+	<td class="summary">Create a listener instance</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#instance.add">instance.add (url_or_fn_to_add, message_id)</a></td>
+	<td class="summary">Add a function or url to invoke when the listener is triggered</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#instance.remove">instance.remove (url_or_fn_to_remove, message_id)</a></td>
+	<td class="summary">Remove a previously added callback function or url</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#instance.trigger">instance.trigger (message_id, message)</a></td>
+	<td class="summary">Trigger this listener</td>
+	</tr>
+</table>
+
+<br/>
+<br/>
+
+
+    <h2 class="section-header "><a name="Functions"></a>Functions</h2>
+
+    <dl class="function">
+    <dt>
+    <a name = "create"></a>
+    <strong>create ()</strong>
+    </dt>
+    <dd>
+    Create a listener instance
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+        Listener
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "instance.add"></a>
+    <strong>instance.add (url_or_fn_to_add, message_id)</strong>
+    </dt>
+    <dd>
+    Add a function or url to invoke when the listener is triggered
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">url_or_fn_to_add</span>
+         URL or function to call. Can be nil in which case the current URL is used.
+        </li>
+        <li><span class="parameter">message_id</span>
+         Optional message id to filter on
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "instance.remove"></a>
+    <strong>instance.remove (url_or_fn_to_remove, message_id)</strong>
+    </dt>
+    <dd>
+    Remove a previously added callback function or url
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">url_or_fn_to_remove</span>
+
+        </li>
+        <li><span class="parameter">message_id</span>
+         Optional message_id to limit removal to
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "instance.trigger"></a>
+    <strong>instance.trigger (message_id, message)</strong>
+    </dt>
+    <dd>
+    Trigger this listener
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">message_id</span>
+         Id of message to trigger
+        </li>
+        <li><span class="parameter">message</span>
+         The message itself (can be nil)
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+</dl>
+
+
+</div> <!-- id="content" -->
+</div> <!-- id="main" -->
+<div id="about">
+<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.4.6</a></i>
+<i style="float:right;">Last updated 2017-11-27 06:48:33 </i>
+</div> <!-- id="about" -->
+</div> <!-- id="container" -->
+</body>
+</html>

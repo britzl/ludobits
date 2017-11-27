@@ -1,0 +1,284 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<head>
+    <title>Reference</title>
+    <link rel="stylesheet" href="../ldoc.css" type="text/css" />
+</head>
+<body>
+
+<div id="container">
+
+<div id="product">
+	<div id="product_logo"></div>
+	<div id="product_name"><big><b></b></big></div>
+	<div id="product_description"></div>
+</div> <!-- id="product" -->
+
+
+<div id="main">
+
+
+<!-- Menu -->
+
+<div id="navigation">
+<br/>
+<h1>ldoc</h1>
+
+<ul>
+  <li><a href="../index.html">Index</a></li>
+</ul>
+
+<h2>Contents</h2>
+<ul>
+<li><a href="#Functions">Functions</a></li>
+</ul>
+
+
+<h2>Modules</h2>
+<ul class="nowrap">
+  <li><a href="../modules/m.app.html">m.app</a></li>
+  <li><a href="../modules/m.bezier.html">m.bezier</a></li>
+  <li><a href="../modules/m.broadcast.html">m.broadcast</a></li>
+  <li><a href="../modules/m.dynamic.html">m.dynamic</a></li>
+  <li><a href="../modules/m.file.html">m.file</a></li>
+  <li><a href="../modules/m.flow.html">m.flow</a></li>
+  <li><a href="../modules/m.gesture.html">m.gesture</a></li>
+  <li><a href="../modules/m.input.html">m.input</a></li>
+  <li><strong>m.kinematic</strong></li>
+  <li><a href="../modules/m.listener.html">m.listener</a></li>
+  <li><a href="../modules/m.logger.html">m.logger</a></li>
+  <li><a href="../modules/m.platformer.html">m.platformer</a></li>
+  <li><a href="../modules/m.savefile.html">m.savefile</a></li>
+  <li><a href="../modules/m.savetable.html">m.savetable</a></li>
+  <li><a href="../modules/m.settings.html">m.settings</a></li>
+  <li><a href="../modules/m.signal.html">m.signal</a></li>
+  <li><a href="../modules/m.simple_input.html">m.simple_input</a></li>
+  <li><a href="../modules/m.util.html">m.util</a></li>
+</ul>
+
+</div>
+
+<div id="content">
+
+<h1>Module <code>m.kinematic</code></h1>
+<p>Utility functions for working with kinematic collision objects</p>
+<p></p>
+
+
+<h2><a href="#Functions">Functions</a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#handle_geometry_contact">handle_geometry_contact (correction, normal, distance, id)</a></td>
+	<td class="summary">Handle geometry contact (ie collision) by separating this object from
+ the collision.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#look_at">look_at (look_at_position, id)</a></td>
+	<td class="summary">Set rotation around z-axis in such a way that the game object is
+ facing a specific position</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#rotate">rotate (angle, id)</a></td>
+	<td class="summary">Rotate around the z-axis</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#set_rotation">set_rotation (angle, id)</a></td>
+	<td class="summary">Set the absolute rotation around z-axis</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#forward">forward (amount, id)</a></td>
+	<td class="summary">Move forward in the current direction of rotation around z-axis</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#backwards">backwards (amount, id)</a></td>
+	<td class="summary">Move backwards in the current direction of rotation around z-axis</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#create">create ()</a></td>
+	<td class="summary">Create a wrapper for a kinematic collision object</td>
+	</tr>
+</table>
+
+<br/>
+<br/>
+
+
+    <h2 class="section-header "><a name="Functions"></a>Functions</h2>
+
+    <dl class="function">
+    <dt>
+    <a name = "handle_geometry_contact"></a>
+    <strong>handle_geometry_contact (correction, normal, distance, id)</strong>
+    </dt>
+    <dd>
+    Handle geometry contact (ie collision) by separating this object from
+ the collision.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">correction</span>
+         Aggregated correction vector (for when dealing with
+ multiple collisions per frame)
+        </li>
+        <li><span class="parameter">normal</span>
+         Collision normal (as provided from a contact_point_response
+ message)
+        </li>
+        <li><span class="parameter">distance</span>
+         Collision distance/overlap
+        </li>
+        <li><span class="parameter">id</span>
+         Optional id of the game object to separate
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "look_at"></a>
+    <strong>look_at (look_at_position, id)</strong>
+    </dt>
+    <dd>
+    Set rotation around z-axis in such a way that the game object is
+ facing a specific position
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">look_at_position</span>
+         The position to look at
+        </li>
+        <li><span class="parameter">id</span>
+         Optional id of the game object to rotate
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "rotate"></a>
+    <strong>rotate (angle, id)</strong>
+    </dt>
+    <dd>
+    Rotate around the z-axis
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">angle</span>
+         Amount to rotate in radians
+        </li>
+        <li><span class="parameter">id</span>
+         Optional id of the game object to rotate
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "set_rotation"></a>
+    <strong>set_rotation (angle, id)</strong>
+    </dt>
+    <dd>
+    Set the absolute rotation around z-axis
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">angle</span>
+         Angle in radians (use math.rad(deg) to convert from degrees to radians)
+        </li>
+        <li><span class="parameter">id</span>
+         Optional id of the game object to rotate
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "forward"></a>
+    <strong>forward (amount, id)</strong>
+    </dt>
+    <dd>
+    Move forward in the current direction of rotation around z-axis
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">amount</span>
+         Distance to move
+        </li>
+        <li><span class="parameter">id</span>
+         Optional id of the game object to move
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "backwards"></a>
+    <strong>backwards (amount, id)</strong>
+    </dt>
+    <dd>
+    Move backwards in the current direction of rotation around z-axis
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">amount</span>
+         Distance to move
+        </li>
+        <li><span class="parameter">id</span>
+         Optional id of the game object to move
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "create"></a>
+    <strong>create ()</strong>
+    </dt>
+    <dd>
+    Create a wrapper for a kinematic collision object
+
+
+
+
+
+
+
+</dd>
+</dl>
+
+
+</div> <!-- id="content" -->
+</div> <!-- id="main" -->
+<div id="about">
+<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.4.6</a></i>
+<i style="float:right;">Last updated 2017-11-27 06:48:33 </i>
+</div> <!-- id="about" -->
+</div> <!-- id="container" -->
+</body>
+</html>

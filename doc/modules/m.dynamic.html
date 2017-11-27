@@ -1,0 +1,229 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<head>
+    <title>Reference</title>
+    <link rel="stylesheet" href="../ldoc.css" type="text/css" />
+</head>
+<body>
+
+<div id="container">
+
+<div id="product">
+	<div id="product_logo"></div>
+	<div id="product_name"><big><b></b></big></div>
+	<div id="product_description"></div>
+</div> <!-- id="product" -->
+
+
+<div id="main">
+
+
+<!-- Menu -->
+
+<div id="navigation">
+<br/>
+<h1>ldoc</h1>
+
+<ul>
+  <li><a href="../index.html">Index</a></li>
+</ul>
+
+<h2>Contents</h2>
+<ul>
+<li><a href="#Functions">Functions</a></li>
+</ul>
+
+
+<h2>Modules</h2>
+<ul class="nowrap">
+  <li><a href="../modules/m.app.html">m.app</a></li>
+  <li><a href="../modules/m.bezier.html">m.bezier</a></li>
+  <li><a href="../modules/m.broadcast.html">m.broadcast</a></li>
+  <li><strong>m.dynamic</strong></li>
+  <li><a href="../modules/m.file.html">m.file</a></li>
+  <li><a href="../modules/m.flow.html">m.flow</a></li>
+  <li><a href="../modules/m.gesture.html">m.gesture</a></li>
+  <li><a href="../modules/m.input.html">m.input</a></li>
+  <li><a href="../modules/m.kinematic.html">m.kinematic</a></li>
+  <li><a href="../modules/m.listener.html">m.listener</a></li>
+  <li><a href="../modules/m.logger.html">m.logger</a></li>
+  <li><a href="../modules/m.platformer.html">m.platformer</a></li>
+  <li><a href="../modules/m.savefile.html">m.savefile</a></li>
+  <li><a href="../modules/m.savetable.html">m.savetable</a></li>
+  <li><a href="../modules/m.settings.html">m.settings</a></li>
+  <li><a href="../modules/m.signal.html">m.signal</a></li>
+  <li><a href="../modules/m.simple_input.html">m.simple_input</a></li>
+  <li><a href="../modules/m.util.html">m.util</a></li>
+</ul>
+
+</div>
+
+<div id="content">
+
+<h1>Module <code>m.dynamic</code></h1>
+<p>Utility functions for working with dynamic collision objects</p>
+<p></p>
+
+
+<h2><a href="#Functions">Functions</a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#rotate">rotate (collisionobject_url, force)</a></td>
+	<td class="summary">Rotate a collision object be applying opposing and offset forces</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#forward">forward (collisionobject_url, force)</a></td>
+	<td class="summary">Move a dynamic collision object in its direction of rotation by
+ applying a force</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#backwards">backwards (collisionobject_url, force)</a></td>
+	<td class="summary">Move a dynamic collision object in the opposite direction of
+ its rotation by applying a force</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#stop_moving">stop_moving (collisionobject_url)</a></td>
+	<td class="summary">Stop the movemembt of a dynamic collision object by applying a force opposit
+ to the linear velocity and mass of the object</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#stop_rotating">stop_rotating (collisionobject_url)</a></td>
+	<td class="summary">Stop the rotation of a dynamic collision object by applying a force opposite
+ to the angular velocity of the object</td>
+	</tr>
+</table>
+
+<br/>
+<br/>
+
+
+    <h2 class="section-header "><a name="Functions"></a>Functions</h2>
+
+    <dl class="function">
+    <dt>
+    <a name = "rotate"></a>
+    <strong>rotate (collisionobject_url, force)</strong>
+    </dt>
+    <dd>
+    Rotate a collision object be applying opposing and offset forces
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">collisionobject_url</span>
+
+        </li>
+        <li><span class="parameter">force</span>
+         In the format of vmath.vector3(0, force, 0)
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "forward"></a>
+    <strong>forward (collisionobject_url, force)</strong>
+    </dt>
+    <dd>
+    Move a dynamic collision object in its direction of rotation by
+ applying a force
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">collisionobject_url</span>
+
+        </li>
+        <li><span class="parameter">force</span>
+         In the format of vmath.vector3(0, force, 0)
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "backwards"></a>
+    <strong>backwards (collisionobject_url, force)</strong>
+    </dt>
+    <dd>
+    Move a dynamic collision object in the opposite direction of
+ its rotation by applying a force
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">collisionobject_url</span>
+
+        </li>
+        <li><span class="parameter">force</span>
+         In the format of vmath.vector3(0, force, 0)
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "stop_moving"></a>
+    <strong>stop_moving (collisionobject_url)</strong>
+    </dt>
+    <dd>
+    Stop the movemembt of a dynamic collision object by applying a force opposit
+ to the linear velocity and mass of the object
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">collisionobject_url</span>
+
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "stop_rotating"></a>
+    <strong>stop_rotating (collisionobject_url)</strong>
+    </dt>
+    <dd>
+    Stop the rotation of a dynamic collision object by applying a force opposite
+ to the angular velocity of the object
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">collisionobject_url</span>
+
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+</dl>
+
+
+</div> <!-- id="content" -->
+</div> <!-- id="main" -->
+<div id="about">
+<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.4.6</a></i>
+<i style="float:right;">Last updated 2017-11-27 06:48:33 </i>
+</div> <!-- id="about" -->
+</div> <!-- id="container" -->
+</body>
+</html>

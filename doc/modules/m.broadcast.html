@@ -1,0 +1,253 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<head>
+    <title>Reference</title>
+    <link rel="stylesheet" href="../ldoc.css" type="text/css" />
+</head>
+<body>
+
+<div id="container">
+
+<div id="product">
+	<div id="product_logo"></div>
+	<div id="product_name"><big><b></b></big></div>
+	<div id="product_description"></div>
+</div> <!-- id="product" -->
+
+
+<div id="main">
+
+
+<!-- Menu -->
+
+<div id="navigation">
+<br/>
+<h1>ldoc</h1>
+
+<ul>
+  <li><a href="../index.html">Index</a></li>
+</ul>
+
+<h2>Contents</h2>
+<ul>
+<li><a href="#Functions">Functions</a></li>
+</ul>
+
+
+<h2>Modules</h2>
+<ul class="nowrap">
+  <li><a href="../modules/m.app.html">m.app</a></li>
+  <li><a href="../modules/m.bezier.html">m.bezier</a></li>
+  <li><strong>m.broadcast</strong></li>
+  <li><a href="../modules/m.dynamic.html">m.dynamic</a></li>
+  <li><a href="../modules/m.file.html">m.file</a></li>
+  <li><a href="../modules/m.flow.html">m.flow</a></li>
+  <li><a href="../modules/m.gesture.html">m.gesture</a></li>
+  <li><a href="../modules/m.input.html">m.input</a></li>
+  <li><a href="../modules/m.kinematic.html">m.kinematic</a></li>
+  <li><a href="../modules/m.listener.html">m.listener</a></li>
+  <li><a href="../modules/m.logger.html">m.logger</a></li>
+  <li><a href="../modules/m.platformer.html">m.platformer</a></li>
+  <li><a href="../modules/m.savefile.html">m.savefile</a></li>
+  <li><a href="../modules/m.savetable.html">m.savetable</a></li>
+  <li><a href="../modules/m.settings.html">m.settings</a></li>
+  <li><a href="../modules/m.signal.html">m.signal</a></li>
+  <li><a href="../modules/m.simple_input.html">m.simple_input</a></li>
+  <li><a href="../modules/m.util.html">m.util</a></li>
+</ul>
+
+</div>
+
+<div id="content">
+
+<h1>Module <code>m.broadcast</code></h1>
+<p>Module to simplify sending of a message to multiple receivers</p>
+<p></p>
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">-- script_a.script
+
+local broadcast = require &quot;ludobits.m.broadcast&quot;
+
+function init(self)
+	-- this script should react to &quot;foo&quot; and &quot;bar&quot; messages
+	broadcast.register(&quot;foo&quot;)
+	broadcast.register(&quot;bar&quot;, function(message, sender)
+		-- handle message
+	end)
+end
+
+function final(self)
+	broadcast.unregister(&quot;foo&quot;)
+	broadcast.unregister(&quot;bar&quot;)
+end
+
+function on_message(self, message_id, message, sender)
+	if broadcast.on_message(message_id, message, sender) then
+		-- message was handled
+		return
+	end
+	if message_id == hash(&quot;foo&quot;) then
+		-- handle message &quot;foo&quot;
+	end
+end
+
+
+-- script_b.script
+
+local broadcast = require &quot;ludobits.m.broadcast&quot;
+
+function update(self, dt)
+	if some condition then
+		-- broadcast a &quot;foo&quot; message to anyone listening
+		broadcast.send(&quot;foo&quot;)
+	end
+end
+</pre>
+    </ul>
+
+
+<h2><a href="#Functions">Functions</a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#send">send (message_id, message)</a></td>
+	<td class="summary">Send a message to all registered receivers</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#register">register (message_id, on_message_handler)</a></td>
+	<td class="summary">Register the current script as a receiver for a specific message</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#unregister">unregister (message_id)</a></td>
+	<td class="summary">Unregister the current script from receiving a previously registered message</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#on_message">on_message (message_id, message, sender)</a></td>
+	<td class="summary">Forward received messages in scripts where the broadcast module is used and where
+ registered messages have also provide a message handler function.</td>
+	</tr>
+</table>
+
+<br/>
+<br/>
+
+
+    <h2 class="section-header "><a name="Functions"></a>Functions</h2>
+
+    <dl class="function">
+    <dt>
+    <a name = "send"></a>
+    <strong>send (message_id, message)</strong>
+    </dt>
+    <dd>
+    Send a message to all registered receivers
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">message_id</span>
+
+        </li>
+        <li><span class="parameter">message</span>
+
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "register"></a>
+    <strong>register (message_id, on_message_handler)</strong>
+    </dt>
+    <dd>
+    Register the current script as a receiver for a specific message
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">message_id</span>
+
+        </li>
+        <li><span class="parameter">on_message_handler</span>
+         Optional message handler function to call
+ when a message is received. The function will receive the message
+ and sender as it's arguments. You must call <a href="../modules/m.broadcast.html#on_message">on_message</a> for this
+ to work
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "unregister"></a>
+    <strong>unregister (message_id)</strong>
+    </dt>
+    <dd>
+    Unregister the current script from receiving a previously registered message
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">message_id</span>
+
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "on_message"></a>
+    <strong>on_message (message_id, message, sender)</strong>
+    </dt>
+    <dd>
+    Forward received messages in scripts where the broadcast module is used and where
+ registered messages have also provide a message handler function.  If no message
+ handler functions are used then there is no need to call this function.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">message_id</span>
+
+        </li>
+        <li><span class="parameter">message</span>
+
+        </li>
+        <li><span class="parameter">sender</span>
+
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        true if the message was handled
+    </ol>
+
+
+
+
+</dd>
+</dl>
+
+
+</div> <!-- id="content" -->
+</div> <!-- id="main" -->
+<div id="about">
+<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.4.6</a></i>
+<i style="float:right;">Last updated 2017-11-27 06:48:33 </i>
+</div> <!-- id="about" -->
+</div> <!-- id="container" -->
+</body>
+</html>

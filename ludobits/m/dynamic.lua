@@ -1,3 +1,4 @@
+--- Utility functions for working with dynamic collision objects
 local M = {}
 
 local LINEAR_VELOCITY = hash("linear_velocity")
@@ -17,7 +18,7 @@ end
 
 
 --- Move a dynamic collision object in its direction of rotation by
--- applying a force 
+-- applying a force
 -- @param collisionobject_url
 -- @param force In the format of vmath.vector3(0, force, 0)
 function M.forward(collisionobject_url, force)
@@ -26,7 +27,7 @@ function M.forward(collisionobject_url, force)
 end
 
 --- Move a dynamic collision object in the opposite direction of
--- its rotation by applying a force 
+-- its rotation by applying a force
 -- @param collisionobject_url
 -- @param force In the format of vmath.vector3(0, force, 0)
 function M.backwards(collisionobject_url, force)
@@ -34,12 +35,18 @@ function M.backwards(collisionobject_url, force)
 	msg.post(collisionobject_url, "apply_force", { force = vmath.rotate(go.get_rotation(), -force * mass), position = go.get_world_position() })
 end
 
+--- Stop the movemembt of a dynamic collision object by applying a force opposit
+-- to the linear velocity and mass of the object
+-- @param collisionobject_url
 function M.stop_moving(collisionobject_url)
 	local mass = go.get(collisionobject_url, MASS)
 	local linv = go.get(collisionobject_url, LINEAR_VELOCITY)
 	msg.post(collisionobject_url, "apply_force", { force = -linv * 100 * mass, position = go.get_world_position() })
 end
 
+--- Stop the rotation of a dynamic collision object by applying a force opposite
+-- to the angular velocity of the object
+-- @param collisionobject_url
 function M.stop_rotating(collisionobject_url)
 	local angv = go.get(collisionobject_url, ANGULAR_VELOCITY)
 	angv.x = angv.z

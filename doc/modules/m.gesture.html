@@ -1,0 +1,259 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<head>
+    <title>Reference</title>
+    <link rel="stylesheet" href="../ldoc.css" type="text/css" />
+</head>
+<body>
+
+<div id="container">
+
+<div id="product">
+	<div id="product_logo"></div>
+	<div id="product_name"><big><b></b></big></div>
+	<div id="product_description"></div>
+</div> <!-- id="product" -->
+
+
+<div id="main">
+
+
+<!-- Menu -->
+
+<div id="navigation">
+<br/>
+<h1>ldoc</h1>
+
+<ul>
+  <li><a href="../index.html">Index</a></li>
+</ul>
+
+<h2>Contents</h2>
+<ul>
+<li><a href="#Functions">Functions</a></li>
+<li><a href="#Fields">Fields</a></li>
+</ul>
+
+
+<h2>Modules</h2>
+<ul class="nowrap">
+  <li><a href="../modules/m.app.html">m.app</a></li>
+  <li><a href="../modules/m.bezier.html">m.bezier</a></li>
+  <li><a href="../modules/m.broadcast.html">m.broadcast</a></li>
+  <li><a href="../modules/m.dynamic.html">m.dynamic</a></li>
+  <li><a href="../modules/m.file.html">m.file</a></li>
+  <li><a href="../modules/m.flow.html">m.flow</a></li>
+  <li><strong>m.gesture</strong></li>
+  <li><a href="../modules/m.input.html">m.input</a></li>
+  <li><a href="../modules/m.kinematic.html">m.kinematic</a></li>
+  <li><a href="../modules/m.listener.html">m.listener</a></li>
+  <li><a href="../modules/m.logger.html">m.logger</a></li>
+  <li><a href="../modules/m.platformer.html">m.platformer</a></li>
+  <li><a href="../modules/m.savefile.html">m.savefile</a></li>
+  <li><a href="../modules/m.savetable.html">m.savetable</a></li>
+  <li><a href="../modules/m.settings.html">m.settings</a></li>
+  <li><a href="../modules/m.signal.html">m.signal</a></li>
+  <li><a href="../modules/m.simple_input.html">m.simple_input</a></li>
+  <li><a href="../modules/m.util.html">m.util</a></li>
+</ul>
+
+</div>
+
+<div id="content">
+
+<h1>Module <code>m.gesture</code></h1>
+<p>Gesture detection module that can be used to detect gestures such as tap, double tap,
+ long press and swipe</p>
+<p></p>
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">local gesture = require &quot;ludobits.m.gesture&quot;
+
+function on_input(self, action_id, action)
+	local g = gesture.on_input(self, action_id, action)
+	if g.tap then
+		print(&quot;Single tap detected&quot;)
+	elseif g.double_tap then
+		print(&quot;Double tap detected&quot;)
+	elseif g.long_press then
+		print(&quot;Long-press detected&quot;)
+	elseif g.swipe_left then
+		print(&quot;Swipe left detected&quot;)
+	elseif g.swipe_right then
+		print(&quot;Swipe right detected&quot;)
+	elseif g.swipe_up then
+		print(&quot;Swipe up detected&quot;)
+	elseif g.swipe_down then
+		print(&quot;Swipe down detected&quot;)
+	end
+end
+</pre>
+    </ul>
+
+
+<h2><a href="#Functions">Functions</a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#on_input">on_input (self, action_id, action)</a></td>
+	<td class="summary">Forward calls to on_input to this function to detect supported gestures</td>
+	</tr>
+</table>
+<h2><a href="#Fields">Fields</a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#TAP_THRESHOLD">TAP_THRESHOLD</a></td>
+	<td class="summary">maximum distance between a pressed and release action to consider it a tap</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#DOUBLE_TAP_INTERVAL">DOUBLE_TAP_INTERVAL</a></td>
+	<td class="summary">maximum interval allowed between two taps to consider it a double-tap</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#SWIPE_THRESHOLD">SWIPE_THRESHOLD</a></td>
+	<td class="summary">minimum distance between a pressed and release action to consider it a swipe</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#SWIPE_TIME">SWIPE_TIME</a></td>
+	<td class="summary">maximum time between a pressed and release action to consider it a swipe</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#LONG_PRESS_TIME">LONG_PRESS_TIME</a></td>
+	<td class="summary">minimum time of a pressed/release sequence to consider it a long press</td>
+	</tr>
+</table>
+
+<br/>
+<br/>
+
+
+    <h2 class="section-header "><a name="Functions"></a>Functions</h2>
+
+    <dl class="function">
+    <dt>
+    <a name = "on_input"></a>
+    <strong>on_input (self, action_id, action)</strong>
+    </dt>
+    <dd>
+    Forward calls to on_input to this function to detect supported gestures
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">self</span>
+
+        </li>
+        <li><span class="parameter">action_id</span>
+
+        </li>
+        <li><span class="parameter">action</span>
+
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+         A table containing detected gestures. Can contain the following
+ values:
+		* tap [boolean]
+		* double_tap [boolean]
+		* long_press [boolean]
+		* swipe_left [boolean]
+		* swipe_right [boolean]
+		* swipe_up [boolean]
+		* swipe_down [boolean]
+		* swipe - table with values from, to and time
+    </ol>
+
+
+
+
+</dd>
+</dl>
+    <h2 class="section-header "><a name="Fields"></a>Fields</h2>
+
+    <dl class="function">
+    <dt>
+    <a name = "TAP_THRESHOLD"></a>
+    <strong>TAP_THRESHOLD</strong>
+    </dt>
+    <dd>
+    maximum distance between a pressed and release action to consider it a tap
+
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "DOUBLE_TAP_INTERVAL"></a>
+    <strong>DOUBLE_TAP_INTERVAL</strong>
+    </dt>
+    <dd>
+    maximum interval allowed between two taps to consider it a double-tap
+
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "SWIPE_THRESHOLD"></a>
+    <strong>SWIPE_THRESHOLD</strong>
+    </dt>
+    <dd>
+    minimum distance between a pressed and release action to consider it a swipe
+
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "SWIPE_TIME"></a>
+    <strong>SWIPE_TIME</strong>
+    </dt>
+    <dd>
+    maximum time between a pressed and release action to consider it a swipe
+
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "LONG_PRESS_TIME"></a>
+    <strong>LONG_PRESS_TIME</strong>
+    </dt>
+    <dd>
+    minimum time of a pressed/release sequence to consider it a long press
+
+
+
+
+
+
+
+</dd>
+</dl>
+
+
+</div> <!-- id="content" -->
+</div> <!-- id="main" -->
+<div id="about">
+<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.4.6</a></i>
+<i style="float:right;">Last updated 2017-11-27 06:48:33 </i>
+</div> <!-- id="about" -->
+</div> <!-- id="container" -->
+</body>
+</html>

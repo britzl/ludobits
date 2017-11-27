@@ -1,0 +1,337 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<head>
+    <title>Reference</title>
+    <link rel="stylesheet" href="../ldoc.css" type="text/css" />
+</head>
+<body>
+
+<div id="container">
+
+<div id="product">
+	<div id="product_logo"></div>
+	<div id="product_name"><big><b></b></big></div>
+	<div id="product_description"></div>
+</div> <!-- id="product" -->
+
+
+<div id="main">
+
+
+<!-- Menu -->
+
+<div id="navigation">
+<br/>
+<h1>ldoc</h1>
+
+<ul>
+  <li><a href="../index.html">Index</a></li>
+</ul>
+
+<h2>Contents</h2>
+<ul>
+<li><a href="#Functions">Functions</a></li>
+</ul>
+
+
+<h2>Modules</h2>
+<ul class="nowrap">
+  <li><a href="../modules/m.app.html">m.app</a></li>
+  <li><a href="../modules/m.bezier.html">m.bezier</a></li>
+  <li><a href="../modules/m.broadcast.html">m.broadcast</a></li>
+  <li><a href="../modules/m.dynamic.html">m.dynamic</a></li>
+  <li><a href="../modules/m.file.html">m.file</a></li>
+  <li><a href="../modules/m.flow.html">m.flow</a></li>
+  <li><a href="../modules/m.gesture.html">m.gesture</a></li>
+  <li><a href="../modules/m.input.html">m.input</a></li>
+  <li><a href="../modules/m.kinematic.html">m.kinematic</a></li>
+  <li><a href="../modules/m.listener.html">m.listener</a></li>
+  <li><a href="../modules/m.logger.html">m.logger</a></li>
+  <li><strong>m.platformer</strong></li>
+  <li><a href="../modules/m.savefile.html">m.savefile</a></li>
+  <li><a href="../modules/m.savetable.html">m.savetable</a></li>
+  <li><a href="../modules/m.settings.html">m.settings</a></li>
+  <li><a href="../modules/m.signal.html">m.signal</a></li>
+  <li><a href="../modules/m.simple_input.html">m.simple_input</a></li>
+  <li><a href="../modules/m.util.html">m.util</a></li>
+</ul>
+
+</div>
+
+<div id="content">
+
+<h1>Module <code>m.platformer</code></h1>
+<p>Wrapper for the physics and behaviour involved in creating a platformer
+ game</p>
+<p></p>
+
+
+<h2><a href="#Functions">Functions</a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#create">create (collision_hashes)</a></td>
+	<td class="summary">Create a platformer game logic wrapper.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#instance.right">instance.right (velocity)</a></td>
+	<td class="summary">Move the game object right by setting horizontal velocity</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#instance.move">instance.move (velocity)</a></td>
+	<td class="summary">Move the game object by setting its velocity</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#instance.stop">instance.stop ()</a></td>
+	<td class="summary">Stop horizontal movement by setting the velocity.x component to zero</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#instance.jump">instance.jump (power, allow_double_jump, allow_wall_jump)</a></td>
+	<td class="summary">Try to make the game object jump.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#instance.abort_jump">instance.abort_jump (reduction)</a></td>
+	<td class="summary">Abort a jump by "cutting it short"</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#instance.is_jumping">instance.is_jumping ()</a></td>
+	<td class="summary">Check if this object is jumping</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#instance.is_falling">instance.is_falling ()</a></td>
+	<td class="summary">Check if this object is falling</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#instance.on_message">instance.on_message (message_id, message)</a></td>
+	<td class="summary">Forward any on_message calls here to resolve physics collisions</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#instance.update">instance.update (dt)</a></td>
+	<td class="summary">Call this every frame to update the platformer physics</td>
+	</tr>
+</table>
+
+<br/>
+<br/>
+
+
+    <h2 class="section-header "><a name="Functions"></a>Functions</h2>
+
+    <dl class="function">
+    <dt>
+    <a name = "create"></a>
+    <strong>create (collision_hashes)</strong>
+    </dt>
+    <dd>
+    Create a platformer game logic wrapper.  This will provide all the functionality
+ to control a game object in a platformer game. The functions will operate on
+ the game object attached to the script calling the functions.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">collision_hashes</span>
+         Table with hashes for the collision groups that
+ prevents movement and where collisions should be resolved
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "instance.right"></a>
+    <strong>instance.right (velocity)</strong>
+    </dt>
+    <dd>
+    Move the game object right by setting horizontal velocity
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">velocity</span>
+         Horizontal velocity
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "instance.move"></a>
+    <strong>instance.move (velocity)</strong>
+    </dt>
+    <dd>
+    Move the game object by setting its velocity
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">velocity</span>
+         Velocity as a vector3
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "instance.stop"></a>
+    <strong>instance.stop ()</strong>
+    </dt>
+    <dd>
+    Stop horizontal movement by setting the velocity.x component to zero
+
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "instance.jump"></a>
+    <strong>instance.jump (power, allow_double_jump, allow_wall_jump)</strong>
+    </dt>
+    <dd>
+    Try to make the game object jump.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">power</span>
+         The power of the jump (ie how high)
+        </li>
+        <li><span class="parameter">allow_double_jump</span>
+         True if double-jump should be allowed
+        </li>
+        <li><span class="parameter">allow_wall_jump</span>
+         True if wall-jump should be allowed
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "instance.abort_jump"></a>
+    <strong>instance.abort_jump (reduction)</strong>
+    </dt>
+    <dd>
+    Abort a jump by "cutting it short"
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">reduction</span>
+         The amount to reduce the vertical speed (default 0.5)
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "instance.is_jumping"></a>
+    <strong>instance.is_jumping ()</strong>
+    </dt>
+    <dd>
+    Check if this object is jumping
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+        true if jumping
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "instance.is_falling"></a>
+    <strong>instance.is_falling ()</strong>
+    </dt>
+    <dd>
+    Check if this object is falling
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+        true if falling
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "instance.on_message"></a>
+    <strong>instance.on_message (message_id, message)</strong>
+    </dt>
+    <dd>
+    Forward any on_message calls here to resolve physics collisions
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">message_id</span>
+
+        </li>
+        <li><span class="parameter">message</span>
+
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "instance.update"></a>
+    <strong>instance.update (dt)</strong>
+    </dt>
+    <dd>
+    Call this every frame to update the platformer physics
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">dt</span>
+
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+</dl>
+
+
+</div> <!-- id="content" -->
+</div> <!-- id="main" -->
+<div id="about">
+<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.4.6</a></i>
+<i style="float:right;">Last updated 2017-11-27 06:48:33 </i>
+</div> <!-- id="about" -->
+</div> <!-- id="container" -->
+</body>
+</html>

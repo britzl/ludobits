@@ -338,7 +338,7 @@ end
 --- Call gui.animate and wait until it has finished
 -- NOTE: The argument order differs from gui.animate() (playback is shifted
 -- to the same position as for go.animate)
--- @param url
+-- @param node
 -- @param property
 -- @param playback
 -- @param to
@@ -438,7 +438,7 @@ function M.update(dt)
 		else
 			local current_script_instance = _G.__dm_script_instance__
 			_G.__dm_script_instance__ = instance.script_instance
-			
+
 			if instance.state == WAITING and instance.condition then
 				if instance.condition(dt) then
 					instance.condition = nil
@@ -446,7 +446,7 @@ function M.update(dt)
 					instance.state = READY
 				end
 			end
-			
+
 			if instance.state == READY then
 				resume(instance)
 			end

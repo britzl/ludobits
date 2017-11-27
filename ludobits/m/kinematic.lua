@@ -1,10 +1,18 @@
+--- Utility functions for working with kinematic collision objects
 local M = {}
 
 
 M.CONTACT_POINT_RESPONSE = hash("contact_point_response")
 
 
-
+--- Handle geometry contact (ie collision) by separating this object from
+-- the collision.
+-- @param correction Aggregated correction vector (for when dealing with
+-- multiple collisions per frame)
+-- @param normal Collision normal (as provided from a contact_point_response
+-- message)
+-- @param distance Collision distance/overlap
+-- @param id Optional id of the game object to separate
 function M.handle_geometry_contact(correction, normal, distance, id)
 	-- project the correction vector onto the contact normal
 	-- (the correction vector is the 0-vector for the first contact point)
@@ -12,7 +20,9 @@ function M.handle_geometry_contact(correction, normal, distance, id)
 	-- calculate the compensation we need to make for this contact point
 	local comp = (distance - proj) * normal
 	-- add it to the correction vector
-	correction = correction + comp
+	correction.x = correction.x + comp.x
+	correction.y = correction.y + comp.y
+	correction.z = correction.z + comp.z
 	-- apply the compensation to the player character
 	go.set_position(go.get_position(id) + comp, id)
 end
@@ -29,7 +39,7 @@ function M.look_at(look_at_position, id)
 end
 
 --- Rotate around the z-axis
--- @param Amount to rotate in radians
+-- @param angle Amount to rotate in radians
 -- @param id Optional id of the game object to rotate
 function M.rotate(angle, id)
 	go.set_rotation(go.get_rotation(id) * vmath.quat_rotation_z(angle), id)
@@ -60,6 +70,7 @@ function M.backwards(amount, id)
 	go.set_position(go.get_position(id) - direction, id)
 end
 
+--- Create a wrapper for a kinematic collision object
 function M.create()
 	local instance = {}
 

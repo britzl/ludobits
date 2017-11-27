@@ -3,7 +3,7 @@
 -- @usage
 --
 --	local gesture = require "ludobits.m.gesture"
---	
+--
 --	function on_input(self, action_id, action)
 --		local g = gesture.on_input(self, action_id, action)
 --		if g.tap then
@@ -29,22 +29,37 @@ local M = {}
 
 M.HASH_TOUCH = hash("touch")
 
--- maximum distance between a pressed and release action to consider it a tap
+--- maximum distance between a pressed and release action to consider it a tap
 M.TAP_THRESHOLD = 20
 
+--- maximum interval allowed between two taps to consider it a double-tap
 M.DOUBLE_TAP_INTERVAL = 0.5
 
--- minimum distance between a pressed and release action to consider it a swipe
+--- minimum distance between a pressed and release action to consider it a swipe
 M.SWIPE_THRESHOLD = 50
 
--- maximum time between a pressed and release action to consider it a swipe
+--- maximum time between a pressed and release action to consider it a swipe
 M.SWIPE_TIME = 0.5
 
--- minimum time of a pressed/release sequence to consider it a long press
+--- minimum time of a pressed/release sequence to consider it a long press
 M.LONG_PRESS_TIME = 0.5
 
 local contexts = {}
 
+--- Forward calls to on_input to this function to detect supported gestures
+-- @param self
+-- @param action_id
+-- @param action
+-- @return A table containing detected gestures. Can contain the following
+-- values:
+--		* tap [boolean]
+--		* double_tap [boolean]
+--		* long_press [boolean]
+--		* swipe_left [boolean]
+--		* swipe_right [boolean]
+--		* swipe_up [boolean]
+--		* swipe_down [boolean]
+--		* swipe - table with values from, to and time
 function M.on_input(self, action_id, action)
 	if action_id ~= M.HASH_TOUCH then
 		return

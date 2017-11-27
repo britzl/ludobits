@@ -44,6 +44,7 @@ end
 
 
 
+--- Wrapper for iac.set_listener
 M.iac = {}
 
 local iac_listener = create_listener()
@@ -58,7 +59,7 @@ function M.iac.remove_listener(fn)
 	iac_listener.remove(fn)
 end
 
-
+--- Wrapper for iap.set_listener
 M.iap = {}
 
 local iap_listener = create_listener()
@@ -74,6 +75,7 @@ function M.iap.remove_listener(fn)
 end
 
 
+--- Wrapper for window.set_listener
 M.window = {}
 
 local window_listener = create_listener()
@@ -88,7 +90,7 @@ function M.window.remove_listener(fn)
 	window_listener.remove(fn)
 end
 
-
+--- Wrapper for push.set_listener
 M.push = {}
 
 local push_listener = create_listener()

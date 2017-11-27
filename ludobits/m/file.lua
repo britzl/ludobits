@@ -1,4 +1,4 @@
-
+--- File manipulation utilities
 
 local M = {}
 

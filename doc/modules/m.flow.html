@@ -1,0 +1,679 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<head>
+    <title>Reference</title>
+    <link rel="stylesheet" href="../ldoc.css" type="text/css" />
+</head>
+<body>
+
+<div id="container">
+
+<div id="product">
+	<div id="product_logo"></div>
+	<div id="product_name"><big><b></b></big></div>
+	<div id="product_description"></div>
+</div> <!-- id="product" -->
+
+
+<div id="main">
+
+
+<!-- Menu -->
+
+<div id="navigation">
+<br/>
+<h1>ldoc</h1>
+
+<ul>
+  <li><a href="../index.html">Index</a></li>
+</ul>
+
+<h2>Contents</h2>
+<ul>
+<li><a href="#Functions">Functions</a></li>
+</ul>
+
+
+<h2>Modules</h2>
+<ul class="nowrap">
+  <li><a href="../modules/m.app.html">m.app</a></li>
+  <li><a href="../modules/m.bezier.html">m.bezier</a></li>
+  <li><a href="../modules/m.broadcast.html">m.broadcast</a></li>
+  <li><a href="../modules/m.dynamic.html">m.dynamic</a></li>
+  <li><a href="../modules/m.file.html">m.file</a></li>
+  <li><strong>m.flow</strong></li>
+  <li><a href="../modules/m.gesture.html">m.gesture</a></li>
+  <li><a href="../modules/m.input.html">m.input</a></li>
+  <li><a href="../modules/m.kinematic.html">m.kinematic</a></li>
+  <li><a href="../modules/m.listener.html">m.listener</a></li>
+  <li><a href="../modules/m.logger.html">m.logger</a></li>
+  <li><a href="../modules/m.platformer.html">m.platformer</a></li>
+  <li><a href="../modules/m.savefile.html">m.savefile</a></li>
+  <li><a href="../modules/m.savetable.html">m.savetable</a></li>
+  <li><a href="../modules/m.settings.html">m.settings</a></li>
+  <li><a href="../modules/m.signal.html">m.signal</a></li>
+  <li><a href="../modules/m.simple_input.html">m.simple_input</a></li>
+  <li><a href="../modules/m.util.html">m.util</a></li>
+</ul>
+
+</div>
+
+<div id="content">
+
+<h1>Module <code>m.flow</code></h1>
+<p>The flow module simplifies asynchronous flows of execution where your
+ code needs to wait for one asynchronous operation to finish before
+ starting with the next one.</p>
+<p></p>
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">local flow = require &quot;ludobits.m.flow&quot;
+
+function init(self)
+	flow.start(function()
+		-- animate a gameobject and wait for animation to complete
+		flow.go_animate(&quot;.&quot;, &quot;position.y&quot;, go.PLAYBACK_ONCE_FORWARD, 0, go.EASING_INCUBIC, 2)
+		-- wait for one and a half seconds
+		flow.delay(1.5)
+		-- wait until a function returns true
+		flow.until_true(is_game_over)
+		-- animate go again
+		flow.go_animate(&quot;.&quot;, &quot;position.y&quot;, go.PLAYBACK_ONCE_FORWARD, 400, go.EASING_INCUBIC, 2)
+	end)
+end
+
+function final(self)
+	flow.stop()
+end
+
+function update(self, dt)
+	flow.update()
+end
+
+function on_message(self, message_id, message, sender)
+	flow.on_message(message_id, message, sender)
+end
+</pre>
+    </ul>
+
+
+<h2><a href="#Functions">Functions</a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#start">start (fn, options, on_error)</a></td>
+	<td class="summary">Start a new flow.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#stop">stop (instance)</a></td>
+	<td class="summary">Stop a created flow before it has completed</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#delay">delay (seconds)</a></td>
+	<td class="summary">Wait until a certain time has elapsed</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#frames">frames (frames)</a></td>
+	<td class="summary">Wait until a certain number of frames have elapsed</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#until_true">until_true (fn)</a></td>
+	<td class="summary">Wait until a function returns true</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#until_any_message">until_any_message ()</a></td>
+	<td class="summary">Wait until any message is received</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#until_message">until_message (message_1, message_2, message_n)</a></td>
+	<td class="summary">Wait until a specific message is received</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#until_input_pressed">until_input_pressed (action_id)</a></td>
+	<td class="summary">Wait until input action with pressed state</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#until_input_released">until_input_released (action_id)</a></td>
+	<td class="summary">Wait until input action with released state</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#until_callback">until_callback (fn, arg1, arg2, argn)</a></td>
+	<td class="summary">Wait until a callback function is invoked</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#load">load (collection_url)</a></td>
+	<td class="summary">Load a collection and wait until it is loaded and enabled</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#unload">unload (collection_url)</a></td>
+	<td class="summary">Unload a collection and wait until it is unloaded</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#go_animate">go_animate (url, property, playback, to, easing, duration, delay)</a></td>
+	<td class="summary">Call go.animate and wait until it has finished</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#gui_animate">gui_animate (node, property, playback, to, easing, duration, delay)</a></td>
+	<td class="summary">Call gui.animate and wait until it has finished
+ NOTE: The argument order differs from gui.animate() (playback is shifted
+ to the same position as for go.animate)</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#play_animation">play_animation (sprite_url, id)</a></td>
+	<td class="summary">Play a sprite animation and wait until it has finished</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#ray_cast">ray_cast (from, to, groups)</a></td>
+	<td class="summary">Cast a physics ray and wait for a response for a maximum of one frame</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#update">update (dt)</a></td>
+	<td class="summary">Call this as often as needed (every frame)</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#on_message">on_message (message_id, message, sender)</a></td>
+	<td class="summary">Forward any received messages in your scripts to this function</td>
+	</tr>
+</table>
+
+<br/>
+<br/>
+
+
+    <h2 class="section-header "><a name="Functions"></a>Functions</h2>
+
+    <dl class="function">
+    <dt>
+    <a name = "start"></a>
+    <strong>start (fn, options, on_error)</strong>
+    </dt>
+    <dd>
+    Start a new flow.  If this function is called from
+ within an existing flow the existing flow can either
+ wait for the new flow to finish or run in parallel
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">fn</span>
+         The function to run within the flow
+        </li>
+        <li><span class="parameter">options</span>
+         Key value pairs. Allowed keys:
+		parallel = true if running flow shouldn't wait for this flow
+        </li>
+        <li><span class="parameter">on_error</span>
+         Function to call if something goes wrong while
+ running the flow
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        The created flow instance
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "stop"></a>
+    <strong>stop (instance)</strong>
+    </dt>
+    <dd>
+    Stop a created flow before it has completed
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">instance</span>
+         This can be either the returned value from
+ a call to <a href="../modules/m.flow.html#start">start</a>, a coroutine or URL. Defaults to the URL of the
+ running script
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "delay"></a>
+    <strong>delay (seconds)</strong>
+    </dt>
+    <dd>
+    Wait until a certain time has elapsed
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">seconds</span>
+
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "frames"></a>
+    <strong>frames (frames)</strong>
+    </dt>
+    <dd>
+    Wait until a certain number of frames have elapsed
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">frames</span>
+
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "until_true"></a>
+    <strong>until_true (fn)</strong>
+    </dt>
+    <dd>
+    Wait until a function returns true
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">fn</span>
+
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "until_any_message"></a>
+    <strong>until_any_message ()</strong>
+    </dt>
+    <dd>
+    Wait until any message is received
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+        <li>
+        message_id</li>
+        <li>
+        message</li>
+        <li>
+        sender</li>
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "until_message"></a>
+    <strong>until_message (message_1, message_2, message_n)</strong>
+    </dt>
+    <dd>
+    Wait until a specific message is received
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">message_1</span>
+         Message to wait for
+        </li>
+        <li><span class="parameter">message_2</span>
+         Message to wait for
+        </li>
+        <li><span class="parameter">message_n</span>
+         Message to wait for
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+        <li>
+        message_id</li>
+        <li>
+        message</li>
+        <li>
+        sender</li>
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "until_input_pressed"></a>
+    <strong>until_input_pressed (action_id)</strong>
+    </dt>
+    <dd>
+    Wait until input action with pressed state
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">action_id</span>
+         Optional action to wait for (nil for any action)
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+        <li>
+        action_id</li>
+        <li>
+        action</li>
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "until_input_released"></a>
+    <strong>until_input_released (action_id)</strong>
+    </dt>
+    <dd>
+    Wait until input action with released state
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">action_id</span>
+         Optional action to wait for (nil for any action)
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+        <li>
+        action_id</li>
+        <li>
+        action</li>
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "until_callback"></a>
+    <strong>until_callback (fn, arg1, arg2, argn)</strong>
+    </dt>
+    <dd>
+    Wait until a callback function is invoked
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">fn</span>
+         The function to call. The function must take a callback function as its first argument
+        </li>
+        <li><span class="parameter">arg1</span>
+         Additional argument to pass to fn
+        </li>
+        <li><span class="parameter">arg2</span>
+         Additional argument to pass to fn
+        </li>
+        <li><span class="parameter">argn</span>
+         Additional argument to pass to fn
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        Any values passed to the callback function
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "load"></a>
+    <strong>load (collection_url)</strong>
+    </dt>
+    <dd>
+    Load a collection and wait until it is loaded and enabled
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">collection_url</span>
+
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "unload"></a>
+    <strong>unload (collection_url)</strong>
+    </dt>
+    <dd>
+    Unload a collection and wait until it is unloaded
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">collection_url</span>
+         The collection to unload
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "go_animate"></a>
+    <strong>go_animate (url, property, playback, to, easing, duration, delay)</strong>
+    </dt>
+    <dd>
+    Call go.animate and wait until it has finished
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">url</span>
+
+        </li>
+        <li><span class="parameter">property</span>
+
+        </li>
+        <li><span class="parameter">playback</span>
+
+        </li>
+        <li><span class="parameter">to</span>
+
+        </li>
+        <li><span class="parameter">easing</span>
+
+        </li>
+        <li><span class="parameter">duration</span>
+
+        </li>
+        <li><span class="parameter">delay</span>
+
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "gui_animate"></a>
+    <strong>gui_animate (node, property, playback, to, easing, duration, delay)</strong>
+    </dt>
+    <dd>
+    Call gui.animate and wait until it has finished
+ NOTE: The argument order differs from gui.animate() (playback is shifted
+ to the same position as for go.animate)
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">node</span>
+
+        </li>
+        <li><span class="parameter">property</span>
+
+        </li>
+        <li><span class="parameter">playback</span>
+
+        </li>
+        <li><span class="parameter">to</span>
+
+        </li>
+        <li><span class="parameter">easing</span>
+
+        </li>
+        <li><span class="parameter">duration</span>
+
+        </li>
+        <li><span class="parameter">delay</span>
+
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "play_animation"></a>
+    <strong>play_animation (sprite_url, id)</strong>
+    </dt>
+    <dd>
+    Play a sprite animation and wait until it has finished
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">sprite_url</span>
+
+        </li>
+        <li><span class="parameter">id</span>
+
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "ray_cast"></a>
+    <strong>ray_cast (from, to, groups)</strong>
+    </dt>
+    <dd>
+    Cast a physics ray and wait for a response for a maximum of one frame
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">from</span>
+
+        </li>
+        <li><span class="parameter">to</span>
+
+        </li>
+        <li><span class="parameter">groups</span>
+
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        The ray cast response or nil if no hit
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "update"></a>
+    <strong>update (dt)</strong>
+    </dt>
+    <dd>
+    Call this as often as needed (every frame)
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">dt</span>
+
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "on_message"></a>
+    <strong>on_message (message_id, message, sender)</strong>
+    </dt>
+    <dd>
+    Forward any received messages in your scripts to this function
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">message_id</span>
+
+        </li>
+        <li><span class="parameter">message</span>
+
+        </li>
+        <li><span class="parameter">sender</span>
+
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+</dl>
+
+
+</div> <!-- id="content" -->
+</div> <!-- id="main" -->
+<div id="about">
+<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.4.6</a></i>
+<i style="float:right;">Last updated 2017-11-27 06:48:33 </i>
+</div> <!-- id="about" -->
+</div> <!-- id="container" -->
+</body>
+</html>
