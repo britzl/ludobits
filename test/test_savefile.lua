@@ -2,9 +2,9 @@ local mock = require "deftest.mock"
 local mock_fs = require "deftest.mock.fs"
 
 return function()
-	local file = require "ludobits.m.file"
+	local savefile = require "ludobits.m.savefile"
 	
-	describe("file", function()
+	describe("savefile", function()
 		before(function()
 			mock_fs.mock()
 		end)
@@ -13,13 +13,19 @@ return function()
 			mock_fs.unmock()
 		end)
 
-		it("should be able to fix filenames with illegal characters", function()
-			assert(file.fix("foobar") == "foobar")
-			assert(file.fix("foo.bar") == "foo.bar")
-			assert(file.fix("foo_bar") == "foo_bar")
-			assert(file.fix("foo bar") == "foo+bar")
-			assert(file.fix("O/>") == "O%2F%3E")
-			assert(file.fix("foo\nbar") == "foo%0Abar")
+		it("should be able to save and load files", function()
+			local file1 = savefile.open("foobar1")
+			local file2 = savefile.open("foobar2")
+			local t1 = file1.load()
+			local t2 = file2.load()
+			assert(not t1)
+			assert(not t2)
+			file1.save("foobar")
+
+			local t1 = file1.load()
+			local t2 = file2.load()
+			assert(t1 == "foobar")
+			assert(not t2)
 		end)
 	end)
 end

@@ -12,7 +12,7 @@ local savetable = require "ludobits.m.savetable"
 
 local M = {}
 
-local settings = savetable.open("__settings").load()
+local settings = savetable.open("__settings").load() or {}
 
 --- Save settings to disk. The settings will be saved to a file named __settings
 function M.save()

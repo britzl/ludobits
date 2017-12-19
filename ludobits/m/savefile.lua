@@ -1,7 +1,7 @@
 --- Wrapper module for io.open and io.write
 -- Files will be saved in a path created from a call to sys.get_save_file() with
--- application id equal to the game.project config project.title with spaces
--- replaced with underscores.
+-- application id equal to the game.project config project.title with invalid path
+-- characters replaced.
 -- @usage
 -- local savefile = require "ludobits.m.savefile"
 --
@@ -22,10 +22,11 @@ function M.open(filename)
 	local instance = {}
 
 	--- Load the table stored in the file
+	-- @param mode The read mode, defaults to "rb"
 	-- @return contents File contents or nil if something went wrong
 	-- @return error_message Error message if something went wrong while reading
-	function instance.load()
-		local f, err = io.open(path, "rb")
+	function instance.load(mode)
+		local f, err = io.open(path, mode or "rb")
 		if err then
 			return nil, err
 		end
@@ -34,11 +35,12 @@ function M.open(filename)
 
 	--- Save string to the file
 	-- @param s The string to save
+	-- @param mode The write mode, defaults to "wb"
 	-- @return success
 	-- @return error_message
-	function instance.save(s)
+	function instance.save(s, mode)
 		assert(s and type(s) == "string", "You must provide a string to save")
-		local f, err = io.open(path, "wb")
+		local f, err = io.open(path, mode or "wb")
 		if err then
 			return nil, err
 		end
