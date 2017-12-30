@@ -93,5 +93,36 @@ return function()
 			assert(input.is_pressed(action_id_string))
 			assert(input.is_pressed(action_id_hash))
 		end)
+
+
+		it("should be able to create multiple instances", function()
+			local action_id1 = hash("action1")
+			local action_id2 = hash("action2")
+			local pressed = { pressed = true }
+			local released = { released = true }
+
+			local input1 = input.create()
+			local input2 = input.create()
+			
+			assert(not input1.is_pressed(action_id1))
+			assert(not input1.is_pressed(action_id2))
+			assert(not input2.is_pressed(action_id1))
+			assert(not input2.is_pressed(action_id2))
+
+			input1.on_input(action_id1, pressed)
+			assert(input1.is_pressed(action_id1))
+			assert(not input2.is_pressed(action_id1))
+
+			input2.on_input(action_id2, pressed)
+			assert(input1.is_pressed(action_id1))
+			assert(not input2.is_pressed(action_id1))
+			assert(not input1.is_pressed(action_id2))
+			assert(input2.is_pressed(action_id2))
+			
+			input1.on_input(action_id1, released)
+			assert(not input1.is_pressed(action_id1))
+			input2.on_input(action_id2, released)
+			assert(not input2.is_pressed(action_id2))
+		end)
 	end)
 end
