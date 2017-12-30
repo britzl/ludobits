@@ -1,4 +1,4 @@
-local simple_input = require "ludobits.m.simple_input"
+local simple_input = require "ludobits.m.input.simple"
 local some_data = require "examples.listener.some_data"
 
 
