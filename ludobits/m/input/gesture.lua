@@ -2,7 +2,7 @@
 -- long press and swipe
 -- @usage
 --
---	local gesture = require "ludobits.m.gesture"
+--	local gesture = require "ludobits.m.input.gesture"
 --
 --	function on_input(self, action_id, action)
 --		local g = gesture.on_input(self, action_id, action)

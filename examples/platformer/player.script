@@ -1,5 +1,6 @@
 local platformer = require "ludobits.m.platformer"
-local input = require "ludobits.m.input"
+local input = require "ludobits.m.input.state"
+local input_mapper = require "ludobits.m.input.mapper"
 
 local LEFT = hash("left")
 local RIGHT = hash("right")
@@ -15,6 +16,9 @@ end
 function init(self)
 	input.acquire()
 	msg.post("camera#camera", "acquire_camera_focus")
+	input_mapper.bind(input_mapper.KEY_LEFT, LEFT)
+	input_mapper.bind(input_mapper.KEY_RIGHT, RIGHT)
+	input_mapper.bind(input_mapper.KEY_SPACE, JUMP)
 	self.platformer = platformer.create({ hash("ground") })
 	self.platformer.gravity = -1200
 	self.current_animation = nil
@@ -22,6 +26,7 @@ end
 
 function final(self)
 	input.release()
+	msg.post("@render:", "set_view_projection", { id = hash(""), view = vmath.matrix4(), projection = vmath.matrix4() })
 end
 
 function update(self, dt)
@@ -46,6 +51,7 @@ function on_message(self, message_id, message, sender)
 end
 
 function on_input(self, action_id, action)
+	action_id = input_mapper.on_input(action_id)
 	input.on_input(action_id, action)
 	if action_id == JUMP then
 		if action.pressed then

@@ -1,8 +1,8 @@
---- Module to simplify input handling. The module will keep track of
--- pressed and released states for all input that it receives.
+--- Module to keep track of pressed and released states for all
+-- input that it receives.
 -- @usage
 --
--- local input = require "ludobits.m.input"
+-- local input = require "ludobits.m.input.state"
 -- 
 -- function init(self)
 -- 	input.acquire()

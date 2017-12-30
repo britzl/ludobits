@@ -14,6 +14,7 @@ end
 
 function final(self)
 	simple_input.release()
+	simple_input.unregister()
 end
 
 function on_input(self, action_id, action)

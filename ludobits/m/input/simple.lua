@@ -2,7 +2,7 @@
 -- on_input() to this module and it will automatically do picking and invoke
 -- a registered callback. Example:
 --
--- local simple_input = require "ludobits.m.simple_input"
+-- local simple_input = require "ludobits.m.input.simple"
 --
 -- function init(self)
 -- 		simple_input.acquire()

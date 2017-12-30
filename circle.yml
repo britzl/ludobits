@@ -1,9 +1,0 @@
-machine:
-  java:
-    version: openjdk8
-  environment:
-    DEFOLD_USER: bjorn.ritzl@king.com
-
-test:
-  post:
-    - "./.test/run.sh"

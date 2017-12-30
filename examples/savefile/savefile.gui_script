@@ -1,5 +1,5 @@
-local savefile = require "ludobits.m.savefile"
-local simple_input = require "ludobits.m.simple_input"
+local savefile = require "ludobits.m.io.savefile"
+local simple_input = require "ludobits.m.input.simple"
 
 
 function init(self)

@@ -2,7 +2,7 @@ local mock = require "deftest.mock"
 local mock_fs = require "deftest.mock.fs"
 
 return function()
-	local savefile = require "ludobits.m.savefile"
+	local savefile = require "ludobits.m.io.savefile"
 	
 	describe("savefile", function()
 		before(function()

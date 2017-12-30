@@ -4,14 +4,14 @@
 -- characters replaced.
 --
 -- @usage
--- local savetable = require "ludobits.m.savetable"
+-- local savetable = require "ludobits.m.io.savetable"
 --
 -- local file = savetable.open("foobar")
 -- local data = file.load()
 -- file.save({ foo = "bar" })
 --
 
-local savefile = require "ludobits.m.savefile"
+local savefile = require "ludobits.m.io.savefile"
 local json = require "ludobits.m.json"
 
 local M = {}

@@ -8,7 +8,7 @@
 --
 -- settings.save()
 
-local savetable = require "ludobits.m.savetable"
+local savetable = require "ludobits.m.io.savetable"
 
 local M = {}
 

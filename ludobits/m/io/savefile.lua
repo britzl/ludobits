@@ -3,14 +3,14 @@
 -- application id equal to the game.project config project.title with invalid path
 -- characters replaced.
 -- @usage
--- local savefile = require "ludobits.m.savefile"
+-- local savefile = require "ludobits.m.io.savefile"
 --
 -- local file = savefile.open("foobar")
 -- local data = file.load()
 -- file.save("something large to save")
 --
 
-local file = require "ludobits.m.file"
+local file = require "ludobits.m.io.file"
 
 local M = {}
 
@@ -45,6 +45,8 @@ function M.open(filename)
 			return nil, err
 		end
 		f:write(s)
+		f:flush()
+		f:close()
 		return true
 	end
 

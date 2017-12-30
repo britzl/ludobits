@@ -1,5 +1,6 @@
-local input = require "ludobits.m.input"
-local kinematic = require "ludobits.m.kinematic"
+local input = require "ludobits.m.input.state"
+local mapper = require "ludobits.m.input.mapper"
+local kinematic = require "ludobits.m.physics.kinematic"
 
 local UP = hash("up")
 local DOWN = hash("down")
@@ -11,6 +12,14 @@ local HEIGHT = 720
 
 function init(self)
 	input.acquire()
+	mapper.bind(mapper.KEY_LEFT, LEFT)
+	mapper.bind(mapper.KEY_RIGHT, RIGHT)
+	mapper.bind(mapper.KEY_UP, UP)
+	mapper.bind(mapper.KEY_DOWN, DOWN)
+	mapper.bind(mapper.KEY_A, LEFT)
+	mapper.bind(mapper.KEY_D, RIGHT)
+	mapper.bind(mapper.KEY_W, UP)
+	mapper.bind(mapper.KEY_S, DOWN)
 	self.k = kinematic.create()
 end
 
@@ -37,6 +46,7 @@ function on_message(self, message_id, message, sender)
 end
 
 function on_input(self, action_id, action)
+	action_id = mapper.on_input(action_id)
 	input.on_input(action_id, action)
 	
 	if not action_id then

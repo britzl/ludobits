@@ -1,4 +1,17 @@
-local gesture = require "ludobits.m.gesture"
+local gesture = require "ludobits.m.input.gesture"
+
+local function prettify(t, indentation)
+	indentation = indentation or ""
+	local s = ""
+	for k,v in pairs(t) do
+		if type(v) == "table" then
+			s = s .. ("%s%s = {\n%s},\n"):format(indentation, k, prettify(v, indentation .. "  "))
+		else
+			s = s .. ("%s%s = %s,\n"):format(indentation, k, v)
+		end
+	end
+	return s
+end
 
 function init(self)
 	msg.post(".", "acquire_input_focus")
@@ -12,5 +25,7 @@ function on_input(self, action_id, action)
 	local g = gesture.on_input(self, action_id, action)
 	if g then
 		pprint(g)
+		local s = prettify(g)
+		label.set_text("#label", s)
 	end
 end

@@ -4,11 +4,11 @@ version = 0.7.6
 dependencies = https://github.com/britzl/deftest/archive/master.zip
 
 [bootstrap]
-main_collection = /test/test.collectionc
+main_collection = /examples/examples.collectionc
 render = /builtins/render/default.renderc
 
 [input]
-game_binding = /input/game.input_bindingc
+game_binding = /ludobits/m/input/all.input_bindingc
 
 [display]
 width = 1280
@@ -27,4 +27,7 @@ include_dirs = ludobits
 
 [graphics]
 max_debug_vertices = 50000
+
+[collection_proxy]
+max_count = 16
 
