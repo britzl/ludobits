@@ -22,4 +22,16 @@ function M.random(list)
 	return list[i], i
 end
 
+--- Clamp a value to within a specific range
+-- @param value The value to clamp
+-- @param min Minimum value
+-- @param max Maximum value
+-- @return The value clamped to between min and max
+function M.clamp(value, min, max)
+	if value > max then return max end
+	if value < min then return min end
+	return value
+end
+
+
 return M
