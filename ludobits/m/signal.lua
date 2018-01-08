@@ -78,10 +78,9 @@ function M.create(signal_id)
 	end
 
 	--- Trigger the signal
-	-- @param message Message to pass to listeners
+	-- @param message Optional message to pass to listeners
 	function signal.trigger(message)
-		assert(message, "You must provide a message")
-		for k,v in pairs(listeners) do
+		for _,v in pairs(listeners) do
 			v.fn(message or {})
 		end
 	end
