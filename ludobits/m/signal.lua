@@ -33,7 +33,7 @@
 -- end
 --
 -- function on_message(self, message_id, message, sender)
---		if message_id == hash(LOGOUT_SIGNAL.id) then
+--		if message_id == hash(example_module.LOGOUT_SIGNAL.id) then
 --			print("User logged out")
 --		end
 --	end
