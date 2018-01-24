@@ -1,0 +1,66 @@
+local simple_input = require "ludobits.m.input.simple"
+local logger = require "ludobits.m.logger"
+
+local log = logger.create("[gui]")
+
+local function update_log_level_buttons(current_level)
+	for _,level in pairs({ "debug", "info", "warn", "error", "fatal" }) do
+		gui.set_color(gui.get_node("set_" .. level .. "/button"), vmath.vector4(0.5, 0.5, 0.5, 1))
+	end
+	gui.set_color(gui.get_node("set_" .. current_level .. "/button"), vmath.vector4(1))
+end
+
+function init(self)
+	log.d("init")
+	simple_input.acquire()
+	simple_input.register("debug/button", function()
+		log.d("debug button pressed")
+	end)
+	simple_input.register("info/button", function()
+		log.i("info button pressed")
+	end)
+	simple_input.register("warn/button", function()
+		log.w("warn button pressed")
+	end)
+	simple_input.register("error/button", function()
+		log.e("error button pressed")
+	end)
+	simple_input.register("fatal/button", function()
+		log.f("fatal button pressed")
+	end)
+	
+	simple_input.register("set_debug/button", function()
+		update_log_level_buttons("debug")
+		logger.level(logger.DEBUG)
+	end)
+	simple_input.register("set_info/button", function()
+		update_log_level_buttons("info")
+		logger.level(logger.INFO)
+	end)
+	simple_input.register("set_warn/button", function()
+		update_log_level_buttons("warn")
+		logger.level(logger.WARN)
+	end)
+	simple_input.register("set_error/button", function()
+		update_log_level_buttons("error")
+		logger.level(logger.ERROR)
+	end)
+	simple_input.register("set_fatal/button", function()
+		update_log_level_buttons("fatal")
+		logger.level(logger.FATAL)
+	end)
+	update_log_level_buttons("debug")
+end
+
+function final(self)
+	log.d("final")
+end
+
+function on_input(self, action_id, action)
+	simple_input.on_input(action_id, action)
+end
+
+function on_reload(self)
+	-- Add input-handling code here
+	-- Remove this function if not needed
+end

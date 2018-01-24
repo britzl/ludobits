@@ -8,7 +8,7 @@ main_collection = /examples/examples.collectionc
 render = /builtins/render/default.renderc
 
 [input]
-game_binding = /ludobits/m/input/all.input_bindingc
+game_binding = /input/game.input_bindingc
 
 [display]
 width = 1280

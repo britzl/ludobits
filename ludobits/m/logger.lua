@@ -57,6 +57,11 @@ function M.create(tag)
 	--- Log with level set to FATAL
 	function instance.f(...) fatal("FATAL", tag, ...) end
 
+	setmetatable(instance, {
+		__call = function(t, ...)
+			return instance.debug(...)
+		end
+	})
 	return instance
 end
 
