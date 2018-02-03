@@ -1,13 +1,3 @@
---- Module to save user settings to disk
--- @usage
--- local settings = require "ludobits.m.settings"
---
--- settings.volume = 0.7
--- settings.language = "en"
--- settings.username = "Johnny Defold"
---
--- settings.save()
-
 local savetable = require "ludobits.m.io.savetable"
 
 local M = {}
