@@ -82,7 +82,7 @@ M.quat = {
 	end
 }
 
-M.func = function(fn)
+function M.func(fn)
 	assert(fn and type(fn) == "function", "You must provide a function")
 	return {
 		encode = function(v) return "" end,
@@ -90,8 +90,9 @@ M.func = function(fn)
 	}
 end
 
-M.gameobject = function(factory_url, properties)
+function M.gameobject(factory_url, properties)
 	assert(factory_url, "You must provide a factory url")
+	assert(properties)
 	return {
 		encode = function(id)
 			assert(id and type(id) == "userdata", "Expected userdata")
@@ -151,7 +152,7 @@ function M.tableof(fn)
 end
 
 function M.object(model)
-	assert(model and type(mode) == "table", "Expected an object model")
+	assert(model and type(model) == "table", "Expected an object model")
 	return {
 		encode = function(data)
 			local result = {}
