@@ -1,5 +1,5 @@
-local input = require "ludobits.m.input.state"
-local mapper = require "ludobits.m.input.mapper"
+local input = require "in.state"
+local mapper = require "in.mapper"
 local kinematic = require "ludobits.m.physics.kinematic"
 
 local UP = hash("up")

@@ -1,7 +1,7 @@
 local mock = require "deftest.mock"
 
 return function()
-	local input = require "ludobits.m.input.state"
+	local input = require "in.state"
 	
 	describe("input", function()
 		before(function()

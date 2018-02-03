@@ -1,6 +1,6 @@
 local platformer = require "ludobits.m.platformer"
-local input = require "ludobits.m.input.state"
-local input_mapper = require "ludobits.m.input.mapper"
+local input = require "in.state"
+local input_mapper = require "in.mapper"
 
 local LEFT = hash("left")
 local RIGHT = hash("right")

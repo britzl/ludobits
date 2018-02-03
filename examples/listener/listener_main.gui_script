@@ -1,24 +1,24 @@
-local simple_input = require "ludobits.m.input.simple"
+local button = require "in.button"
 local some_data = require "examples.listener.some_data"
 
 
 function init(self)
-	simple_input.acquire()
-	simple_input.register("foo/button", function()
-		some_data.trigger_foo()
+	button.acquire()
+	button.register("foo/button", function()
+		button.trigger_foo()
 	end)
-	simple_input.register("bar/button", function()
-		some_data.trigger_bar()
+	button.register("bar/button", function()
+		button.trigger_bar()
 	end)
 end
 
 function final(self)
-	simple_input.release()
-	simple_input.unregister()
+	button.release()
+	button.unregister()
 end
 
 function on_input(self, action_id, action)
-	simple_input.on_input(action_id, action)
+	button.on_input(action_id, action)
 end
 
 function on_reload(self)

@@ -1,0 +1,72 @@
+local deser = require "ludobits.m.deser"
+local savefile = require "ludobits.m.io.savefile"
+
+local GAMEDATA_MODEL = deser.json(deser.object({
+	id = deser.copy,
+	fn = deser.func(math.random),
+	positions = deser.tableof(deser.vector3),
+	nested = deser.object({
+		pos = deser.vector3,
+		speed = deser.vector3,
+		id = deser.copy
+	}),
+	player = deser.gameobject("#factory", {
+		script = {
+			player_id = deser.copy,
+			speed = deser.vector3,
+		}
+	})
+}))
+
+local function random_v3()
+	return vmath.vector3(math.random(10, 300), math.random(10, 300), math.random(-1, 1))
+end
+
+local function random_gamedata()
+	return {
+		id = math.random(9999, 999999),
+		fn = math.random(),
+		positions = {
+			random_v3(),
+			random_v3(),
+		},
+		nested = {
+			pos = random_v3(),
+			speed = random_v3(),
+			id = math.random(1, 10),
+		},
+		player = factory.create("#factory", random_v3(), nil, {
+			player_id = math.random(1, 1000),
+			speed = random_v3()
+		})
+	}
+end
+
+function init(self)
+	math.randomseed(os.time())
+	self.gamedata = random_gamedata()
+	msg.post("#", "save")
+	
+end
+
+function on_message(self, message_id, message, sender)
+	if message_id == hash("save") then
+		savefile.open("deser_gamedata").save(GAMEDATA_MODEL.encode(self.gamedata))
+	elseif message_id == hash("load") then
+		go.delete(self.gamedata.player)
+		self.gamedata = GAMEDATA_MODEL.decode(savefile.open("deser_gamedata").load())
+	elseif message_id == hash("random") then
+		go.delete(self.gamedata.player)
+		self.gamedata = random_gamedata()
+	end
+end
+
+function on_input(self, action_id, action)
+	-- Add input-handling code here
+	-- Remove this function if not needed
+end
+
+function on_reload(self)
+	-- Add reload-handling code here
+	-- Remove this function if not needed
+end

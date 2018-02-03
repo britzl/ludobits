@@ -1,0 +1,6 @@
+go.property("player_id", 5)
+go.property("speed", vmath.vector3(100, 200, 0))
+
+function init(self)
+	print("deser_player", self.player_id, self.speed)
+end

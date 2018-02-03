@@ -1,6 +1,6 @@
 local dynamic = require "ludobits.m.physics.dynamic"
-local input = require "ludobits.m.input.state"
-local mapper = require "ludobits.m.input.mapper"
+local input = require "in.state"
+local mapper = require "in.mapper"
 
 local LEFT = hash("left")
 local RIGHT = hash("right")
