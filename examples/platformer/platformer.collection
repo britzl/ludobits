@@ -1,10 +1,66 @@
 name: "platformer"
+instances {
+  id: "moving_platform1"
+  prototype: "/examples/platformer/moving_platform.go"
+  position {
+    x: 396.0
+    y: 262.0
+    z: 0.0
+  }
+  rotation {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 1.0
+  }
+  component_properties {
+    id: "script"
+    properties {
+      id: "direction"
+      value: "-200.0, 50.0, 0.0"
+      type: PROPERTY_TYPE_VECTOR3
+    }
+  }
+  scale3 {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+  }
+}
+instances {
+  id: "moving_platform2"
+  prototype: "/examples/platformer/moving_platform.go"
+  position {
+    x: 813.0
+    y: 159.0
+    z: 0.0
+  }
+  rotation {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 1.0
+  }
+  component_properties {
+    id: "script"
+    properties {
+      id: "direction"
+      value: "200.0, -50.0, 0.0"
+      type: PROPERTY_TYPE_VECTOR3
+    }
+  }
+  scale3 {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+  }
+}
 collection_instances {
   id: "player"
   collection: "/examples/platformer/player.collection"
   position {
-    x: 266.00378
-    y: -227.6115
+    x: -227.996
+    y: -233.611
     z: 1.0
   }
   rotation {
@@ -64,6 +120,26 @@ embedded_instances {
   "  }\n"
   "}\n"
   ""
+  position {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+  }
+  rotation {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 1.0
+  }
+  scale3 {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+  }
+}
+embedded_instances {
+  id: "go"
+  data: ""
   position {
     x: 0.0
     y: 0.0

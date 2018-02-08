@@ -114,6 +114,9 @@ function M.create(collision_hashes)
 					instance.double_jumping = false
 					instance.wall_jumping = false
 				end
+				if instance.ground_contact then
+					msg.post(".", "set_parent", { parent_id = message.other_id })
+				end
 			end
 		end
 	end

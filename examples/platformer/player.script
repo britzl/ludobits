@@ -55,8 +55,7 @@ function on_input(self, action_id, action)
 	input.on_input(action_id, action)
 	if action_id == JUMP then
 		if action.pressed then
-			print("platformer")
-			self.platformer.jump(1000)
+			self.platformer.jump(1000, true, true)
 		elseif action.released then
 			self.platformer.abort_jump()
 		end
