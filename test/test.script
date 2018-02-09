@@ -1,4 +1,3 @@
-local test_input = require "test.test_input"
 local test_broadcast = require "test.test_broadcast"
 local test_flow = require "test.test_flow"
 local test_savetable = require "test.test_savetable"
@@ -10,7 +9,6 @@ local test_listener = require "test.test_listener"
 local deftest = require "deftest.deftest"
 
 function init(self)
-	deftest.add(test_input)
 	deftest.add(test_broadcast)
 	deftest.add(test_flow)
 	deftest.add(test_savetable)
