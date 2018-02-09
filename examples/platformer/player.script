@@ -39,7 +39,9 @@ function update(self, dt)
 		sprite.set_hflip("#sprite", false)
 		play_animation(self, hash("green_player_walk"))
 	else
-		self.platformer.stop()
+		if self.platformer.ground_contact then
+			self.platformer.stop()
+		end
 		play_animation(self, hash("green_player_idle"))
 	end
 

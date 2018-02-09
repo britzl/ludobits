@@ -107,6 +107,7 @@ function M.create(collision_hashes)
 				if proj < 0 then
 					instance.velocity = instance.velocity - proj * message.normal
 				end
+				instance.normal = message.normal
 				instance.wall_contact = math.abs(message.normal.x) > 0.8 and message.normal or instance.wall_contact
 				instance.ground_contact = message.normal.y ~= 0 and message.normal or instance.ground_contact
 				if message.normal.y ~= 0 then
@@ -126,8 +127,13 @@ function M.create(collision_hashes)
 	function instance.update(dt)
 		instance.velocity.y = instance.velocity.y + instance.gravity * dt
 		local pos = go.get_position()
-		go.set_position(pos + instance.velocity * dt)
+		local new_pos = pos + instance.velocity * dt
+		go.set_position(new_pos)
 
+		if not instance.ground_contact then
+			msg.post(".", "set_parent", { parent_id = nil })
+		end
+		
 		correction = vmath.vector3()
 		instance.ground_contact = false
 		instance.wall_contact = false

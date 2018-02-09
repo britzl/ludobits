@@ -4,7 +4,7 @@ version = 0.7.6
 dependencies = https://github.com/britzl/deftest/archive/master.zip,https://github.com/britzl/defold-input/archive/0.9.zip
 
 [bootstrap]
-main_collection = /examples/deser/deser.collectionc
+main_collection = /examples/examples.collectionc
 render = /builtins/render/default.renderc
 
 [input]
