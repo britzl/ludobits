@@ -92,7 +92,7 @@ function M.on_input(self, action_id, action)
 			end
 			if time < M.LONG_PRESS_TIME then
 				c.gestures.tap = true
-				c.potential_double_tap = true
+				c.potential_double_tap = c.gestures.double_tap == false and true or false
 			else
 				c.gestures.long_press = true
 				c.potential_double_tap = false
