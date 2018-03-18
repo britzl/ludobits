@@ -4,11 +4,11 @@ version = 0.7.6
 dependencies = https://github.com/britzl/deftest/archive/master.zip,https://github.com/britzl/defold-input/archive/0.9.zip
 
 [bootstrap]
-main_collection = /examples/examples.collectionc
+main_collection = /examples/platformer/platformer.collectionc
 render = /builtins/render/default.renderc
 
 [input]
-game_binding = /in/bindings/game.input_bindingc
+game_binding = /in/bindings/all.input_bindingc
 gamepads = /in/gamepads/in.gamepadsc
 
 [display]
