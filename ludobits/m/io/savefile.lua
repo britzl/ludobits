@@ -1,14 +1,12 @@
---- Wrapper module for io.open and io.write
--- Files will be saved in a path created from a call to sys.get_save_file() with
--- application id equal to the game.project config project.title with invalid path
--- characters replaced.
+--- Save and load using the io.* functions
+--
 -- @usage
 -- local savefile = require "ludobits.m.io.savefile"
 --
 -- local file = savefile.open("foobar")
--- local data = file.load()
 -- file.save("something large to save")
---
+-- local data = file.load()
+-- print(data) -- "something large to save"
 
 local file = require "ludobits.m.io.file"
 
