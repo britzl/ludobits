@@ -4,6 +4,7 @@
 local M = {}
 
 local CONTACT_POINT_RESPONSE = hash("contact_point_response")
+local POST_UPDATE = hash("platformer_post_update")
 
 
 --- Create a platformer game logic wrapper. This will provide all the functionality
@@ -149,6 +150,12 @@ function M.create(collision_hashes)
 					msg.post(".", "set_parent", { parent_id = message.other_id })
 				end
 			end
+		elseif message_id == POST_UPDATE then
+			-- reset transient state
+			correction = vmath.vector3()
+			state.previous, state.current = state.current, state.previous
+			state.current.ground_contact = false
+			state.current.wall_contact = false			
 		end
 	end
 
@@ -182,11 +189,7 @@ function M.create(collision_hashes)
 			msg.post(".", "set_parent", { parent_id = nil })
 		end
 
-		-- reset transient state
-		correction = vmath.vector3()
-		state.previous, state.current = state.current, state.previous
-		state.current.ground_contact = false
-		state.current.wall_contact = false
+		msg.post("#", POST_UPDATE)
 	end
 
 	return instance
