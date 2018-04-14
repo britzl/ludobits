@@ -6,6 +6,15 @@ local M = {}
 local CONTACT_POINT_RESPONSE = hash("contact_point_response")
 local POST_UPDATE = hash("platformer_post_update")
 
+local function clamp(v, min, max)
+	if v < min then
+		return min
+	elseif v > max then
+		return max
+	else
+		return v
+	end
+end
 
 --- Create a platformer game logic wrapper. This will provide all the functionality
 -- to control a game object in a platformer game. The functions will operate on
@@ -25,7 +34,9 @@ function M.create(collision_hashes)
 
 	local instance = {
 		velocity = vmath.vector3(),
+		movement = vmath.vector3(),
 		gravity = -100,
+		max_velocity = nil,
 	}
 
 	local correction = vmath.vector3()
@@ -34,34 +45,34 @@ function M.create(collision_hashes)
 		return (instance.velocity.y > 0 and instance.gravity < 0) or (instance.velocity.y < 0 and instance.gravity > 0)
 	end
 
-	-- Move the game object left by setting horizontal velocity
+	-- Move the game object left
 	-- @param velocity Horizontal velocity
 	function instance.left(velocity)
-		instance.velocity.x = -velocity
+		instance.movement.x = -velocity
 	end
 
-	--- Move the game object right by setting horizontal velocity
+	--- Move the game object right
 	-- @param velocity Horizontal velocity
 	function instance.right(velocity)
-		instance.velocity.x = velocity
+		instance.movement.x = velocity
 	end
 
-	-- Move the game object up by setting vertical velocity
+	-- Move the game object up
 	-- @param velocity Vertical velocity
 	function instance.up(velocity)
-		instance.velocity.y = velocity
+		instance.movement.y = velocity
 	end
 
-	--- Move the game object down by setting vertical velocity
+	--- Move the game object down
 	-- @param velocity Vertical velocity
 	function instance.down(velocity)
-		instance.velocity.y = -velocity
+		instance.movement.y = -velocity
 	end
 	
-	--- Move the game object by setting its velocity
+	--- Move the game object
 	-- @param velocity Velocity as a vector3
 	function instance.move(velocity)
-		instance.velocity = velocity
+		instance.movement = velocity
 	end
 
 	--- Stop horizontal movement by setting the velocity.x component to zero
@@ -143,6 +154,7 @@ function M.create(collision_hashes)
 				end
 				-- check ground contact
 				if message.normal.y > 0 then
+					instance.velocity.x = 0
 					state.current.ground_contact = message.normal
 					state.current.jumping = false
 					state.current.double_jumping = false
@@ -153,6 +165,8 @@ function M.create(collision_hashes)
 		elseif message_id == POST_UPDATE then
 			-- reset transient state
 			correction = vmath.vector3()
+			instance.movement.x = 0
+			instance.movement.y = 0
 			state.previous, state.current = state.current, state.previous
 			state.current.ground_contact = false
 			state.current.wall_contact = false			
@@ -162,14 +176,24 @@ function M.create(collision_hashes)
 	--- Call this every frame to update the platformer physics
 	-- @param dt
 	function instance.update(dt)
-		-- update velocity and move the game object
+		-- apply friction to horizontal movement
+		local ground_contact = instance.has_ground_contact()
+
+		-- apply gravity
 		instance.velocity.y = instance.velocity.y + instance.gravity * dt
+
+		-- clamp velocity
+		if instance.max_velocity then
+			instance.velocity.x = clamp(instance.velocity.x, -instance.max_velocity, instance.max_velocity)
+			instance.velocity.y = clamp(instance.velocity.y, -instance.max_velocity, instance.max_velocity)
+		end
+
+		-- move the game object
 		local pos = go.get_position()
-		local new_pos = pos + instance.velocity * dt
+		local new_pos = pos + (instance.velocity * dt) + (instance.movement * dt)
 		go.set_position(new_pos)
 
 		-- notify game object of ground contact
-		local ground_contact = instance.has_ground_contact()
 		if not instance.ground_contact and ground_contact then
 			msg.post("#", "ground_contact")
 		elseif instance.ground_contact and not ground_contact then

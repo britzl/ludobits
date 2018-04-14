@@ -21,6 +21,7 @@ function init(self)
 	input_mapper.bind(input_mapper.KEY_SPACE, JUMP)
 	self.platformer = platformer.create({ hash("ground") })
 	self.platformer.gravity = -1200
+	self.platformer.max_velocity = 1000
 	self.current_animation = nil
 end
 
@@ -39,7 +40,6 @@ function update(self, dt)
 		sprite.set_hflip("#sprite", false)
 		play_animation(self, hash("green_player_walk"))
 	else
-		self.platformer.stop()
 		play_animation(self, hash("green_player_idle"))
 	end
 
