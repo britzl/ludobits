@@ -226,8 +226,8 @@ function M.until_message(...)
 end
 
 
---- Wait until specific input action with pressed state
--- @param action_1 Action to wait for
+--- Wait until input action with pressed state
+-- @param action_1 Action to wait for (nil for any action)
 -- @param action_2 Action to wait for
 -- @param action_n Action to wait for
 -- @return action_id
@@ -236,14 +236,24 @@ function M.until_input_pressed(...)
 	local action_ids_to_wait_for = { ... }
 	local instance = create_or_get(coroutine.running())
 	instance.state = WAITING
-	instance.on_input = function(action_id, action)
-		if action_id and action.pressed then
-			for _, action_id_to_wait_for in pairs(action_ids_to_wait_for) do
-				if action_id == action_id_to_wait_for then
-					instance.result = table_pack(action_id, action)
-					instance.on_input = nil
-					instance.state = READY
-					break
+	if #action_ids_to_wait_for == 0 then
+		instance.on_input = function(action_id, action)
+			if action_id and action.pressed then
+				instance.result = table_pack(action_id, action)
+				instance.on_input = nil
+				instance.state = READY
+			end
+		end
+	else
+		instance.on_input = function(action_id, action)
+			if action_id and action.pressed then
+				for _, action_id_to_wait_for in pairs(action_ids_to_wait_for) do
+					if action_id == action_id_to_wait_for then
+						instance.result = table_pack(action_id, action)
+						instance.on_input = nil
+						instance.state = READY
+						break
+					end
 				end
 			end
 		end
@@ -252,8 +262,8 @@ function M.until_input_pressed(...)
 end
 
 
---- Wait until specific input action with released state
--- @param action_1 Action to wait for
+--- Wait until input action with released state
+-- @param action_1 Action to wait for (nil for any action)
 -- @param action_2 Action to wait for
 -- @param action_n Action to wait for
 -- @return action_id
@@ -262,14 +272,24 @@ function M.until_input_released(...)
 	local action_ids_to_wait_for = { ... }
 	local instance = create_or_get(coroutine.running())
 	instance.state = WAITING
-	instance.on_input = function(action_id, action)
-		if action_id and action.released then
-			for _, action_id_to_wait_for in pairs(action_ids_to_wait_for) do
-				if action_id == action_id_to_wait_for then
-					instance.result = table_pack(action_id, action)
-					instance.on_input = nil
-					instance.state = READY
-					break
+	if #action_ids_to_wait_for == 0 then
+		instance.on_input = function(action_id, action)
+			if action_id and action.released then
+				instance.result = table_pack(action_id, action)
+				instance.on_input = nil
+				instance.state = READY
+			end
+		end
+	else
+		instance.on_input = function(action_id, action)
+			if action_id and action.released then
+				for _, action_id_to_wait_for in pairs(action_ids_to_wait_for) do
+					if action_id == action_id_to_wait_for then
+						instance.result = table_pack(action_id, action)
+						instance.on_input = nil
+						instance.state = READY
+						break
+					end
 				end
 			end
 		end
