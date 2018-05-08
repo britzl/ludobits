@@ -230,11 +230,11 @@ end
 -- @param action_id Optional action to wait for (nil for any action)
 -- @return action_id
 -- @return action
-function M.until_input_pressed(action_id)
+function M.until_input_pressed(action_id_to_wait_for)
 	local instance = create_or_get(coroutine.running())
 	instance.state = WAITING
 	instance.on_input = function(action_id, action)
-		if (action_id and action_id == action_id) and action.pressed then
+		if (action_id and action_id == action_id_to_wait_for) and action.pressed then
 			instance.result = table_pack(action_id, action)
 			instance.on_input = nil
 			instance.state = READY
@@ -247,11 +247,11 @@ end
 -- @param action_id Optional action to wait for (nil for any action)
 -- @return action_id
 -- @return action
-function M.until_input_released(action_id)
+function M.until_input_released(action_id_to_wait_for)
 	local instance = create_or_get(coroutine.running())
 	instance.state = WAITING
 	instance.on_input = function(action_id, action)
-		if (action_id and action_id == action_id) and action.released then
+		if (action_id and action_id == action_id_to_wait_for) and action.released then
 			instance.result = table_pack(action_id, action)
 			instance.on_input = nil
 			instance.state = READY
