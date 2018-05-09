@@ -5,27 +5,38 @@ Utilities for game development using the [Defold](http://www.defold.com) engine.
 
 ## Modules
 
+### ludobits.m.io.file
+File name and path utilities
+
 ### ludobits.m.io.savefile
 Read/write files
 
 ### ludobits.m.io.savetable
 Read/write Lua tables
 
-### ludobits.m.input.gesture
-Detect gestures such as single and doubel taps, long press and swipes
-
-### ludobits.m.input.mapper
-Map keys to actions
-
-### ludobits.m.input.simple
-Simplified GUI node input handler
-
-### ludobits.m.input.state
-Keep track of pressed/released state of any input action
-
 ### ludobits.m.app
-Wrap engine callbacks from iac, iap, push and window.
+Wrap engine callbacks from iac, iap, push and window. Refer to [app.md](ludobits/m/app.md) for usage details.
+
+### ludobits.m.bezier
+Create bezier curves
 
 ### ludobits.m.broadcast
-Broadcast messages and set up optional function callbacks when messages are received
+Broadcast messages and set up optional function callbacks when messages are received. Refer to [broadcast.md](ludobits/m/broadcast.md) for usage details.
+
+### ludobits.m.flow
+Simplifies asynchronous flows of execution where your code needs to wait for one asynchronous operation to finish before tarting with the next one.
+
+### ludobits.m.json
+JSON encode
+
 ### ludobits.m.listener
+Listener implementation where listeners are added as either urls or functions and notified when any or specific messages are received. Refer to [listener.md](ludobits/m/listener.md) for usage details.
+
+### ludobits.m.logger
+The Logger module provides a simple logging framework to log application events of different severities to standard out. The module supports simple filtering based on severity. Refer to [logger.md](ludobits/m/logger.md) for usage details.
+
+### ludobits.m.settings
+Store user settings to disk. Refer to [settings.md](ludobits/m/settings.md) for usage details.
+
+### ludobits.m.signal
+Signal system where named signals can be created, listened to and triggered. Inspired by as3-signals. Refer to [signal.md](ludobits/m/signal.md) for usage details.
