@@ -1,4 +1,4 @@
-local mock = require "deftest.mock"
+local mock = require "deftest.mock.mock"
 local mock_fs = require "deftest.mock.fs"
 
 return function()
