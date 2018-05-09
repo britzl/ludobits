@@ -25,6 +25,7 @@ end
 
 function final(self)
 	button.release()
+	button.unregister()
 end
 
 function on_input(self, action_id, action)
