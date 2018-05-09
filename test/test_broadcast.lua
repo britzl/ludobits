@@ -1,10 +1,13 @@
 local mock = require "deftest.mock.mock"
+local unload = require "deftest.util.unload"
 
 return function()
-	local broadcast = require "ludobits.m.broadcast"
+	local broadcast
 	
 	describe("broadcast", function()
 		before(function()
+			unload.unload("ludobits.")
+			broadcast = require "ludobits.m.broadcast"
 			mock.mock(msg)
 			msg.post.replace(function() end)
 		end)

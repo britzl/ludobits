@@ -1,4 +1,5 @@
 local mock = require "deftest.mock.mock"
+local unload = require "deftest.util.unload"
 
 return function()
 	local flow
@@ -9,6 +10,7 @@ return function()
 	
 	describe("flow", function()
 		before(function()
+			unload.unload("ludobits.")
 			flow = require "ludobits.m.flow"
 			mock.mock(msg)
 			msg.post.replace(function() end)

@@ -1,10 +1,12 @@
 local mock = require "deftest.mock.mock"
+local unload = require "deftest.util.unload"
 
 return function()
-	local listener = nil
+	local listener
 	
 	describe("listener", function()
 		before(function()
+			unload.unload("ludobits.")
 			listener = require "ludobits.m.listener"
 			mock.mock(msg)
 			msg.post.replace(function() end)

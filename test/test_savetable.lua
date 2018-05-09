@@ -1,12 +1,15 @@
 local mock = require "deftest.mock.mock"
 local mock_fs = require "deftest.mock.fs"
+local unload = require "deftest.util.unload"
 
 return function()
-	local savetable = require "ludobits.m.io.savetable"
+	local savetable
 	
 	describe("savetable", function()
 		before(function()
+			unload.unload("ludobits.")
 			mock_fs.mock()
+			savetable = require "ludobits.m.io.savetable"
 		end)
 
 		after(function()
