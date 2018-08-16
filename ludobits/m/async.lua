@@ -42,6 +42,18 @@ function M.go_animate(url, property, playback, to, easing, duration, delay)
 	end)
 end
 
+function M.delay(delay)
+	return M.async(function(done)
+		local handle = timer.delay(delay, false, function()
+			done()
+		end)
+		if handle == timer.INVALID_TIMER_HANDLE then
+			print("Unable to create timer")
+			done()
+		end
+	end)
+end
+
 setmetatable(M, {
 	__call = function(t, ...)
 		return M.async(...)
