@@ -33,5 +33,13 @@ function M.clamp(value, min, max)
 	return value
 end
 
+-- http://www.rorydriscoll.com/2016/03/07/frame-rate-independent-damping-using-lerp/
+-- return vmath.lerp(1 - math.pow(t, dt), v1, v2)
+-- https://www.gamasutra.com/blogs/ScottLembcke/20180404/316046/Improved_Lerp_Smoothing.php
+local UPDATE_FREQUENCY = tonumber(sys.get_config("display.update_frequency")) or 60
+function M.lerp(t, dt, v1, v2)
+	local rate = UPDATE_FREQUENCY * math.log10(1 - t)
+	return vmath.lerp(1 - math.pow(10, rate * dt), v1, v2)
+end
 
 return M
