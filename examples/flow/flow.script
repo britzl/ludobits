@@ -105,10 +105,6 @@ function final(self)
 	msg.post(".", "release_input_focus")
 end
 
-function update(self, dt)
-	flow.update(dt)
-end
-
 function on_message(self, message_id, message, sender)
 	flow.on_message(message_id, message, sender)
 end

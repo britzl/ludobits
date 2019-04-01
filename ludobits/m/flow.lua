@@ -23,10 +23,6 @@
 -- 		flow.stop()
 -- 	end
 --
--- 	function update(self, dt)
--- 		flow.update()
--- 	end
---
 -- 	function on_message(self, message_id, message, sender)
 -- 		flow.on_message(message_id, message, sender)
 -- 	end
@@ -69,6 +65,41 @@ local function table_unpack(args)
 	end
 end
 
+
+local function resume(instance)
+	instance.state = RUNNING
+	local result = instance.result or {}
+	instance.result = nil
+	local ok, error = coroutine.resume(instance.co, table_unpack(result))
+	if not ok then
+		if instance.on_error then
+			instance.on_error(error)
+		else
+			print("Warning: Flow resulted in error", error)
+		end
+	end
+end
+
+local function update_flow(self, dt, co)
+	local status = coroutine.status(co)
+	if status == "dead" then
+		instances[co] = nil
+	else
+		local instance = instances[co]
+		if instance.state == WAITING and instance.condition then
+			if instance.condition(dt) then
+				instance.condition = nil
+				instance.on_message = nil
+				instance.state = READY
+			end
+		end
+
+		if instance.state == READY then
+			resume(instance)
+		end
+	end
+end
+
 local id_counter = 0
 
 local function create_or_get(co)
@@ -80,7 +111,9 @@ local function create_or_get(co)
 			url = msg.url(),
 			state = READY,
 			co = co,
-			script_instance = _G.__dm_script_instance__,
+			timer_id = timer.delay(0.016, true, function(self, handle, time_elapsed)
+				update_flow(self, time_elapsed, co)
+			end),
 		}
 	end
 	return instances[co]
@@ -402,95 +435,17 @@ function M.play_animation(sprite_url, id)
 	assert(sprite_url, "You must provide a sprite url")
 	assert(id, "You must provide an animation id")
 	sprite_url = ensure_url(sprite_url)
-	id = ensure_hash(id)
-	local instance = create_or_get(coroutine.running())
-	instance.state = WAITING
-	instance.on_message = function(message_id, message, sender)
-		if message_id == hash("animation_done") and sender == sprite_url then
-			instance.state = READY
-		end
-	end
-	msg.post(sprite_url, PLAY_ANIMATION, { id = id })
-	return coroutine.yield()
+	M.until_callback(function(cb)
+		sprite.play_flipbook(sprite_url, id, cb)
+	end)
 end
 
-
-local raycast_request_id_counter = 0
-
-
---- Cast a physics ray and wait for a response for a maximum of one frame
--- @param from
--- @param to
--- @param groups
--- @return The ray cast response or nil if no hit
-function M.ray_cast(from, to, groups)
-	assert(from, "You must provide a position to cast ray from")
-	assert(to, "You must provide a position to cast ray to")
-	assert(groups, "You must provide a list of groups")
-	local request_id = raycast_request_id_counter
-	raycast_request_id_counter = raycast_request_id_counter + 1
-	local instance = create_or_get(coroutine.running())
-	instance.state = WAITING
-	instance.on_message = function(message_id, message, sender)
-		if message_id == RAY_CAST_RESPONSE and message.request_id == request_id then
-			instance.result = table_pack(message)
-			instance.condition = nil
-			instance.state = READY
-		end
-	end
-	local frames = 1
-	instance.condition = function()
-		frames = frames - 1
-		return frames == 0
-	end
-	physics.ray_cast(from, to, groups, request_id)
-	return coroutine.yield()
+function M.ray_cast()
+	print("flow.ray_cast() is deprecated. Use synchronous ray casts released in Defold 1.2.150 instead!")
 end
 
-
-local function resume(instance)
-	instance.state = RUNNING
-	local result = instance.result or {}
-	instance.result = nil
-	local ok, error = coroutine.resume(instance.co, table_unpack(result))
-	if not ok then
-		if instance.on_error then
-			instance.on_error(error)
-		else
-			print("Warning: Flow resulted in error", error)
-		end
-	end
-end
-
---- Call this as often as needed (every frame)
-function M.update(dt)
-	if not dt then
-		print("WARN: flow.update() now requires dt. Assuming 0.0167 for now.")
-		dt = 0.0167
-	end
-	for co,instance in pairs(instances) do
-		local status = coroutine.status(co)
-		if status == "dead" then
-			instances[co] = nil
-		else
-			local current_script_instance = _G.__dm_script_instance__
-			_G.__dm_script_instance__ = instance.script_instance
-
-			if instance.state == WAITING and instance.condition then
-				if instance.condition(dt) then
-					instance.condition = nil
-					instance.on_message = nil
-					instance.state = READY
-				end
-			end
-
-			if instance.state == READY then
-				resume(instance)
-			end
-
-			_G.__dm_script_instance__ = current_script_instance
-		end
-	end
+function M.update()
+	print("flow.update() is deprecated. You no longer need to call it!")
 end
 
 

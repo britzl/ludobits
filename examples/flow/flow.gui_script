@@ -16,15 +16,6 @@ function final(self)
 	flow.stop()
 end
 
-function update(self, dt)
-	flow.update(dt)
-end
-
 function on_message(self, message_id, message, sender)
 	flow.on_message(message_id, message, sender)
-end
-
-function on_reload(self)
-    -- Add input-handling code here
-    -- Remove this function if not needed
 end
