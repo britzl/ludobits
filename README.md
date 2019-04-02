@@ -21,13 +21,13 @@ Wrap engine callbacks from iac, iap, push and window. Refer to [app.md](ludobits
 Create bezier curves
 
 ### ludobits.m.broadcast
-Broadcast messages and set up optional function callbacks when messages are received. Refer to [broadcast.md](ludobits/m/broadcast.md) for usage details.
+Broadcast Defold messages (using msg.post) and set up optional function callbacks when messages are received. Refer to [broadcast.md](ludobits/m/broadcast.md) for usage details.
 
 ### ludobits.m.flow
 Simplifies asynchronous flows of execution where your code needs to wait for one asynchronous operation to finish before tarting with the next one.
 
 ### ludobits.m.json
-JSON encode
+JSON encode (using rxi.json)
 
 ### ludobits.m.listener
 Listener implementation where listeners are added as either urls or functions and notified when any or specific messages are received. Refer to [listener.md](ludobits/m/listener.md) for usage details.
