@@ -112,6 +112,10 @@ local function create_or_get(co)
 			state = READY,
 			co = co,
 			timer_id = timer.delay(0.016, true, function(self, handle, time_elapsed)
+				if not instances[co] then
+					timer.cancel(handle)
+					return
+				end
 				update_flow(self, time_elapsed, co)
 			end),
 		}
