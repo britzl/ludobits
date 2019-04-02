@@ -1,6 +1,25 @@
 local mock = require "deftest.mock.mock"
 local unload = require "deftest.util.unload"
 
+local function wait_until(cb)
+	local co = coroutine.running()
+	timer.delay(0.01, true, function(self, handle, elapsed_time)
+		if cb() then
+			timer.cancel(handle)
+			coroutine.resume(co)
+		end
+	end)
+	coroutine.yield()
+end
+
+local function wait_seconds(seconds)
+	local co = coroutine.running()
+	timer.delay(seconds, false, function(self, handle, elapsed_time)
+		coroutine.resume(co)
+	end)
+	coroutine.yield()
+end
+
 return function()
 	local flow
 	
@@ -34,7 +53,7 @@ return function()
 			assert(not flow_finished)
 		end)
 
-		it("should run the flow after a call to update", function()
+		it("should run the flow on a timer", function()
 			msg.url.replace(function() return broadcast1 end)
 			msg.post.replace(function(url, message_id, message, sender)
 				flow.on_message(message_id, message, sender)
@@ -45,7 +64,9 @@ return function()
 				flow_finished = true
 			end)
 
-			flow.update(0)
+			wait_until(function()
+				return flow_finished
+			end)
 
 			assert(flow_finished)
 		end)
@@ -58,15 +79,13 @@ return function()
 
 			local flow_finished = false
 			local instance = flow.start(function()
-				flow.delay(20)
+				flow.delay(1)
 				flow_finished = true
 			end)
-
-			flow.update(0)
-			flow.update(19)
+			wait_seconds(0.5)
 			assert(not flow_finished)
 			
-			flow.update(1)
+			wait_seconds(0.75)
 			assert(flow_finished)
 		end)
 		
@@ -82,13 +101,7 @@ return function()
 				flow_finished = true
 			end)
 
-			flow.update(0)
-			for i=1,19 do
-				flow.update(1)
-				assert(not flow_finished)
-			end
-			
-			flow.update(1)
+			wait_seconds(20 * 0.02)
 			assert(flow_finished)
 		end)
 
@@ -107,13 +120,10 @@ return function()
 				flow_finished = true
 			end)
 
-			for i=1,10 do
-				flow.update(i)
-				assert(not flow_finished)
-			end
+			wait_seconds(0.25)
+			assert(not flow_finished)
 			is_it_true_yet = true
-			
-			flow.update(1)
+			wait_seconds(0.25)
 			assert(flow_finished)
 		end)
 
@@ -129,11 +139,10 @@ return function()
 				flow_finished = true
 			end)
 
-			flow.update(0)
+			wait_seconds(0.25)
 			assert(not flow_finished)
-
 			msg.post(broadcast1, "foobar", {})
-			flow.update(0)
+			wait_seconds(0.25)
 			assert(flow_finished)
 		end)
 
@@ -150,14 +159,14 @@ return function()
 				flow_finished = true
 			end)
 
-			flow.update(0)
+			wait_seconds(0.25)
 			assert(not flow_finished)
 
 			msg.post(broadcast1, "bar", {})
-			flow.update(0)
+			wait_seconds(0.25)
 			assert(not flow_finished)
 			msg.post(broadcast1, "boo", {})
-			flow.update(0)
+			wait_seconds(0.25)
 			assert(flow_finished)
 		end)
 		
@@ -178,11 +187,11 @@ return function()
 				flow_finished = true
 			end)
 
-			flow.update(0)
+			wait_seconds(0.25)
 			assert(not flow_finished)
 
 			callback()
-			flow.update(0)
+			wait_seconds(0.25)
 			assert(flow_finished)
 		end)
 	end)

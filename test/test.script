@@ -16,5 +16,7 @@ function init(self)
 	deftest.add(test_file)
 	deftest.add(test_listener)
 	deftest.add(test_settings)
-	deftest.run()
+	deftest.run({
+		--pattern = "should be able to pause until a message is received"
+	})
 end
