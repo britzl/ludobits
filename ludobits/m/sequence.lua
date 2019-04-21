@@ -40,9 +40,17 @@ end
 function M.go_animate(url, property, playback, to, easing, duration, delay)
 	local co = coroutine.running()
 	assert(co, "You must call this from inside a sequence")
-	go.animate(url, property, playback, to, easing, duration, delay, function()
-		resume(co)
-	end, playback)
+	delay = delay or 0
+	if property == "position.xy" then
+		go.animate(url, "position.x", playback, to.x, easing, duration, delay, nil, playback)
+		go.animate(url, "position.y", playback, to.y, easing, duration, delay, function()
+			resume(co)
+		end, playback)
+	else
+		go.animate(url, property, playback, to, easing, duration, delay, function()
+			resume(co)
+		end, playback)
+	end
 	coroutine.yield()
 end
 
