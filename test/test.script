@@ -5,6 +5,7 @@ local test_savefile = require "test.test_savefile"
 local test_file = require "test.test_file"
 local test_settings = require "test.test_settings"
 local test_listener = require "test.test_listener"
+local test_signal = require "test.test_signal"
 
 local deftest = require "deftest.deftest"
 
@@ -16,6 +17,7 @@ function init(self)
 	deftest.add(test_file)
 	deftest.add(test_listener)
 	deftest.add(test_settings)
+	deftest.add(test_signal)
 	deftest.run({
 		--pattern = "should be able to pause until a message is received"
 	})

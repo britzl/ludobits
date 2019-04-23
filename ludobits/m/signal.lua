@@ -20,7 +20,18 @@ function M.create(signal_id)
 			listeners[cb] = { fn = cb }
 		else
 			local key = hash_to_hex(cb.socket or hash("")) .. hash_to_hex(cb.path or hash("")) .. hash_to_hex(cb.fragment or hash(""))
-			listeners[key] = { fn = function(message) msg.post(cb, signal_id, message) end }
+			listeners[key] = {
+				fn = function(message)
+					if not message then
+						msg.post(cb, signal_id)
+					else
+						if type(message) ~= "table" then
+							message = { message = message }
+						end
+						msg.post(cb, signal_id, message)
+					end
+				end
+			}
 		end
 	end
 
@@ -40,7 +51,7 @@ function M.create(signal_id)
 	-- @param message Optional message to pass to listeners
 	function signal.trigger(message)
 		for _,v in pairs(listeners) do
-			v.fn(message or {})
+			v.fn(message)
 		end
 	end
 
