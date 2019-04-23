@@ -6,8 +6,9 @@ local M = {}
 -- @return The created signal
 function M.create(signal_id)
 	assert(signal_id, "You must provide a signal_id")
+	signal_id = type(signal_id) == "string" and hash(signal_id) or signal_id
 	local signal = {
-		id = signal_id
+		id = signal_id,
 	}
 
 	local listeners = {}
