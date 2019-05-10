@@ -25,7 +25,7 @@ function init(self)
 
 	local examples = {
 		"bezier", "broadcast", "dynamic", "flow", "kinematic", "listener",
-		"savefile", "savetable", "logger"
+		"savefile", "savetable", "logger", "sequence"
 	}
 
 	for _,example in ipairs(examples) do

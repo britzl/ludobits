@@ -1,0 +1,29 @@
+local sequence = require "ludobits.m.sequence"
+
+local function random_position()
+	return vmath.vector3(math.random(20, 800), math.random(20, 500), 0)
+end
+
+function init(self)
+	sequence.run_loop(function()
+		-- animate game object and wait until done
+		sequence.go_animate(".", "position", go.PLAYBACK_ONCE_FORWARD, random_position(), go.EASING_INOUTQUAD, 1, 0)
+
+		-- make http GET and wait for response
+		local response = sequence.http_get("https://postman-echo.com/get?foo1=bar1&foo2=bar2")
+		pprint(response)
+
+		-- wait 2.5 seconds
+		sequence.delay(2.5)
+
+		-- call any function and pass a callback to be invoked when done
+		local one, two, three = sequence.call(function(cb)
+			-- anything async or sync operation can be done in here
+			-- just make sure to call "cb" when done
+			print("hello")
+			-- done, return some values
+			cb(1, 2, 3)
+		end)
+		print(one, two, three)
+	end)
+end

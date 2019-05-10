@@ -2,8 +2,8 @@ local M = {}
 
 
 
-local function resume(co)
-	local ok, err = coroutine.resume(co)
+local function resume(co, ...)
+	local ok, err = coroutine.resume(co, ...)
 	if err then print(err) end
 end
 
@@ -84,6 +84,7 @@ end
 function M.http_request(url, method, headers, post_data, options)
 	local co = coroutine.running()
 	assert(co, "You must call this from inside a sequence")
+	
 	http.request(url, method, function(self, id, response)
 		resume(co, response)
 	end,headers, post_data, options)
@@ -91,12 +92,33 @@ function M.http_request(url, method, headers, post_data, options)
 end
 
 function M.http_get(url, headers, options)
-	return http_request(url, "GET", headers, nil, options)
+	return M.http_request(url, "GET", headers, nil, options)
 end
 
 function M.http_post(url, headers, post_data, options)
-	return http_request(url, "POST", headers, post_data, options)
+	return M.http_request(url, "POST", headers, post_data, options)
 end
 
+function M.call(fn, ...)
+	local co = coroutine.running()
+	assert(co, "You must call this from inside a sequence")
+	local results = nil
+	local yielded = false
+	local done = false
+	fn(function(...)
+		done = true
+		if yielded then
+			resume(co, ...)
+		else
+			results = { ... }
+		end
+	end, ...)
+	if not done then
+		print("not done, yielding")
+		yielded = true
+		results = { coroutine.yield() }
+	end
+	return unpack(results)
+end
 
 return M
