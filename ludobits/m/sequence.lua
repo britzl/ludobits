@@ -28,10 +28,10 @@ function M.delay(seconds)
 	coroutine.yield()
 end
 
-function M.wait_until_false(fn, ...)
+function M.wait_until_false(fn)
 	local co = coroutine.running()
 	timer.delay(0, true, function(self, handle, time_elapsed)
-		if not fn(...) then
+		if not fn() then
 			timer.cancel(handle)
 			coroutine.resume(co)
 		end
@@ -39,10 +39,10 @@ function M.wait_until_false(fn, ...)
 	coroutine.yield()
 end
 
-function M.wait_until_true(fn, ...)
+function M.wait_until_true(fn)
 	local co = coroutine.running()
 	timer.delay(0, true, function(self, handle, time_elapsed)
-		if fn(...) then
+		if fn() then
 			timer.cancel(handle)
 			coroutine.resume(co)
 		end
