@@ -28,6 +28,28 @@ function M.delay(seconds)
 	coroutine.yield()
 end
 
+function M.wait_until_false(fn, ...)
+	local co = coroutine.running()
+	timer.delay(0, true, function(self, handle, time_elapsed)
+		if not fn(...) then
+			timer.cancel(handle)
+			coroutine.resume(co)
+		end
+	end)
+	coroutine.yield()
+end
+
+function M.wait_until_true(fn, ...)
+	local co = coroutine.running()
+	timer.delay(0, true, function(self, handle, time_elapsed)
+		if fn(...) then
+			timer.cancel(handle)
+			coroutine.resume(co)
+		end
+	end)
+	coroutine.yield()
+end
+
 function M.gui_animate(node, property, to, easing, duration, delay, playback)
 	local co = coroutine.running()
 	assert(co, "You must call this from inside a sequence")

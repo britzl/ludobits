@@ -6,14 +6,19 @@ end
 
 function init(self)
 	sequence.run_loop(function()
+		print("Start of loop")
+		
 		-- animate game object and wait until done
+		print("go.animate")
 		sequence.go_animate(".", "position", go.PLAYBACK_ONCE_FORWARD, random_position(), go.EASING_INOUTQUAD, 1, 0)
 
 		-- make http GET and wait for response
+		print("http.request")
 		local response = sequence.http_get("https://postman-echo.com/get?foo1=bar1&foo2=bar2")
 		pprint(response)
 
 		-- wait 2.5 seconds
+		print("delay")
 		sequence.delay(2.5)
 
 		-- call any function and pass a callback to be invoked when done
@@ -25,5 +30,14 @@ function init(self)
 			cb(1, 2, 3)
 		end)
 		print(one, two, three)
+
+		local countdown = 10
+		sequence.wait_until_false(function()
+			print(countdown)
+			countdown = countdown - 1
+			return countdown > 0
+		end)
+
+		print("End of loop")
 	end)
 end
