@@ -14,10 +14,8 @@ addons:
 
 language: java
 
-dist: trusty
-
 jdk:
-  - oraclejdk8
+  - oraclejdk11
 
 env:
   global:
