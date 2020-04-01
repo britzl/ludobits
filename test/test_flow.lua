@@ -32,7 +32,9 @@ return function()
 			unload.unload("ludobits.")
 			flow = require "ludobits.m.flow"
 			mock.mock(msg)
-			msg.post.replace(function() end)
+			msg.post.replace(function(url, message_id, message, sender)
+				flow.on_message(type(message_id) == "string" and hash(message_id) or message_id, message, sender)
+			end)
 		end)
 
 		after(function()
@@ -55,9 +57,6 @@ return function()
 
 		it("should run the flow on a timer", function()
 			msg.url.replace(function() return broadcast1 end)
-			msg.post.replace(function(url, message_id, message, sender)
-				flow.on_message(message_id, message, sender)
-			end)
 
 			local flow_finished = false
 			local instance = flow.start(function()
@@ -73,9 +72,6 @@ return function()
 		
 		it("should be able to pause for a specific number of seconds", function()
 			msg.url.replace(function() return broadcast1 end)
-			msg.post.replace(function(url, message_id, message, sender)
-				flow.on_message(message_id, message, sender)
-			end)
 
 			local flow_finished = false
 			local instance = flow.start(function()
@@ -91,9 +87,6 @@ return function()
 		
 		it("should be able to pause for a specific number of frames", function()
 			msg.url.replace(function() return broadcast1 end)
-			msg.post.replace(function(url, message_id, message, sender)
-				flow.on_message(message_id, message, sender)
-			end)
 
 			local flow_finished = false
 			local instance = flow.start(function()
@@ -107,9 +100,6 @@ return function()
 
 		it("should be able to pause until a condition is true", function()
 			msg.url.replace(function() return broadcast1 end)
-			msg.post.replace(function(url, message_id, message, sender)
-				flow.on_message(message_id, message, sender)
-			end)
 
 			local flow_finished = false
 			local is_it_true_yet = false
@@ -129,9 +119,6 @@ return function()
 
 		it("should be able to pause until a message is received", function()
 			msg.url.replace(function() return broadcast1 end)
-			msg.post.replace(function(url, message_id, message, sender)
-				flow.on_message(message_id, message, sender)
-			end)
 
 			local flow_finished = false
 			local instance = flow.start(function()
@@ -148,9 +135,6 @@ return function()
 
 		it("should be able to pause until a specific message is received", function()
 			msg.url.replace(function() return broadcast1 end)
-			msg.post.replace(function(url, message_id, message, sender)
-				flow.on_message(message_id, message, sender)
-			end)
 
 			local flow_finished = false
 			local instance = flow.start(function()
@@ -172,9 +156,6 @@ return function()
 		
 		it("should be possible to pause until a callback is invoked", function()
 			msg.url.replace(function() return broadcast1 end)
-			msg.post.replace(function(url, message_id, message, sender)
-				flow.on_message(message_id, message, sender)
-			end)
 
 			local callback
 			local flow_finished = false
