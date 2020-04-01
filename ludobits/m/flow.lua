@@ -53,6 +53,13 @@ local function ensure_hash(s)
 	return (type(s) == "string") and hash(s) or s
 end
 
+local function ensure_hashes(t)
+	for k,v in pairs(t) do
+		t[k] = ensure_hash(v)
+	end
+	return t
+end
+
 local function table_pack(...)
 	return { n = select("#", ...), ... }
 end
@@ -233,6 +240,7 @@ function M.until_any_message()
 		instance.result = table_pack(message_id, message, sender)
 		instance.on_message = nil
 		instance.state = READY
+		resume(instance)
 	end
 	return coroutine.yield()
 end
@@ -246,7 +254,7 @@ end
 -- @return message
 -- @return sender
 function M.until_message(...)
-	local message_ids_to_wait_for = { ... }
+	local message_ids_to_wait_for = ensure_hashes({ ... })
 	local instance = create_or_get(coroutine.running())
 	instance.state = WAITING
 	instance.on_message = function(message_id, message, sender)
@@ -255,6 +263,7 @@ function M.until_message(...)
 				instance.result = table_pack(message_id, message, sender)
 				instance.on_message = nil
 				instance.state = READY
+				resume(instance)
 				break
 			end
 		end
@@ -270,7 +279,7 @@ end
 -- @return action_id
 -- @return action
 function M.until_input_pressed(...)
-	local action_ids_to_wait_for = { ... }
+	local action_ids_to_wait_for =  ensure_hashes({ ... })
 	local instance = create_or_get(coroutine.running())
 	instance.state = WAITING
 	if #action_ids_to_wait_for == 0 then
@@ -279,6 +288,7 @@ function M.until_input_pressed(...)
 				instance.result = table_pack(action_id, action)
 				instance.on_input = nil
 				instance.state = READY
+				resume(instance)
 			end
 		end
 	else
@@ -289,6 +299,7 @@ function M.until_input_pressed(...)
 						instance.result = table_pack(action_id, action)
 						instance.on_input = nil
 						instance.state = READY
+						resume(instance)
 						break
 					end
 				end
@@ -306,7 +317,7 @@ end
 -- @return action_id
 -- @return action
 function M.until_input_released(...)
-	local action_ids_to_wait_for = { ... }
+	local action_ids_to_wait_for = ensure_hashes({ ... })
 	local instance = create_or_get(coroutine.running())
 	instance.state = WAITING
 	if #action_ids_to_wait_for == 0 then
@@ -315,6 +326,7 @@ function M.until_input_released(...)
 				instance.result = table_pack(action_id, action)
 				instance.on_input = nil
 				instance.state = READY
+				resume(instance)
 			end
 		end
 	else
@@ -325,6 +337,7 @@ function M.until_input_released(...)
 						instance.result = table_pack(action_id, action)
 						instance.on_input = nil
 						instance.state = READY
+						resume(instance)
 						break
 					end
 				end
