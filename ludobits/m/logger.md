@@ -3,24 +3,25 @@ The Logger module provides a simple logging framework to log application events 
 
 # Usage
 
+```lua
 	local logger = require "ludobits.m.logger"
 
-	local log1 = logger.create("foo")
+	local log = logger.create("foo")
 
-	log1.d("This will be logged with level DEBUG")
-	log1.debug("And this too")
-	log1("And this too")
-	log1.i("This will be logged with level INFO")
-	log1.info("And this too")
-	log1.w("This will be logged with level WARN")
-	log1.warn("And this too")
-	log1.e("This will be logged with level ERROR")
-	log1.error("And this too")
-	log1.f("This will be logged with level FATAL")
-	log1.fatal("And this too")
+	log.d("This will be logged with level DEBUG")
+	log.debug("And this too")
+	log("And this too")
+	log.i("This will be logged with level INFO")
+	log.info("And this too")
+	log.w("This will be logged with level WARN")
+	log.warn("And this too")
+	log.e("This will be logged with level ERROR")
+	log.error("And this too")
+	log.f("This will be logged with level FATAL")
+	log.fatal("And this too")
 
 	-- only log WARN and above
-	log1.level(logger.WARN)
+	logger.level(logger.WARN)
 
-	local log2 = logger.create("bar")
-	log2.d("This will still be logged since the level was set on another instance")
+	log.d("This will not be logged since the minimum log level is set to WARN")
+```
