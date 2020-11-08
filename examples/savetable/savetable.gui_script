@@ -5,9 +5,8 @@ local button = require "in.button"
 function init(self)
 	button.acquire()
 	
-	self.file = savetable.open("savetable")
 	button.register("load/button", function()
-		local data = self.file.load()
+		local data = savetable.load("savetable")
 		gui.set_text(gui.get_node("text"), table.concat(data, " "))
 	end)
 
@@ -18,7 +17,7 @@ function init(self)
 			local i2 = math.random(1, #lorem)
 			lorem[i1], lorem[i2] = lorem[i2], lorem[i1]
 		end
-		self.file.save(lorem)
+		savetable.save(lorem, "savetable")
 		gui.set_text(gui.get_node("text"), table.concat(lorem, " "))
 	end)
 end

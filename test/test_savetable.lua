@@ -16,19 +16,37 @@ return function()
 			mock_fs.unmock()
 		end)
 
-		it("should be able to save and load tables", function()
-			local file1 = savetable.open("foobar1")
-			local file2 = savetable.open("foobar2")
-			local t1, err = file1.load()
-			local t2 = file2.load()
-			assert(not t1)
-			assert(not t2)
-			file1.save({ foo = "bar" })
+		it("should be able to load and save tables", function()
+			local file1 = savetable.load("foobar1", savetable.FORMAT_IO)
+			local file2 = savetable.load("foobar2", savetable.FORMAT_SYS)
+			file1.boba = "fett"
+			file2.luke = "skywalker"
+			savetable.save(file1)
+			savetable.save(file2)
 
-			local t1 = file1.load()
-			local t2 = file2.load()
-			assert(t1.foo == "bar")
-			assert(not t2)
+			local file1 = savetable.load("foobar1", savetable.FORMAT_IO)
+			local file2 = savetable.load("foobar2", savetable.FORMAT_SYS)
+			assert(file1.boba == "fett")
+			assert(file2.luke == "skywalker")
+
+			local file3 = {}
+			file3.darth = "vader"
+			savetable.save(file3, "foobar3", savetable.FORMAT_SYS)
+
+			local file3 = savetable.load("foobar3", savetable.FORMAT_SYS)
+			assert(file3.darth == "vader")
+		end)
+
+		it("should be able to save and load tables", function()
+			local file3 = { darth = "vader" }
+			local file4 = { han  ="solo" }
+			savetable.save(file3, "foobar3", savetable.FORMAT_IO)
+			savetable.save(file4, "foobar4", savetable.FORMAT_SYS)
+						
+			local file3 = savetable.load("foobar3", savetable.FORMAT_IO)
+			local file4 = savetable.load("foobar4", savetable.FORMAT_SYS)
+			assert(file3.darth == "vader")
+			assert(file4.han == "solo")
 		end)
 	end)
 end

@@ -9,7 +9,7 @@ local settings
 -- @param filename File to load from or nil for the default file ("__settings")
 function M.load(filename)
 	settings_filename = filename or "__settings"
-	settings = savetable.open(settings_filename).load() or {}
+	settings = savetable.load(settings_filename, savetable.FORMAT_IO)
 end
 
 --- Get the filename of the currently loaded settings file
@@ -28,7 +28,7 @@ end
 -- @param filename File to save to or nil for the currently loaded file
 function M.save(filename)
 	settings_filename = filename or settings_filename
-	savetable.open(settings_filename).save(settings)
+	savetable.save(settings, settings_filename, savetable.FORMAT_IO)
 end
 
 M.load()
