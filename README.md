@@ -24,7 +24,7 @@ Create bezier curves
 Broadcast Defold messages (using msg.post) and set up optional function callbacks when messages are received. Refer to [broadcast.md](ludobits/m/broadcast.md) for usage details.
 
 ### ludobits.m.flow
-Simplifies asynchronous flows of execution where your code needs to wait for one asynchronous operation to finish before tarting with the next one.
+Simplifies asynchronous flows of execution where your code needs to wait for one asynchronous operation to finish before starting with the next one.
 
 ### ludobits.m.json
 JSON encode (using rxi.json)
