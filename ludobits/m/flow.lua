@@ -364,10 +364,9 @@ function M.until_callback(fn, ...)
 end
 
 
---- Load a collection and wait until it is loaded and enabled
--- @param collection_url
-function M.load(collection_url)
+local function load_collection_proxy(collection_url, method)
 	assert(collection_url, "You must provide a URL to a collection proxy")
+	assert(method)
 	collection_url = ensure_url(collection_url)
 	local instance = create_or_get(coroutine.running())
 	instance.state = WAITING
@@ -378,10 +377,22 @@ function M.load(collection_url)
 			instance.state = READY
 		end
 	end
-	msg.post(collection_url, "load")
+	msg.post(collection_url, method)
 	return coroutine.yield()
 end
 
+--- Load a collection and wait until it is loaded and enabled
+-- @param collection_url
+function M.load(collection_url)
+	return load_collection_proxy(collection_url, "load")
+end
+
+
+--- Load a collection asynchronously and wait until it is loaded and enabled
+-- @param collection_url
+function M.load_async(collection_url)
+	return load_collection_proxy(collection_url, "async_load")
+end
 
 --- Unload a collection and wait until it is unloaded
 -- @param collection_url The collection to unload
@@ -399,6 +410,29 @@ function M.unload(collection_url)
 	return coroutine.yield()
 end
 
+--- Load the resources used by a factory
+-- @param factory_url The factory to load resources for
+-- @return True if resources were loaded sucessfully
+function M.load_factory(factory_url)
+	assert(factory_url, "You must provide a URL to a factory")
+	M.until_callback(function(cb)
+		factory.load(factory_url, function(self, url, result)
+			cb(result)
+		end)
+	end)
+end
+
+--- Load the resources used by a collection factory
+-- @param factory_url The collection factory to load resources for
+-- @return True if resources were loaded sucessfully
+function M.load_collection_factory(collectionfactory_url)
+	assert(collectionfactory_url, "You must provide a URL to a collection factory")
+	M.until_callback(function(cb)
+		collectionfactory.load(collectionfactory_url, function(self, url, result)
+			cb(result)
+		end)
+	end)
+end
 
 --- Call go.animate and wait until it has finished
 -- @param url
