@@ -142,20 +142,19 @@ end
 -- @return The created flow instance
 function M.start(fn, options, on_error)
 	assert(fn, "You must provide a function")
+	local created_instance = create_or_get(coroutine.create(fn))
+	created_instance.on_error = on_error
+
+	local parallel = options and options.parallel
 	local co = coroutine.running()
-	if not co or not instances[co] or (options and options.parallel) then
-		local created_instance = create_or_get(coroutine.create(fn))
-		created_instance.on_error = on_error
-		return created_instance
-	else
-		local running_instance = instances[co]
-		local created_instance = create_or_get(coroutine.create(fn))
-		created_instance.on_error = on_error
+	if co and instances[co] and not parallel then
 		M.until_true(function()
 			return instances[created_instance.co] == nil
 		end)
-		return created_instance
-	end
+	else
+		update_flow(self, 0, created_instance.co)
+	end 
+	return created_instance
 end
 
 

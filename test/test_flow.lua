@@ -47,12 +47,12 @@ return function()
 			assert(instance)
 		end)
 
-		it("should not run the flow immediately when started", function()
+		it("should run the flow immediately when started", function()
 			local flow_finished = false
 			flow.start(function()
 				flow_finished = true
 			end)
-			assert(not flow_finished)
+			assert(flow_finished)
 		end)
 
 		it("should run the flow on a timer", function()
