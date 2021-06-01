@@ -87,7 +87,7 @@ local function resume(instance)
 	end
 end
 
-local function update_flow(self, dt, co)
+local function update_flow(dt, co)
 	local status = coroutine.status(co)
 	if status == "dead" then
 		instances[co] = nil
@@ -123,7 +123,7 @@ local function create_or_get(co)
 					timer.cancel(handle)
 					return
 				end
-				update_flow(self, time_elapsed, co)
+				update_flow(time_elapsed, co)
 			end),
 		}
 	end
@@ -152,7 +152,7 @@ function M.start(fn, options, on_error)
 			return instances[created_instance.co] == nil
 		end)
 	else
-		update_flow(self, 0, created_instance.co)
+		update_flow(0, created_instance.co)
 	end 
 	return created_instance
 end
