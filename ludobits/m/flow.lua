@@ -82,7 +82,7 @@ local function resume(instance)
 		if instance.on_error then
 			instance.on_error(error)
 		else
-			print("Warning: Flow resulted in error", error)
+			pprint(debug.traceback(instance.co, error, 1))
 		end
 	end
 end
