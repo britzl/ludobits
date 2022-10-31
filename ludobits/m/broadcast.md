@@ -5,12 +5,12 @@ Module to simplify sending of a message to multiple receivers
 
 Register a listener:
 
-```
+```lua
 -- receiver_a.script
 local broadcast = require "ludobits.m.broadcast"
 
 function init(self)
-	-- listene to the "foo" message
+	-- listen to the "foo" message
 	broadcast.register("foo")
 end
 
@@ -28,12 +28,12 @@ end
 
 Broadcast a "foo" message:
 
-```
+```lua
 -- broadcaster.script
 local broadcast = require "ludobits.m.broadcast"
 
 function update(self, dt)
-	if some condition then
+	if some_condition then
 		-- broadcast a "foo" message to anyone listening
 		broadcast.send("foo", { something = 123 })
 	end

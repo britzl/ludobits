@@ -3,6 +3,7 @@ Module to create a signal system where named signals can be created, listened to
 
 ## Usage
 
+```lua
 	-- example_module.lua
 	local signal = require "ludobits.m.signal"
 
@@ -38,3 +39,4 @@ Module to create a signal system where named signals can be created, listened to
 			print("User logged out")
 		end
 	end
+```

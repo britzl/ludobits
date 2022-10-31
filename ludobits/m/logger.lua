@@ -29,8 +29,8 @@ function M.level(level)
 end
 
 --- Create a logger instance
--- @param tag Optional tag to preprend to all log output
--- @return Logger instance§
+-- @param tag Optional tag to prepend to all log output
+-- @return Logger instance
 function M.create(tag)
 	tag = tag or ""
 

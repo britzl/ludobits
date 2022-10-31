@@ -3,6 +3,7 @@ Module to simplify the use of several of the engine listeners. The module allows
 
 ## Usage
 
+```lua
 	local app = require "ludobits.app"
 
 	local function iac_listener1(self, playload, type)
@@ -15,3 +16,4 @@ Module to simplify the use of several of the engine listeners. The module allows
 
 	app.iac.add_listener(iac_listener1)
 	app.iac.add_listener(iac_listener2)
+```

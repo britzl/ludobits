@@ -3,6 +3,7 @@ Listener implementation where listeners are added as either urls or functions an
 
 # Usage
 
+```lua
 	-- a.script
 	local listener = require "ludobits.m.listener"
 
@@ -37,14 +38,18 @@ Listener implementation where listeners are added as either urls or functions an
 	l.trigger(hash("mymessage2"), { text = "lorem ipsum" })
 	l.trigger(hash("mymessage3"), { text = "lorem ipsum" })
 	l.trigger(hash("foobar"), { foo = "bar" })
+```
 
-
+```lua
 	--myscript1.script
 	function on_message(self, mesage_id, message, sender)
 		print(message_id)
 	end
+```
 
+```lua
 	-- myscript2.script
 	function on_message(self, mesage_id, message, sender)
 		print(message_id)
 	end
+```
