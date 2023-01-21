@@ -175,5 +175,28 @@ return function()
 			wait_seconds(0.25)
 			assert(flow_finished)
 		end)
+
+		it("should be possible to pause until flows complete", function()
+			local flow_finished = false
+			local instance = flow.start(function()
+				local f1 = flow.parallel(function()
+					flow.delay(0.3)
+				end)
+
+				local f2 = flow.parallel(function()
+					flow.delay(0.3)
+				end)
+
+				flow.until_flows(f1)
+				flow.until_flows({ f1, f2 })
+				flow_finished = true
+			end)
+
+			wait_seconds(0.2)
+			assert(not flow_finished)
+
+			wait_seconds(0.2)
+			assert(flow_finished)
+		end)
 	end)
 end
