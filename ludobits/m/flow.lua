@@ -490,6 +490,27 @@ function M.play_animation(sprite_url, id)
 	end)
 end
 
+--- Wair until other flow coroutines were finished
+-- @param flows one coroutine or array of coroutines
+function M.until_flows(flows)
+	assert(flows)
+
+	-- single coroutine
+	if flows.co then
+		M.until_true(function()
+			return coroutine.status(flows.co) == "dead"
+		end)
+		return
+	end
+
+	-- several coroutines
+	for k, v in pairs(flows) do
+		M.until_true(function()
+			return coroutine.status(v.co) == "dead"
+		end)
+	end
+end
+
 function M.ray_cast()
 	print("flow.ray_cast() is deprecated. Use synchronous ray casts released in Defold 1.2.150 instead!")
 end
