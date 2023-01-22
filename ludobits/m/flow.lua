@@ -490,7 +490,7 @@ function M.play_animation(sprite_url, id)
 	end)
 end
 
---- Wair until other flow coroutines were finished
+--- Wait until other flow coroutines were finished
 -- @param flows one coroutine or array of coroutines
 function M.until_flows(flows)
 	assert(flows)
