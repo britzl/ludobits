@@ -109,7 +109,7 @@ end
 
 local id_counter = 0
 
-local function create_or_get(co)
+local function create_or_get(co, group_id)
 	assert(co, "You must provide a coroutine")
 	if not instances[co] then
 		id_counter = id_counter + 1
@@ -118,6 +118,7 @@ local function create_or_get(co)
 			url = msg.url(),
 			state = READY,
 			co = co,
+			group_id = group_id and ensure_hash(group_id),
 			timer_id = timer.delay(0, true, function(self, handle, time_elapsed)
 				if not instances[co] then
 					timer.cancel(handle)
@@ -137,12 +138,15 @@ end
 -- @param fn The function to run within the flow
 -- @param options Key value pairs. Allowed keys:
 --		parallel = true if running flow shouldn't wait for this flow
+--		group_id = hash("group") if you want to use it in until_group() later
 -- @param on_error Function to call if something goes wrong while
 -- running the flow
 -- @return The created flow instance
 function M.start(fn, options, on_error)
 	assert(fn, "You must provide a function")
-	local created_instance = create_or_get(coroutine.create(fn))
+	local group_id = options and ensure_hash(options.group_id)
+
+	local created_instance = create_or_get(coroutine.create(fn), group_id)
 	created_instance.on_error = on_error
 
 	local parallel = options and options.parallel
@@ -160,6 +164,10 @@ end
 
 function M.parallel(fn, on_error)
 	return M.start(fn, { parallel = true }, on_error)
+end
+
+function M.parallel_group(group_id, fn, on_error)
+	return M.start(fn, { parallel = true, group_id = group_id }, on_error)
 end
 
 
@@ -504,10 +512,27 @@ function M.until_flows(flows)
 	end
 
 	-- several coroutines
-	for k, v in pairs(flows) do
+	for _, instance in pairs(flows) do
 		M.until_true(function()
-			return coroutine.status(v.co) == "dead"
+			return coroutine.status(instance.co) == "dead"
 		end)
+	end
+end
+
+--- Wait until other flow coroutines with a specific group_id were finished
+-- @param group_id identifier of the flows group
+function M.until_group(group_id)
+	assert(group_id)
+	local group = {}
+
+	for _, instance in pairs(instances) do
+		if instance.group_id == ensure_hash(group_id) then
+			table.insert(group, instance)
+		end
+	end
+
+	if #group > 0 then
+		M.until_flows(group)
 	end
 end
 
