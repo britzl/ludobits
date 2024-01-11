@@ -198,5 +198,31 @@ return function()
 			wait_seconds(0.2)
 			assert(flow_finished)
 		end)
+
+		it("should be possible to pause until flows with the specific group_id complete", function()
+			local flow_finished = false
+			local instance = flow.start(function()
+				flow.parallel_group("foo", function()
+					flow.delay(0.1)
+				end)
+
+				flow.parallel_group("foo", function()
+					flow.delay(0.2)
+				end)
+
+				flow.parallel_group("foo", function()
+					flow.delay(0.3)
+				end)
+
+				flow.until_group("foo")
+				flow_finished = true
+			end)
+
+			wait_seconds(0.2)
+			assert(not flow_finished)
+
+			wait_seconds(0.2)
+			assert(flow_finished)
+		end)
 	end)
 end

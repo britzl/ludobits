@@ -88,6 +88,47 @@ function init(self)
 
 		-- play a sprite animation and wait until it is done
 		flow.play_animation("#sprite", "green_walk_once")
+		print("flow.play_animation() is done")
+
+		-- start two parallel flows and store them to the table "foo"
+		print("Parallel flows stored to the table 'foo' are starting")
+		local foo = {}
+
+		-- start a first parallel flow
+		foo[1] = flow.start(function()
+			flow.delay(math.random())
+			print("Parallel flow foo 1 completed")
+		end)
+
+		-- start a second parallel flow
+		foo[2] = flow.start(function()
+			flow.delay(math.random())
+			print("Parallel flow foo 2 completed")
+		end)
+
+		-- wait until all the flows in the table "foo" have completed
+		flow.until_flows(foo)
+		print("All the parallel stored to the table completed")
+
+		-- start two parallel flows with the same group_id "bar"
+		print("Parallel flows with group_id 'bar' are starting")
+
+		-- start a parallel flow with the group_id "bar"
+		flow.parallel_group("bar", function()
+			flow.delay(math.random())
+			print("Parallel flow bar 1 completed")
+		end)
+
+		-- start an another parallel flow with the group_id "bar"
+		flow.parallel_group("bar", function()
+			flow.delay(math.random())
+			print("Parallel flow bar 2 completed")
+		end)
+
+		-- wait until all the flows with the group_id "bar" have completed
+		flow.until_group("bar")
+		print("All the parallel flows with group_id 'bar' completed")
+
 		print("DONE")
 	end)
 	
