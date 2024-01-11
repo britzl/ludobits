@@ -523,10 +523,11 @@ end
 -- @param group_id identifier of the flows group
 function M.until_group(group_id)
 	assert(group_id)
+	local group_id = ensure_hash(group_id)
 	local group = {}
 
 	for _, instance in pairs(instances) do
-		if instance.group_id == ensure_hash(group_id) then
+		if instance.group_id == group_id then
 			table.insert(group, instance)
 		end
 	end
