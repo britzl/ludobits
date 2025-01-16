@@ -8,12 +8,12 @@ jobs:
         runs-on: ubuntu-latest
         steps:
           - uses: actions/checkout@v3
-          - uses: coactions/setup-xvfb@v1
           - uses: actions/setup-java@99b8673ff64fbf99d8d325f52d9a5bdedb8483e9
             with:
                 java-version: '21.0.5+11.0.LTS'
                 distribution: 'temurin'
           - name: Run.sh
+            uses: coactions/setup-xvfb@v1
             env:
                 DEFOLD_USER: foo
                 DEFOLD_AUTH: bar
