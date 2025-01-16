@@ -1,3 +1,4 @@
+#!/bin/bash
 
 if [ $# -eq 0 ]; then
 	PLATFORM="x86_64-linux"
@@ -18,20 +19,24 @@ DMENGINE_URL="http://d.defold.com/archive/${SHA1}/engine/${PLATFORM}/dmengine_he
 BOB_URL="http://d.defold.com/archive/${SHA1}/bob/bob.jar"
 
 # Download dmengine_headless
-echo "Downloading ${DMENGINE_URL}"
-curl -L -o dmengine_headless ${DMENGINE_URL}
-chmod +x dmengine_headless
+if [ ! -f dmengine_headless ]; then
+	echo "Downloading ${DMENGINE_URL}"
+	curl -L -o dmengine_headless ${DMENGINE_URL}
+	chmod +x dmengine_headless
+fi
 
 # Download bob.jar
-echo "Downloading ${BOB_URL}"
-curl -L -o bob.jar ${BOB_URL}
+if [ ! -f bob.jar ]; then
+	echo "Downloading ${BOB_URL}"
+	curl -L -o bob.jar ${BOB_URL}
+fi
 
 # Fetch libraries
 echo "Running bob.jar - resolving dependencies"
-java -jar bob.jar --auth "foobar" --email "john@doe.com" resolve
+java -jar bob.jar resolve
 
 echo "Running bob.jar - building"
-java -jar bob.jar --debug build --keep-unused
+java -jar bob.jar --verbose build
 
 echo "Starting dmengine_headless"
 if [ -n "${DEFOLD_BOOSTRAP_COLLECTION}" ]; then
