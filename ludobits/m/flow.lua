@@ -278,7 +278,7 @@ function M.until_message(...)
 	return coroutine.yield()
 end
 
---- Waiting to receive all messages.
+--- Waiting to receive all specific messages.
 -- @param message_1 Message to wait for
 -- @param message_2 Message to wait for
 -- @param message_n Message to wait for
