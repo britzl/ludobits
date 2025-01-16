@@ -18,4 +18,5 @@ jobs:
                 DEFOLD_USER: foo
                 DEFOLD_AUTH: bar
                 DEFOLD_BOOSTRAP_COLLECTION: /test/test.collectionc
-            run: ./.test/run.sh
+            with:
+                run: ./.test/run.sh
