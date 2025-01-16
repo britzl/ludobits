@@ -57,6 +57,13 @@ function init(self)
 			msg.post("#", "abc")
 			flow.delay(0.2)
 			msg.post("#", "booo")
+
+			flow.delay(0.2)
+			msg.post("#", "msg3")
+			flow.delay(0.2)
+			msg.post("#", "msg1")
+			flow.delay(0.2)
+			msg.post("#", "msg2")
 		end, { parallel = true })
 		
 		print("This flow will continue to run without waiting for the parallel flow to finish")
@@ -68,6 +75,13 @@ function init(self)
 		-- wait for a specific message (the message will be posted by the parallel flow created above)
 		local message_id, message, sender = flow.until_message(hash("booo"))
 		print("flow.until_message()", message_id, message, sender)
+
+		-- wait for all specific messages
+		print("Waiting for all specified messages...")
+		flow(function()
+			local last_message_id, last_message, last_sender = flow.until_all_messages(hash("msg1"), hash("msg2"), hash("msg3"))
+			print("flow.until_all_messages()", last_message_id, last_message, last_sender)
+		end)
 		
 		-- wait until a callback is invoked
 		-- in this case we make a http.request call and wait for the callback

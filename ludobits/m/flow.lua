@@ -278,6 +278,35 @@ function M.until_message(...)
 	return coroutine.yield()
 end
 
+--- Waiting to receive all messages.
+-- @param message_1 Message to wait for
+-- @param message_2 Message to wait for
+-- @param message_n Message to wait for
+-- @return message_id id of the last message
+-- @return message message of the last message
+-- @return sender sender of the last message
+function M.until_all_messages(...)
+	local message_ids_to_wait_for = ensure_hashes({ ... })
+	local instance = create_or_get(coroutine.running())
+	instance.state = WAITING
+	instance.on_message = function(message_id, message, sender)
+		for i, message_id_to_wait_for in pairs(message_ids_to_wait_for) do
+			if message_id == message_id_to_wait_for then
+                table.remove(message_ids_to_wait_for, i)
+				break
+			end
+		end
+
+        if #message_ids_to_wait_for == 0 then
+			instance.result = table_pack(message_id, message, sender)
+			instance.on_message = nil
+			instance.state = READY
+			resume(instance)
+		end
+	end
+	return coroutine.yield()
+end
+
 
 --- Wait until input action with pressed state
 -- @param action_1 Action to wait for (nil for any action)
