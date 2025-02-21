@@ -29,7 +29,7 @@ end
 
 Complete API below (also refer to the examples for usage):
 
-```
+```lua
 -- Start a new flow
 local instance = flow.start(fn, options, on_error)
 
