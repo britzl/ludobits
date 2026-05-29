@@ -509,7 +509,7 @@ function M.gui_animate(node, property, playback, to, easing, duration, delay)
 	assert(easing, "You must provide an easing value")
 	assert(duration, "You must provide a duration")
 	M.until_callback(function(cb)
-		gui.cancel_animation(node, property)
+		gui.cancel_animations(node, property)
 		gui.animate(node, property, to, easing, duration, delay or 0, cb, playback)
 	end)
 end
